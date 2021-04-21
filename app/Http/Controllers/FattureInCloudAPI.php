@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Model\CustomersServices;
 use App\Model\CustomersServicesDetails;
+use App\Model\Fattura;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class FattureInCloudAPI extends Controller
@@ -203,6 +206,92 @@ class FattureInCloudAPI extends Controller
     }
 
     /**
+     * Recupera le fatture attive e passive da FattureInCloud
+     */
+    public function getFattureToday()
+    {
+        // Impostazione data
+        $month = 2;
+
+        $timestamp = mktime(0, 0, 0, $month, 1, env('GOOGLE_SHEETS_YEAR'));
+
+        // Recupero fatture Attive
+        $fatture_attive = $this->get(
+            'fatture',
+            'lista',
+            array(
+                'anno' => env('GOOGLE_SHEETS_YEAR'),
+                'data_inizio' => '01/' . date('m/Y', $timestamp),
+                'data_fine' => date('t', $timestamp) . '/' . date('m/Y', $timestamp)
+            )
+        );
+
+        foreach ($fatture_attive as $fattura_attiva) {
+
+            $fattura = Fattura::where('fic_id', $fattura_attiva['id'])
+                              ->first();
+
+            if (!$fattura) {
+                $fattura = new Fattura();
+            }
+
+            $fattura->fic_id = $fattura_attiva['id'];
+            $fattura->tipo = 'attiva';
+            $fattura->numero = $fattura_attiva['numero'];
+            $fattura->nome = $fattura_attiva['nome'];
+            $fattura->data = Carbon::parse(str_replace('/', '-', $fattura_attiva['data']) . ' 00:00:00');
+            $fattura->importo_netto = $fattura_attiva['importo_netto'];
+            $fattura->importo_iva = $fattura_attiva['importo_totale'] - $fattura_attiva['importo_netto'];
+            $fattura->importo_totale = $fattura_attiva['importo_totale'];
+
+            $fattura->save();
+        }
+
+        // - - -
+
+        // Recupero fatture Passive
+        $fatture_passive = $this->get(
+            'acquisti',
+            'lista',
+            array(
+                'anno' => env('GOOGLE_SHEETS_YEAR'),
+                'data_inizio' => '01/' . date('m/Y', $timestamp),
+                'data_fine' => date('t', $timestamp) . '/' . date('m/Y', $timestamp)
+            )
+        );
+
+        foreach ($fatture_passive as $fattura_passiva) {
+
+            $fattura_passiva_details = $this->get(
+                'acquisti',
+                'dettagli',
+                array(
+                    'id' => $fattura_passiva['id']
+                )
+            );
+
+            $fattura = Fattura::where('fic_id', $fattura_passiva_details['id'])
+                              ->first();
+
+            if (!$fattura) {
+                $fattura = new Fattura();
+            }
+
+            $fattura->fic_id = $fattura_passiva_details['id'];
+            $fattura->tipo = 'passiva';
+            $fattura->numero = $fattura_passiva_details['numero_fattura'];
+            $fattura->nome = $fattura_passiva_details['nome'];
+            $fattura->data = Carbon::parse(str_replace('/', '-', $fattura_passiva_details['data']) . ' 00:00:00');
+            $fattura->categoria = $fattura_passiva_details['categoria'];
+            $fattura->importo_netto = $fattura_passiva_details['importo_netto'];
+            $fattura->importo_iva = $fattura_passiva_details['importo_iva'];
+            $fattura->importo_totale = $fattura_passiva_details['importo_totale'];
+
+            $fattura->save();
+        }
+    }
+
+    /**
      * Recupero i dati e li inserisco in un Array.
      *
      * @param $resource
@@ -223,6 +312,10 @@ class FattureInCloudAPI extends Controller
             $resource == 'acquisti' ||
             $resource == 'ndc') {
             $resource = 'documenti';
+        }
+
+        if ($action == 'dettagli') {
+            $resource = 'documento';
         }
 
         return $fic_result[$action . '_' . $resource];

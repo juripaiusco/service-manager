@@ -66,11 +66,6 @@ Route::get('/customer/renew/{id}', 'Customer@renew')
 Route::get('/customer/service/destroy/{id}', 'Customer@serviceDestroy')
      ->name('customer.service.destroy');
 
-/*Route::get('/setting', 'Setting@create')
-     ->name('setting.create');
-Route::post('/setting/store', 'Setting@store')
-     ->name('setting.store');*/
-
 Route::get('/mail/service-expiration/all', 'Email@sendExpirationList')
      ->name('email.exp.all');
 Route::get('/mail/service-expiration/{id}', 'Email@sendExpirationService')
@@ -89,6 +84,5 @@ Route::get('/payment/confirm/{sid}', 'Payment@confirm')
      ->name('payment.confirm');
 
 Route::get('/gsheets/update', 'GoogleSheetsAPI@update');
-//Route::get('/gsheets/scriptable', 'GoogleSheetsAPI@scriptableWriteJSON');
-
 Route::get('/scriptable/json', 'GoogleSheetsAPI@scriptableGetJSON');
+Route::get('/fic/import', 'Cron@getFattureToday');
