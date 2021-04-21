@@ -218,7 +218,7 @@ class FattureInCloudAPI extends Controller
             'fatture',
             'lista',
             array(
-                'anno' => env('GOOGLE_SHEETS_YEAR'),
+                'anno' => date('Y', $timestamp),
                 'data_inizio' => date('d/m/Y', $timestamp),
                 'data_fine' => date('t', $timestamp) . '/' . date('m/Y', $timestamp)
             )
@@ -252,7 +252,7 @@ class FattureInCloudAPI extends Controller
             'acquisti',
             'lista',
             array(
-                'anno' => env('GOOGLE_SHEETS_YEAR'),
+                'anno' => date('Y', $timestamp),
                 'data_inizio' => date('d/m/Y', $timestamp),
                 'data_fine' => date('t', $timestamp) . '/' . date('m/Y', $timestamp)
             )
