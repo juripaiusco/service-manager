@@ -211,9 +211,7 @@ class FattureInCloudAPI extends Controller
     public function getFattureToday()
     {
         // Impostazione data
-        $month = 2;
-
-        $timestamp = mktime(0, 0, 0, $month, 1, env('GOOGLE_SHEETS_YEAR'));
+        $timestamp = mktime(0, 0, 0, date('m'), date('d'), env('GOOGLE_SHEETS_YEAR'));
 
         // Recupero fatture Attive
         $fatture_attive = $this->get(
@@ -221,7 +219,7 @@ class FattureInCloudAPI extends Controller
             'lista',
             array(
                 'anno' => env('GOOGLE_SHEETS_YEAR'),
-                'data_inizio' => '01/' . date('m/Y', $timestamp),
+                'data_inizio' => date('d/m/Y', $timestamp),
                 'data_fine' => date('t', $timestamp) . '/' . date('m/Y', $timestamp)
             )
         );
@@ -255,7 +253,7 @@ class FattureInCloudAPI extends Controller
             'lista',
             array(
                 'anno' => env('GOOGLE_SHEETS_YEAR'),
-                'data_inizio' => '01/' . date('m/Y', $timestamp),
+                'data_inizio' => date('d/m/Y', $timestamp),
                 'data_fine' => date('t', $timestamp) . '/' . date('m/Y', $timestamp)
             )
         );
