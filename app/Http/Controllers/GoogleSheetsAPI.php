@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Fattura;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -389,5 +390,74 @@ class GoogleSheetsAPI extends Controller
     public function scriptableGetJSON()
     {
         return Storage::disk('public')->get('scriptable.json');
+    }
+
+    public function pushOuts()
+    {
+        $fatture = Fattura::where('tipo', 'passiva')
+                          ->orderby('categoria')
+                          ->orderby('data')
+                          ->get();
+
+        foreach ($fatture as $fattura) {
+
+            $array_fatture[$fattura->categoria][substr($fattura->data, 0, 4)][] = array(
+                'nome' => $fattura->nome,
+                'data' => $fattura->data,
+                'importo_netto' => $fattura->importo_netto,
+                'importo_iva' => $fattura->importo_iva,
+                'importo_totale' => $fattura->importo_totale
+            );
+
+            if (!isset($array_fatture[$fattura->categoria][substr($fattura->data, 0, 4) . '-tot'])) {
+                $array_fatture[$fattura->categoria][substr($fattura->data, 0, 4) . '-tot'] = 0;
+            }
+
+            $array_fatture[$fattura->categoria][substr($fattura->data, 0, 4) . '-tot'] += $fattura->importo_totale;
+
+        }
+
+//        dd($array_fatture);
+
+        $y_start = substr($fatture[0]->data, 0, 4);
+        $y_end = substr($fatture[count($fatture) - 1]->data, 0, 4);
+
+        $gSheets_values = array();
+
+        $gSheets_values[0][0]= '';
+
+        foreach (array_keys($array_fatture) as $k) {
+            $gSheets_values[] = array($k);
+        }
+
+        $c = 1;
+        for ($i = $y_start; $i <= $y_end; $i++) {
+            $gSheets_values[0][$c] = intval($i);
+            $c++;
+        }
+
+        // - - -
+
+        $alpha = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O');
+        $data = array();
+
+        // Range categorie
+        $range = 'Foglio1!A1:' . $alpha[$y_end - $y_start + 1] . (count($gSheets_values) + 1);
+        $values = $gSheets_values;
+        $data[] = new \Google_Service_Sheets_ValueRange([
+            'range' => $range,
+            'values' => $values
+        ]);
+
+        $client = $this->getClient();
+        $service = new \Google_Service_Sheets($client);
+        $spreadsheetId = env('GOOGLE_SHEETS_TEST_ID');
+
+        $body = new \Google_Service_Sheets_BatchUpdateValuesRequest([
+            'valueInputOption' => 'RAW',
+            'data' => $data
+        ]);
+
+        $result = $service->spreadsheets_values->batchUpdate($spreadsheetId, $body);
     }
 }
