@@ -399,35 +399,54 @@ class GoogleSheetsAPI extends Controller
                           ->orderby('data')
                           ->get();
 
+        $y_start = substr($fatture[0]->data, 0, 4);
+        $y_end = substr($fatture[count($fatture) - 1]->data, 0, 4);
+
         foreach ($fatture as $fattura) {
 
-            $array_fatture[$fattura->categoria][substr($fattura->data, 0, 4)][] = array(
+            /*$array_fatture[$fattura->categoria][substr($fattura->data, 0, 4)][] = array(
                 'nome' => $fattura->nome,
                 'data' => $fattura->data,
                 'importo_netto' => $fattura->importo_netto,
                 'importo_iva' => $fattura->importo_iva,
                 'importo_totale' => $fattura->importo_totale
-            );
+            );*/
 
-            if (!isset($array_fatture[$fattura->categoria][substr($fattura->data, 0, 4) . '-tot'])) {
-                $array_fatture[$fattura->categoria][substr($fattura->data, 0, 4) . '-tot'] = 0;
+            for ($i = $y_start; $i <= $y_end; $i++) {
+
+                $y = intval($i);
+
+                if (!isset($array_fatture[$fattura->categoria][$y])) {
+                    $array_fatture[$fattura->categoria][$y] = 0;
+                }
+
+                if (substr($fattura->data, 0, 4) == $y) {
+
+                    $array_fatture[$fattura->categoria][$y] += $fattura->importo_netto;
+
+                }
             }
 
-            $array_fatture[$fattura->categoria][substr($fattura->data, 0, 4) . '-tot'] += $fattura->importo_totale;
-
         }
-
-//        dd($array_fatture);
-
-        $y_start = substr($fatture[0]->data, 0, 4);
-        $y_end = substr($fatture[count($fatture) - 1]->data, 0, 4);
 
         $gSheets_values = array();
 
         $gSheets_values[0][0]= '';
 
-        foreach (array_keys($array_fatture) as $k) {
-            $gSheets_values[] = array($k);
+        $c = 1;
+        foreach ($array_fatture as $k => $v) {
+
+            $gSheets_values[$c] = array($k);
+
+            for ($i = $y_start; $i <= $y_end; $i++) {
+
+                $gSheets_values[$c][$i] = $v[$i];
+
+            }
+
+            $gSheets_values[$c] = array_values($gSheets_values[$c]);
+
+            $c++;
         }
 
         $c = 1;
@@ -435,6 +454,8 @@ class GoogleSheetsAPI extends Controller
             $gSheets_values[0][$c] = intval($i);
             $c++;
         }
+
+//        dd($gSheets_values);
 
         // - - -
 
