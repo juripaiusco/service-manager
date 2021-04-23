@@ -395,6 +395,109 @@ class GoogleSheetsAPI extends Controller
     public function pushOuts()
     {
         $fatture = Fattura::where('tipo', 'passiva')
+                          ->where('data', '>=', '2020-01-01')
+                          ->orderby('categoria')
+                          ->orderby('data')
+                          ->get();
+
+        $y_start = substr($fatture[0]->data, 0, 4);
+        $y_end = substr($fatture[count($fatture) - 1]->data, 0, 4);
+
+        foreach ($fatture as $fattura) {
+
+            /*$array_fatture[$fattura->categoria][substr($fattura->data, 0, 4)][] = array(
+                'nome' => $fattura->nome,
+                'data' => $fattura->data,
+                'importo_netto' => $fattura->importo_netto,
+                'importo_iva' => $fattura->importo_iva,
+                'importo_totale' => $fattura->importo_totale
+            );*/
+
+            for ($m = 1; $m <= 12; $m++) {
+
+                $data_m_i = intval($m);
+
+                if ($data_m_i < 10) {
+                    $data_m_i = '0' . $data_m_i;
+                }
+
+                for ($y = 2020; $y <= 2021; $y++) {
+
+                    if (!isset($array_fatture[$fattura->categoria][$y . $data_m_i])) {
+                        $array_fatture[$fattura->categoria][$y . $data_m_i] = 0;
+                    }
+
+                    if (substr(
+                            str_replace('-', '', $fattura->data)
+                            , 0, 6) == ($y . $data_m_i)) {
+
+                        $array_fatture[$fattura->categoria][$y . $data_m_i] += $fattura->importo_netto;
+
+                    }
+
+                }
+            }
+
+        }
+
+//        dd($array_fatture);
+
+        $gSheets_values = array();
+
+        $gSheets_values[0][0]= '';
+
+        $c = 1;
+        foreach ($array_fatture as $k => $v) {
+
+            $gSheets_values[$c] = array($k);
+
+            foreach ($v as $k_m => $month) {
+
+                $gSheets_values[$c][$k_m] = $month;
+
+            }
+
+            $gSheets_values[$c] = array_values($gSheets_values[$c]);
+
+            $c++;
+        }
+
+//        dd(count($gSheets_values[1]));
+
+        /*$c = 1;
+        for ($i = $y_start; $i <= $y_end; $i++) {
+            $gSheets_values[0][$c] = intval($i);
+            $c++;
+        }*/
+
+        // - - -
+
+        $alpha = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        $data = array();
+
+        // Range categorie
+        $range = 'Foglio2!A1:' . $alpha[count($gSheets_values[1])] . (count($gSheets_values) + 1);
+        $values = $gSheets_values;
+        $data[] = new \Google_Service_Sheets_ValueRange([
+            'range' => $range,
+            'values' => $values
+        ]);
+
+        $client = $this->getClient();
+        $service = new \Google_Service_Sheets($client);
+        $spreadsheetId = env('GOOGLE_SHEETS_TEST_ID');
+
+        $body = new \Google_Service_Sheets_BatchUpdateValuesRequest([
+            'valueInputOption' => 'RAW',
+            'data' => $data
+        ]);
+
+        $result = $service->spreadsheets_values->batchUpdate($spreadsheetId, $body);
+    }
+
+    public function pushOuts_()
+    {
+        $fatture = Fattura::where('tipo', 'passiva')
                           ->orderby('categoria')
                           ->orderby('data')
                           ->get();
