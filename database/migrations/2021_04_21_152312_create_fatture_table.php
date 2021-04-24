@@ -20,6 +20,7 @@ class CreateFattureTable extends Migration
             $table->char('tipo', 255);
             $table->char('numero', 255)->nullable();
             $table->char('nome', 255);
+            $table->year('anno');
             $table->timestamp('data');
             $table->char('categoria', 255)->nullable();
             $table->float('importo_netto');

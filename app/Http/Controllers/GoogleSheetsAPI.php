@@ -392,7 +392,7 @@ class GoogleSheetsAPI extends Controller
         return Storage::disk('public')->get('scriptable.json');
     }
 
-    public function pushOuts()
+    public function pushOuts_2()
     {
         $fatture = Fattura::where('tipo', 'passiva')
                           ->where('data', '>=', '2020-01-01')
@@ -495,7 +495,7 @@ class GoogleSheetsAPI extends Controller
         $result = $service->spreadsheets_values->batchUpdate($spreadsheetId, $body);
     }
 
-    public function pushOuts_()
+    public function pushOuts_1()
     {
         $fatture = Fattura::where('tipo', 'passiva')
                           ->orderby('categoria')
