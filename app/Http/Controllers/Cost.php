@@ -59,4 +59,53 @@ class Cost extends Controller
             'y_end' => $y_end
         ]);
     }
+
+    public function detail($categoria)
+    {
+        $costs = Fattura::where('tipo', 'passiva')
+                        ->where('categoria', $categoria)
+                        ->select([
+                            'anno',
+                            'data',
+                            'categoria',
+                            DB::raw('SUM(importo_netto) AS importo_netto')
+                        ])
+                        ->orderby('data')
+                        ->groupby(DB::raw('DATE_FORMAT(data, \'%Y-%m\')'))
+                        ->get();
+
+        $y_start = $costs[0]->anno;
+        $y_end = $costs[count($costs) - 1]->anno;
+
+        foreach ($costs as $cost) {
+
+            $data_i = substr(str_replace('-', '', $cost->data), 0, 6);
+            $array_costs[$cost->categoria . ' ' . $cost->anno][$cost->anno][$data_i] = $cost;
+
+        }
+
+        $array_months = array(
+            'gennaio',
+            'febbraio',
+            'marzo',
+            'aprile',
+            'maggio',
+            'giugno',
+            'luglio',
+            'agosto',
+            'settembre',
+            'ottobre',
+            'novembre',
+            'dicembre'
+        );
+
+//        dd($array_costs);
+
+        return view('cost.detail', [
+            'costs' => $array_costs,
+            'months' => $array_months
+            /*'y_start' => $y_start,
+            'y_end' => $y_end*/
+        ]);
+    }
 }

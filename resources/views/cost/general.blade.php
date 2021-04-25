@@ -24,7 +24,9 @@
 
             <tr>
 
-                <td>{{ $k }}</td>
+                <td>
+                    <a href="{{ route('cost.detail', ['categoria' => $k]) }}">{{ $k }}</a>
+                </td>
 
                 @for($y = $y_start; $y <= $y_end; $y++)
 
