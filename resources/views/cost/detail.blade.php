@@ -73,4 +73,44 @@
 
     </table>
 
+    <br>
+    <h2>Fatture</h2>
+
+    <table class="table table-hover table-striped table-sm" style="font-size: .8em;">
+
+        <thead>
+            <tr>
+                <th>Numero</th>
+                <th>Nome</th>
+                <th class="text-center">Data</th>
+                <th class="text-right">Importo</th>
+                <th class="text-right">IVA</th>
+                <th class="text-right">Totale</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        @foreach($fatture as $fattura)
+
+            <tr>
+                <td>{{ $fattura->numero }}</td>
+                <td>{{ $fattura->nome }}</td>
+                <td class="text-center">
+                    {{ date('d/m/Y', strtotime($fattura->data)) }}
+                </td>
+                <td class="text-right">
+                    &euro; {{ number_format($fattura->importo_netto, 2, ',', '.') }}
+                </td>
+                <td class="text-right">
+                    &euro; {{ number_format($fattura->importo_iva, 2, ',', '.') }}
+                </td>
+                <td class="text-right">
+                    &euro; {{ number_format($fattura->importo_totale, 2, ',', '.') }}
+                </td>
+            </tr>
+
+        @endforeach
+        </tbody>
+    </table>
+
 @endsection

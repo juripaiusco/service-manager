@@ -74,6 +74,11 @@ class Cost extends Controller
                         ->groupby(DB::raw('DATE_FORMAT(data, \'%Y-%m\')'))
                         ->get();
 
+        $fatture = Fattura::where('tipo', 'passiva')
+                        ->where('categoria', $categoria)
+                        ->orderby('data', 'desc')
+                        ->get();
+
         $y_start = $costs[0]->anno;
         $y_end = $costs[count($costs) - 1]->anno;
 
@@ -102,9 +107,10 @@ class Cost extends Controller
 //        dd($array_costs);
 
         return view('cost.detail', [
+            'category' => $categoria,
             'costs' => $array_costs,
             'months' => $array_months,
-            'category' => $categoria
+            'fatture' => $fatture
             /*'y_start' => $y_start,
             'y_end' => $y_end*/
         ]);
