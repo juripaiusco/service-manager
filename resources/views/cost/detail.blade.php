@@ -80,6 +80,7 @@
 
         <thead>
             <tr>
+                <th></th>
                 <th>Numero</th>
                 <th>Nome</th>
                 <th class="text-center">Data</th>
@@ -90,9 +91,19 @@
         </thead>
 
         <tbody>
+
+        @php
+            $rem_y = 0;
+        @endphp
+
         @foreach($fatture as $fattura)
 
             <tr>
+                <td>
+                    @if($rem_y != $fattura->anno)
+                    {{ $fattura->anno }}
+                    @endif
+                </td>
                 <td>{{ $fattura->numero }}</td>
                 <td>{{ $fattura->nome }}</td>
                 <td class="text-center">
@@ -108,6 +119,10 @@
                     &euro; {{ number_format($fattura->importo_totale, 2, ',', '.') }}
                 </td>
             </tr>
+
+            @php
+            $rem_y = $fattura->anno;
+            @endphp
 
         @endforeach
         </tbody>
