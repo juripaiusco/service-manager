@@ -17,6 +17,7 @@ class CreateFattureTable extends Migration
             $table->id();
 
             $table->char('fic_id', 255)->index();
+            $table->char('tipo_doc', 255);
             $table->char('tipo', 255);
             $table->char('numero', 255)->nullable();
             $table->char('nome', 255);

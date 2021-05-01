@@ -234,6 +234,7 @@ class FattureInCloudAPI extends Controller
             }
 
             $fattura->fic_id = $fattura_attiva['id'];
+            $fattura->tipo_doc = 'fattura';
             $fattura->tipo = 'attiva';
             $fattura->numero = $fattura_attiva['numero'];
             $fattura->nome = $fattura_attiva['nome'];
@@ -276,6 +277,7 @@ class FattureInCloudAPI extends Controller
             }
 
             $fattura->fic_id = $fattura_passiva_details['id'];
+            $fattura->tipo_doc = 'fattura';
             $fattura->tipo = 'passiva';
             $fattura->numero = $fattura_passiva_details['numero_fattura'];
             $fattura->nome = $fattura_passiva_details['nome'];
