@@ -273,6 +273,7 @@
                             </div>
                             <div class="col-lg-1">
 
+                                @if(isset($customerService->id))
                                 <button type="button"
                                         class="btn btn-block btn-danger"
                                         data-toggle="modal"
@@ -280,6 +281,7 @@
                                         data-href="{{ route('customer.service.destroy', $customerService->id) }}/?cid={{ $customer->id }}">
                                     <i class="far fa-trash-alt"></i>
                                 </button>
+                                @endif
 
                             </div>
                         </div>

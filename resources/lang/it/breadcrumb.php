@@ -18,9 +18,11 @@ return [
 	'service' => 'Servizi',
     'customer' => 'Clienti',
     'setting' => 'Impostazioni',
+    'analysis' => 'Analisi',
 
     'create' => 'Nuovo',
     'edit' => 'Modifica',
+    'cost' => 'Costi',
 
     'name' => ':name',
 

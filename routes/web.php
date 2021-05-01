@@ -89,5 +89,5 @@ Route::get('/fic/import', 'Cron@getFattureToday');
 
 //Route::get('/gsheets/push-outs', 'GoogleSheetsAPI@pushOuts');
 
-Route::get('/cost', 'Cost@general');
-Route::get('/cost/{categoria}', 'Cost@detail')->name('cost.detail');
+Route::get('/analysis/cost', 'Cost@general')->name('cost.list');
+Route::get('/analysis/cost/{categoria}', 'Cost@detail')->name('cost.detail');

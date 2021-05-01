@@ -3,6 +3,11 @@
 
 @section('content')
 
+    <a href="{{ route('cost.list') }}"
+       class="btn btn-primary">Indietro</a>
+
+    <br /><br />
+
     <table class="table table-hover table-striped table-sm" style="font-size: .8em;">
 
         <thead>

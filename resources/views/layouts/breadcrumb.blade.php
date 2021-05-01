@@ -7,16 +7,20 @@
                 <li class="breadcrumb-item {{ ($k + 1 == count(Request::segments())) ? 'active' : '' }}">
                     @if(($k + 1 == count(Request::segments())))
 
-                        @if(is_numeric($segment))
-                            @php($controllerName = Request::segment(1))
+                        @php($controllerName = Request::segment(1))
 
+                        @if(is_numeric($segment))
                             @if($controllerName == 'customer')
                                 {{ ucfirst(__('breadcrumb.name', ['name' => $$controllerName->company])) }}
                             @else
                                 {{ ucfirst(__('breadcrumb.name', ['name' => $$controllerName->name])) }}
                             @endif
                         @else
-                            {{ ucfirst(__('breadcrumb.' . $segment)) }}
+                            @if($controllerName == 'analysis' && Request::segment(2) == 'cost' && isset($category))
+                                {{ ucfirst(__('breadcrumb.name', ['name' => $category])) }}
+                            @else
+                                {{ ucfirst(__('breadcrumb.' . $segment)) }}
+                            @endif
                         @endif
 
                     @else

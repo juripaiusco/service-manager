@@ -70,7 +70,7 @@ class Cost extends Controller
                             'categoria',
                             DB::raw('SUM(importo_netto) AS importo_netto')
                         ])
-                        ->orderby('data')
+                        ->orderby('data', 'desc')
                         ->groupby(DB::raw('DATE_FORMAT(data, \'%Y-%m\')'))
                         ->get();
 
@@ -103,7 +103,8 @@ class Cost extends Controller
 
         return view('cost.detail', [
             'costs' => $array_costs,
-            'months' => $array_months
+            'months' => $array_months,
+            'category' => $categoria
             /*'y_start' => $y_start,
             'y_end' => $y_end*/
         ]);
