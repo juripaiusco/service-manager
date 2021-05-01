@@ -208,7 +208,7 @@ class FattureInCloudAPI extends Controller
     /**
      * Recupera le fatture attive e passive da FattureInCloud
      */
-    public function getFattureToday()
+    public function getDocToday()
     {
         // Impostazione data
         $timestamp = mktime(0, 0, 0, date('m'), date('d'), env('GOOGLE_SHEETS_YEAR'));

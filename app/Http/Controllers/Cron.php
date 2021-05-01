@@ -9,6 +9,6 @@ class Cron extends Controller
     public function getFattureToday()
     {
         $fic = new FattureInCloudAPI();
-        $fic->getFattureToday();
+        $fic->getDocToday();
     }
 }
