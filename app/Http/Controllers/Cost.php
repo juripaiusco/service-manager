@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Fattura;
+use App\Model\FicDoc;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,7 +32,7 @@ class Cost extends Controller
 
         }*/
 
-        $costs = Fattura::where('tipo', 'passiva')
+        $costs = FicDoc::where('tipo', 'passiva')
                           ->select([
                               'anno',
                               'categoria',
@@ -44,25 +44,28 @@ class Cost extends Controller
                           ->groupby('categoria')
                           ->get();
 
-        $y_start = $costs[0]->anno;
-        $y_end = $costs[count($costs) - 1]->anno;
+        if (isset($costs[0]->anno)) {
 
-        foreach ($costs as $cost) {
+            $y_start = $costs[0]->anno;
+            $y_end = $costs[count($costs) - 1]->anno;
 
-            $array_costs[$cost->categoria][$cost->anno] = $cost;
+            foreach ($costs as $cost) {
 
+                $array_costs[$cost->categoria][$cost->anno] = $cost;
+
+            }
+
+            return view('cost.general', [
+                'costs' => $array_costs,
+                'y_start' => $y_start,
+                'y_end' => $y_end
+            ]);
         }
-
-        return view('cost.general', [
-            'costs' => $array_costs,
-            'y_start' => $y_start,
-            'y_end' => $y_end
-        ]);
     }
 
     public function detail($categoria)
     {
-        $costs = Fattura::where('tipo', 'passiva')
+        $costs = FicDoc::where('tipo', 'passiva')
                         ->where('categoria', $categoria)
                         ->select([
                             'anno',
@@ -74,13 +77,10 @@ class Cost extends Controller
                         ->groupby(DB::raw('DATE_FORMAT(data, \'%Y-%m\')'))
                         ->get();
 
-        $fatture = Fattura::where('tipo', 'passiva')
+        $fatture = FicDoc::where('tipo', 'passiva')
                         ->where('categoria', $categoria)
                         ->orderby('data', 'desc')
                         ->get();
-
-        $y_start = $costs[0]->anno;
-        $y_end = $costs[count($costs) - 1]->anno;
 
         foreach ($costs as $cost) {
 
@@ -104,15 +104,11 @@ class Cost extends Controller
             'dicembre'
         );
 
-//        dd($array_costs);
-
         return view('cost.detail', [
             'category' => $categoria,
             'costs' => $array_costs,
             'months' => $array_months,
             'fatture' => $fatture
-            /*'y_start' => $y_start,
-            'y_end' => $y_end*/
         ]);
     }
 }

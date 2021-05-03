@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Fattura extends Model
+class FicDoc extends Model
 {
-    protected $table = 'fatture';
+    protected $table = 'fic_docs';
 }

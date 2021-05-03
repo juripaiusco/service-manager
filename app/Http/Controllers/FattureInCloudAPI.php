@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\CustomersServices;
 use App\Model\CustomersServicesDetails;
-use App\Model\Fattura;
+use App\Model\FicDoc;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -211,33 +211,49 @@ class FattureInCloudAPI extends Controller
     public function getDocToday()
     {
         // Impostazione data
-        $timestamp = mktime(0, 0, 0, date('m'), date('d'), env('GOOGLE_SHEETS_YEAR'));
+        $y = env('GOOGLE_SHEETS_YEAR');
+        $m = date('m');
+        $d = date('d');
+
+        $timestamp_start = mktime(0, 0, 0, $m, $d - 15, $y);
+        $timestamp_end = mktime(0, 0, 0, $m, $d, $y);
+
+        /*$y = 2017;
+        $m = 1;
+
+        $timestamp_start = mktime(0, 0, 0, $m, 1, $y);
+        $timestamp_end = mktime(0, 0, 0, $m, date('t', $timestamp_start), $y);*/
+
+        $array_data_search = array(
+            'anno' => date('Y', $timestamp_start),
+            'data_inizio' => date('d/m/Y', $timestamp_start),
+            'data_fine' => date('d/m/Y', $timestamp_end)
+        );
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         // Recupero fatture Attive
         $fatture_attive = $this->get(
             'fatture',
             'lista',
-            array(
-                'anno' => date('Y', $timestamp),
-                'data_inizio' => date('d/m/Y', $timestamp),
-                'data_fine' => date('t', $timestamp) . '/' . date('m/Y', $timestamp)
-            )
+            $array_data_search
         );
 
         foreach ($fatture_attive as $fattura_attiva) {
 
-            $fattura = Fattura::where('fic_id', $fattura_attiva['id'])
+            $fattura = FicDoc::where('fic_id', $fattura_attiva['id'])
                               ->first();
 
             if (!$fattura) {
-                $fattura = new Fattura();
+                $fattura = new FicDoc();
             }
 
             $fattura->fic_id = $fattura_attiva['id'];
-            $fattura->tipo_doc = 'fattura';
+            $fattura->tipo_doc = $fattura_attiva['tipo'];
             $fattura->tipo = 'attiva';
             $fattura->numero = $fattura_attiva['numero'];
             $fattura->nome = $fattura_attiva['nome'];
+            $fattura->anno = substr(str_replace('/', '', $fattura_attiva['data']), 4, 4);
             $fattura->data = Carbon::parse(str_replace('/', '-', $fattura_attiva['data']) . ' 00:00:00');
             $fattura->importo_netto = $fattura_attiva['importo_netto'];
             $fattura->importo_iva = $fattura_attiva['importo_totale'] - $fattura_attiva['importo_netto'];
@@ -246,17 +262,45 @@ class FattureInCloudAPI extends Controller
             $fattura->save();
         }
 
-        // - - -
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        // Recupero Note di Credito Attive
+        $ndc_attive = $this->get(
+            'ndc',
+            'lista',
+            $array_data_search
+        );
+
+        foreach ($ndc_attive as $ndc_attiva) {
+
+            $ndc = FicDoc::where('fic_id', $ndc_attiva['id'])
+                         ->first();
+
+            if (!$ndc) {
+                $ndc = new FicDoc();
+            }
+
+            $ndc->fic_id = $ndc_attiva['id'];
+            $ndc->tipo_doc = $ndc_attiva['tipo'];
+            $ndc->tipo = 'attiva';
+            $ndc->numero = $ndc_attiva['numero'];
+            $ndc->nome = $ndc_attiva['nome'];
+            $ndc->anno = substr(str_replace('/', '', $fattura_attiva['data']), 4, 4);
+            $ndc->data = Carbon::parse(str_replace('/', '-', $ndc_attiva['data']) . ' 00:00:00');
+            $ndc->importo_netto = $ndc_attiva['importo_netto'];
+            $ndc->importo_iva = $ndc_attiva['importo_totale'] - $ndc_attiva['importo_netto'];
+            $ndc->importo_totale = $ndc_attiva['importo_totale'];
+
+            $ndc->save();
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         // Recupero fatture Passive
         $fatture_passive = $this->get(
             'acquisti',
             'lista',
-            array(
-                'anno' => date('Y', $timestamp),
-                'data_inizio' => date('d/m/Y', $timestamp),
-                'data_fine' => date('t', $timestamp) . '/' . date('m/Y', $timestamp)
-            )
+            $array_data_search
         );
 
         foreach ($fatture_passive as $fattura_passiva) {
@@ -269,18 +313,19 @@ class FattureInCloudAPI extends Controller
                 )
             );
 
-            $fattura = Fattura::where('fic_id', $fattura_passiva_details['id'])
+            $fattura = FicDoc::where('fic_id', $fattura_passiva_details['id'])
                               ->first();
 
             if (!$fattura) {
-                $fattura = new Fattura();
+                $fattura = new FicDoc();
             }
 
             $fattura->fic_id = $fattura_passiva_details['id'];
-            $fattura->tipo_doc = 'fattura';
+            $fattura->tipo_doc = $fattura_passiva_details['tipo'];
             $fattura->tipo = 'passiva';
             $fattura->numero = $fattura_passiva_details['numero_fattura'];
             $fattura->nome = $fattura_passiva_details['nome'];
+            $fattura->anno = $fattura_passiva_details['anno_competenza'];
             $fattura->data = Carbon::parse(str_replace('/', '-', $fattura_passiva_details['data']) . ' 00:00:00');
             $fattura->categoria = $fattura_passiva_details['categoria'];
             $fattura->importo_netto = $fattura_passiva_details['importo_netto'];

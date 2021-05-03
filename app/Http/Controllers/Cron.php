@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class Cron extends Controller
 {
-    public function getFattureToday()
+    public function getDocToday()
     {
         $fic = new FattureInCloudAPI();
         $fic->getDocToday();

@@ -85,7 +85,7 @@ Route::get('/payment/confirm/{sid}', 'Payment@confirm')
 
 Route::get('/gsheets/update', 'GoogleSheetsAPI@update');
 Route::get('/scriptable/json', 'GoogleSheetsAPI@scriptableGetJSON');
-Route::get('/fic/import', 'Cron@getFattureToday');
+Route::get('/fic/import', 'Cron@getDocToday');
 
 //Route::get('/gsheets/push-outs', 'GoogleSheetsAPI@pushOuts');
 
