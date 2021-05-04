@@ -245,8 +245,6 @@ class FattureInCloudAPI extends Controller
             'data_fine' => date('d/m/Y', $timestamp_end)
         );
 
-//        dd($array_data_search);
-
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         // Recupero fatture Attive
