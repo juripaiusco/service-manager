@@ -33,6 +33,7 @@ class Cost extends Controller
         }*/
 
         $costs = FicDoc::where('tipo', 'passiva')
+                       ->where('tipo_doc', 'spesa')
                           ->select([
                               'anno',
                               'categoria',
@@ -66,6 +67,7 @@ class Cost extends Controller
     public function detail($categoria)
     {
         $costs = FicDoc::where('tipo', 'passiva')
+                       ->where('tipo_doc', 'spesa')
                         ->where('categoria', $categoria)
                         ->select([
                             'anno',
@@ -78,6 +80,7 @@ class Cost extends Controller
                         ->get();
 
         $fatture = FicDoc::where('tipo', 'passiva')
+                         ->where('tipo_doc', 'spesa')
                         ->where('categoria', $categoria)
                         ->orderby('data', 'desc')
                         ->get();

@@ -227,7 +227,7 @@ class FattureInCloudAPI extends Controller
         $timestamp_end = mktime(0, 0, 0, $m, $d, $y);
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        
+
         if (count($data_array) > 0) {
 
             $y = $data_array['y'];
