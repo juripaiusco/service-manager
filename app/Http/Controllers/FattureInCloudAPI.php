@@ -227,6 +227,18 @@ class FattureInCloudAPI extends Controller
         $timestamp_end = mktime(0, 0, 0, $m, $d, $y);
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
+        if (count($data_array) > 0) {
+
+            $y = $data_array['y'];
+            $m = $data_array['m'];
+
+            $timestamp_start = mktime(0, 0, 0, $m, 1, $y);
+            $timestamp_end = mktime(0, 0, 0, $m, date('t', $timestamp_start), $y);
+
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         /*
         $docs_search = FicDoc::orderBy('data', 'desc')
                              ->first();
@@ -245,17 +257,6 @@ class FattureInCloudAPI extends Controller
         $timestamp_start = mktime(0, 0, 0, $m, 1, $y);
         $timestamp_end = mktime(0, 0, 0, $m, date('t', $timestamp_start), $y);
         */
-
-        if (count($data_array) > 0) {
-
-            $y = $data_array['y'];
-            $m = $data_array['m'];
-
-            $timestamp_start = mktime(0, 0, 0, $m, 1, $y);
-            $timestamp_end = mktime(0, 0, 0, $m, date('t', $timestamp_start), $y);
-
-        }
-
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         $array_data_search = array(
