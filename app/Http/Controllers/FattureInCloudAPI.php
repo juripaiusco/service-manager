@@ -205,10 +205,18 @@ class FattureInCloudAPI extends Controller
         }
     }
 
+    public function getDocByDate($date)
+    {
+        $this->getDocToday(array(
+            'y' => intval(substr($date, 0, 4)),
+            'm' => intval(substr($date, 4, 2))
+        ));
+    }
+
     /**
      * Recupera le fatture attive e passive da FattureInCloud
      */
-    public function getDocToday()
+    public function getDocToday($data_array = array())
     {
         // Impostazione data
         $y = env('GOOGLE_SHEETS_YEAR');
@@ -230,13 +238,24 @@ class FattureInCloudAPI extends Controller
 
         } else {
 
-            $y = $docs_search->anno;
-            $m = date('m', strtotime($docs_search->data)) + 1;
+            $y = intval($docs_search->anno);
+            $m = intval(date('m', strtotime($docs_search->data)) + 1);
         }
 
         $timestamp_start = mktime(0, 0, 0, $m, 1, $y);
         $timestamp_end = mktime(0, 0, 0, $m, date('t', $timestamp_start), $y);
         */
+
+        if (count($data_array) > 0) {
+
+            $y = $data_array['y'];
+            $m = $data_array['m'];
+
+            $timestamp_start = mktime(0, 0, 0, $m, 1, $y);
+            $timestamp_end = mktime(0, 0, 0, $m, date('t', $timestamp_start), $y);
+
+        }
+
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         $array_data_search = array(
