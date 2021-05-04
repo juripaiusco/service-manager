@@ -218,17 +218,34 @@ class FattureInCloudAPI extends Controller
         $timestamp_start = mktime(0, 0, 0, $m, $d - 15, $y);
         $timestamp_end = mktime(0, 0, 0, $m, $d, $y);
 
-        /*$y = 2017;
-        $m = 1;
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        /*
+        $docs_search = FicDoc::orderBy('data', 'desc')
+                             ->first();
+
+        if (!isset($docs_search)) {
+
+            $y = 2016;
+            $m = 12;
+
+        } else {
+
+            $y = $docs_search->anno;
+            $m = date('m', strtotime($docs_search->data)) + 1;
+        }
 
         $timestamp_start = mktime(0, 0, 0, $m, 1, $y);
-        $timestamp_end = mktime(0, 0, 0, $m, date('t', $timestamp_start), $y);*/
+        $timestamp_end = mktime(0, 0, 0, $m, date('t', $timestamp_start), $y);
+        */
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         $array_data_search = array(
             'anno' => date('Y', $timestamp_start),
             'data_inizio' => date('d/m/Y', $timestamp_start),
             'data_fine' => date('d/m/Y', $timestamp_end)
         );
+
+//        dd($array_data_search);
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
