@@ -3,25 +3,44 @@
 
 @section('content')
 
+    <style>
+        .table {
+            margin-bottom: 0;
+        }
+    </style>
+
     <a href="{{ route('cost.list') }}"
        class="btn btn-primary">Indietro</a>
 
-    <br /><br />
+    <br />
 
-    <h2>Confronto anno precedente</h2>
+    <h1 class="text-center">
+        {{ $category }}
+    </h1>
 
-    <p>
-        Nello spesso periodo
-    </p>
+    <h3 class="text-center">
+        Ad oggi rispetto lo scorso anno
+    </h3>
 
-    <h2>Confronto negli anni</h2>
+    <h1 class="text-center
+        @if($array_comparison[$category]['comparison'] < 0) text-success @else text-danger @endif
+        "
+        style="margin: 15px 0 20px 0;">
+        @if($array_comparison[$category]['comparison'] < 0)
+            -
+        @else
+            +
+        @endif
+        &euro; {{ number_format(abs($array_comparison[$category]['comparison']), 2, ',', '.') }}
+    </h1>
+
     <table class="table table-hover table-striped table-sm table-bordered" style="font-size: .8em;">
 
         <thead>
         <tr>
             <th></th>
 
-            @foreach($months as $month)
+            @foreach($array_months as $month)
                 <th class="text-center">{{ substr($month, 0, 3) }}</th>
             @endforeach
 
@@ -32,39 +51,35 @@
 
         <tbody>
 
-        @foreach($costs as $k => $costs_array)
+        @foreach($array_costs_by_months as $y => $cost)
 
             <tr>
 
                 <td>
-                    {{ $k }}
+                    {{ $y }}
                 </td>
 
-                @foreach($costs_array as $y => $cost)
-
-                    @php
+                @php
                     $importo_netto_tot = 0;
-                    @endphp
+                @endphp
 
-                    @for($m = 1; $m <= 12; $m++)
+                @for($m = 1; $m <= 12; $m++)
 
-                        <td class="text-right">
-                            @php
+                    <td class="text-right">
+                        @php
                             if ($m < 10) $m = '0' . $m;
-                            @endphp
+                        @endphp
 
-                            @if(isset($cost[$y . $m]))
-                                &euro; {{ number_format($cost[$y . $m], 2, ',', '.') }}
+                        @if(isset($cost[$y . $m]))
+                        &euro; {{ number_format($cost[$y . $m], 2, ',', '.') }}
 
-                                @php
-                                $importo_netto_tot += $cost[$y . $m]
-                                @endphp
-                            @endif
-                        </td>
+                        @php
+                            $importo_netto_tot += $cost[$y . $m]
+                        @endphp
+                        @endif
+                    </td>
 
-                    @endfor
-
-                @endforeach
+                @endfor
 
                 <td class="text-right">
                     <strong>

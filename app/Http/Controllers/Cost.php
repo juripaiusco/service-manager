@@ -41,11 +41,15 @@ class Cost extends Controller
      *
      * @return mixed
      */
-    private function getDataByCatLastTwoYears($tipo_doc)
+    private function getDataByCat($tipo_doc, $from_year = '')
     {
+        if ($from_year == '') {
+            $from_year = 0;
+        }
+
         $dataByCategory = FicDoc::where('tipo', 'passiva')
                                 ->where('tipo_doc', $tipo_doc)
-                                ->where('anno', '>=', date('Y') - 1)
+                                ->where('anno', '>=', $from_year)
                                 ->select([
                                     'anno',
                                     'data',
@@ -67,10 +71,10 @@ class Cost extends Controller
      *
      * @return array
      */
-    private function catCostsByMonths()
+    private function catCostsByMonths($from_year = '', $category = '')
     {
         // Recupero le spese
-        $costs_months_by_category = $this->getDataByCatLastTwoYears('spesa');
+        $costs_months_by_category = $this->getDataByCat('spesa', $from_year);
 
         foreach ($costs_months_by_category as $cost) {
 
@@ -80,7 +84,7 @@ class Cost extends Controller
         }
 
         // Recupero le note di credito
-        $credits_months_by_category = $this->getDataByCatLastTwoYears('ndc');
+        $credits_months_by_category = $this->getDataByCat('ndc', $from_year);
 
         foreach ($credits_months_by_category as $credit) {
 
@@ -89,12 +93,21 @@ class Cost extends Controller
 
         }
 
-        return $array_costs_months_by_category;
+        if ($category != '') {
+
+            $return = $array_costs_months_by_category[$category];
+
+        } else {
+
+            $return = $array_costs_months_by_category;
+        }
+
+        return $return;
     }
 
-    private function costsByMonth()
+    private function costsByMonth($from_year = '')
     {
-        $array_catCostsByMonths = $this->catCostsByMonths();
+        $array_catCostsByMonths = $this->catCostsByMonths($from_year);
 
         foreach ($array_catCostsByMonths as $cat => $array_costs) {
 
@@ -196,7 +209,9 @@ class Cost extends Controller
                     $array_comparison[$y] = 0;
                 }
 
-                $array_comparison[$y] += $array_costs[$y . $m];
+                if (isset($array_costs[$y . $m])) {
+                    $array_comparison[$y] += $array_costs[$y . $m];
+                }
 
             }
         }
@@ -208,14 +223,16 @@ class Cost extends Controller
 
     public function general()
     {
-        $array_costs_months_by_category = $this->catCostsByMonths();
+        $from_year = date('Y') - 1;
+
+        $array_costs_months_by_category = $this->catCostsByMonths($from_year);
         $array_comparison_by_category = $this->catCostsComparison($array_costs_months_by_category);
 
-        $array_costs_by_months = $this->costsByMonth();
+        $array_costs_by_months = $this->costsByMonth($from_year);
         $array_comparison_by_year = $this->yearCostsComparison($array_costs_by_months);
 
         return view('cost.general', [
-            'months' => $this->array_months,
+            'array_months' => $this->array_months,
             'array_costs_months_by_category' => $array_costs_months_by_category,
             'array_comparison_by_category' => $array_comparison_by_category,
             'array_costs_by_months' => $array_costs_by_months,
@@ -225,47 +242,8 @@ class Cost extends Controller
 
     public function detail($categoria)
     {
-        // Recupero le fatture passive
-        $costs = FicDoc::where('tipo', 'passiva')
-                       ->where('tipo_doc', 'spesa')
-                        ->where('categoria', $categoria)
-                        ->select([
-                            'anno',
-                            'data',
-                            'categoria',
-                            DB::raw('SUM(importo_netto) AS importo_netto')
-                        ])
-                        ->orderby('data', 'desc')
-                        ->groupby(DB::raw('DATE_FORMAT(data, \'%Y-%m\')'))
-                        ->get();
-
-        foreach ($costs as $cost) {
-
-            $data_i = substr(str_replace('-', '', $cost->data), 0, 6);
-            $array_costs[$cost->categoria . ' ' . $cost->anno][$cost->anno][$data_i] = $cost->importo_netto;
-
-        }
-
-        // Recupero le ndc dei fornitori
-        $credits = FicDoc::where('tipo', 'passiva')
-                       ->where('tipo_doc', 'ndc')
-                       ->where('categoria', $categoria)
-                       ->select([
-                           'anno',
-                           'data',
-                           'categoria',
-                           DB::raw('SUM(importo_netto) AS importo_netto')
-                       ])
-                       ->orderby('data', 'desc')
-                       ->groupby(DB::raw('DATE_FORMAT(data, \'%Y-%m\')'))
-                       ->get();
-
-        foreach ($credits as $credit) {
-
-            $data_i = substr(str_replace('-', '', $credit->data), 0, 6);
-            $array_costs[$credit->categoria . ' ' . $credit->anno][$credit->anno][$data_i] -= $credit->importo_netto;
-
-        }
+        $array_costs_by_months = $this->catCostsByMonths(0, $categoria);
+        $array_comparison = $this->catCostsComparison(array($categoria => $array_costs_by_months));
 
         $fatture = FicDoc::where('tipo', 'passiva')
                          ->where('categoria', $categoria)
@@ -274,8 +252,9 @@ class Cost extends Controller
 
         return view('cost.detail', [
             'category' => $categoria,
-            'costs' => $array_costs,
-            'months' => $this->array_months,
+            'array_months' => $this->array_months,
+            'array_costs_by_months' => $array_costs_by_months,
+            'array_comparison' => $array_comparison,
             'fatture' => $fatture
         ]);
     }

@@ -8,6 +8,12 @@
 
     <br /><br />-->
 
+    <style>
+        .table {
+            margin-bottom: 0;
+        }
+    </style>
+
     <h3 class="text-center">
         Ad oggi rispetto lo scorso anno
     </h3>
@@ -16,16 +22,22 @@
         @if($array_comparison_by_year['comparison'] < 0) text-success @else text-danger @endif
         "
         style="margin: 15px 0 20px 0;">
-        &euro; {{ number_format($array_comparison_by_year['comparison'], 2, ',', '.') }}
+
+        @if($array_comparison_by_year['comparison'] < 0)
+            -
+        @else
+            +
+        @endif
+        &euro; {{ number_format(abs($array_comparison_by_year['comparison']), 2, ',', '.') }}
     </h1>
 
-    <table class="table table-hover table-striped table-sm table-bordered" style="font-size: .8em; margin-bottom: 0;">
+    <table class="table table-hover table-striped table-sm table-bordered" style="font-size: .8em;">
 
         <thead>
             <tr>
                 <th></th>
 
-                @foreach($months as $month)
+                @foreach($array_months as $month)
                     <th class="text-center">{{ substr($month, 0, 3) }}</th>
                 @endforeach
 
