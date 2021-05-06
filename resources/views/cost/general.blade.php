@@ -8,15 +8,6 @@
 
     <br /><br />-->
 
-    <style>
-        .table {
-            margin-bottom: 0;
-        }
-        .table thead th {
-
-        }
-    </style>
-
     <h3 class="text-center">
         Ad oggi rispetto lo scorso anno
     </h3>
@@ -28,7 +19,7 @@
         &euro; {{ number_format($array_comparison_by_year['comparison'], 2, ',', '.') }}
     </h1>
 
-    <table class="table table-hover table-striped table-sm table-bordered" style="font-size: .8em;">
+    <table class="table table-hover table-striped table-sm table-bordered" style="font-size: .8em; margin-bottom: 0;">
 
         <thead>
             <tr>
