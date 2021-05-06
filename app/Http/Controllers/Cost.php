@@ -240,7 +240,7 @@ class Cost extends Controller
         ]);
     }
 
-    public function detail($categoria)
+    public function detail($categoria, Request $request)
     {
         $array_costs_by_months = $this->catCostsByMonths(0, $categoria);
         $array_comparison = $this->catCostsComparison(array($categoria => $array_costs_by_months));
@@ -250,12 +250,21 @@ class Cost extends Controller
                          ->orderby('data', 'desc')
                          ->get();
 
+        foreach ($fatture as $fattura) {
+
+            $data_i = substr(str_replace('-', '', $fattura->data), 0, 6);
+
+            $array_fatture[$fattura->anno][$data_i][] = $fattura;
+
+        }
+
         return view('cost.detail', [
             'category' => $categoria,
             'array_months' => $this->array_months,
             'array_costs_by_months' => $array_costs_by_months,
             'array_comparison' => $array_comparison,
-            'fatture' => $fatture
+            'array_fatture' => $array_fatture,
+            'ym_select' => $request->input('ym')
         ]);
     }
 }

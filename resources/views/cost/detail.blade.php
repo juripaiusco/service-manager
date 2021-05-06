@@ -4,8 +4,22 @@
 @section('content')
 
     <style>
+        .card-body {
+            padding: 0;
+        }
         .table {
             margin-bottom: 0;
+        }
+        .card .table-hover tbody tr:hover {
+            background-color: lightskyblue;
+            color: #fff;
+        }
+        tbody.date_selected {
+            border: 3px solid deepskyblue !important;
+        }
+        .table-hover tbody.date_selected tr:hover {
+            background-color: deepskyblue;
+            color: #fff;
         }
     </style>
 
@@ -71,11 +85,15 @@
                         @endphp
 
                         @if(isset($cost[$y . $m]))
-                        &euro; {{ number_format($cost[$y . $m], 2, ',', '.') }}
 
-                        @php
-                            $importo_netto_tot += $cost[$y . $m]
-                        @endphp
+                            <a href="{{ route('cost.detail', ['categoria' => $category, 'ym' => $y . $m]) }}#{{ $y . $m }}">
+                                &euro; {{ number_format($cost[$y . $m], 2, ',', '.') }}
+                            </a>
+
+                            @php
+                                $importo_netto_tot += $cost[$y . $m]
+                            @endphp
+
                         @endif
                     </td>
 
@@ -96,60 +114,69 @@
     </table>
 
     <br>
-    <h2>Fatture</h2>
 
-    <table class="table table-hover table-striped table-sm" style="font-size: .8em;">
+    <h2 class="text-center">Fatture</h2>
 
-        <thead>
-            <tr>
-                <th></th>
-                <th>Numero</th>
-                <th>Nome</th>
-                <th>Tipo Doc.</th>
-                <th class="text-center">Data</th>
-                <th class="text-right">Importo</th>
-                <th class="text-right">IVA</th>
-                <th class="text-right">Totale</th>
-            </tr>
-        </thead>
+    @foreach($array_fatture as $y => $array_fatture_by_month)
 
-        <tbody>
+        <div class="card">
+            <div class="card-header">
+                {{ $y }} {{--{{ $array_months[intval(substr($ym, 4, 2)) - 1] }}--}}
+            </div>
+            <div class="card-body">
 
-        @php
-            $rem_y = 0;
-        @endphp
+                <table class="table table-hover table-striped table-sm"
+                       style="font-size: .8em;">
 
-        @foreach($fatture as $fattura)
+                    <thead>
+                    <tr>
+                        <th width="20%">Numero</th>
+                        <th>Nome</th>
+                        <th width="10%">Tipo Doc.</th>
+                        <th width="10%" class="text-center">Data</th>
+                        <th width="10%" class="text-right">Importo</th>
+                        <th width="10%" class="text-right">IVA</th>
+                        <th width="10%" class="text-right">Totale</th>
+                    </tr>
+                    </thead>
 
-            <tr>
-                <td>
-                    @if($rem_y != $fattura->anno)
-                    {{ $fattura->anno }}
-                    @endif
-                </td>
-                <td>{{ $fattura->numero }}</td>
-                <td>{{ $fattura->nome }}</td>
-                <td>{{ $fattura->tipo_doc }}</td>
-                <td class="text-center">
-                    {{ date('d/m/Y', strtotime($fattura->data)) }}
-                </td>
-                <td class="text-right">
-                    &euro; {{ number_format($fattura->importo_netto, 2, ',', '.') }}
-                </td>
-                <td class="text-right">
-                    &euro; {{ number_format($fattura->importo_iva, 2, ',', '.') }}
-                </td>
-                <td class="text-right">
-                    &euro; {{ number_format($fattura->importo_totale, 2, ',', '.') }}
-                </td>
-            </tr>
+                    @foreach($array_fatture_by_month as $ym => $array_fatture_obj)
 
-            @php
-            $rem_y = $fattura->anno;
-            @endphp
+                        <tbody class="@if($ym == $ym_select) date_selected @endif">
 
-        @endforeach
-        </tbody>
-    </table>
+                        @foreach($array_fatture_obj as $k => $fattura)
+
+                            <tr @if($k <= 0) id="{{ $ym }}" @endif>
+                                <td>{{ $fattura->numero }}</td>
+                                <td>{{ $fattura->nome }}</td>
+                                <td>{{ $fattura->tipo_doc }}</td>
+                                <td class="text-center">
+                                    {{ date('d/m/Y', strtotime($fattura->data)) }}
+                                </td>
+                                <td class="text-right">
+                                    &euro; {{ number_format($fattura->importo_netto, 2, ',', '.') }}
+                                </td>
+                                <td class="text-right">
+                                    &euro; {{ number_format($fattura->importo_iva, 2, ',', '.') }}
+                                </td>
+                                <td class="text-right">
+                                    &euro; {{ number_format($fattura->importo_totale, 2, ',', '.') }}
+                                </td>
+                            </tr>
+
+                        @endforeach
+
+                        </tbody>
+
+                    @endforeach
+
+                </table>
+
+            </div>
+        </div>
+
+        <br>
+
+    @endforeach
 
 @endsection
