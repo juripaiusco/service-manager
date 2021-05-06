@@ -15,7 +15,7 @@
     </style>
 
     <h3 class="text-center">
-        Ad oggi rispetto lo scorso anno
+        Costi rispetto lo scorso anno
     </h3>
 
     <h1 class="text-center
