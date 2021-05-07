@@ -25,7 +25,7 @@ async function createWidget(items)
      * Read JSON data
      * @type {Request}
      */
-    let r = new Request('WRITE_YOUR_URL')
+    let r = new Request('WRITE_YOUR_URL') 
     let json = await r.loadJSON()
 
     /**
