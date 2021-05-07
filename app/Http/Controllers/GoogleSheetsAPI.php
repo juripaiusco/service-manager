@@ -366,14 +366,66 @@ class GoogleSheetsAPI extends Controller
         );
         $result = $service->spreadsheets_values->batchGet($spreadsheetId, $params);
 
+
+        $cost = new Cost();
+        $from_year = date('Y') - 1;
+
+        $array_costs_months_by_category = $cost->catCostsByMonths($from_year);
+        $array_comparison_by_category = $cost->catCostsComparison($array_costs_months_by_category);
+
+        $array_costs_by_months = $cost->costsByMonth($from_year);
+        $array_comparison_by_year = $cost->yearCostsComparison($array_costs_by_months);
+
         $dataArray = array(
+            'entrate_anno_vs' => array(
+                'value' => 'n/d',
+                'sign' => '-'
+            ),
+            'uscite_anno_vs' => array(
+                'value' => number_format(abs($array_comparison_by_year['comparison']), 2, ',', '.'),
+                'sign' => $array_comparison_by_year['comparison'] < 0 ? '-' : '+'
+            ),
+
             'trimestre' => array(
                 'periodo' => $periodo,
                 'value' => $result->valueRanges[2]->values[0][0],
             ),
+
+            'entrate_mese_corrente' => array(
+                'value' => $result->valueRanges[0]->values[0][0],
+                'vs' => 'n/d',
+                'vs_sign' => '-'
+            ),
+            'uscite_mese_corrente' => array(
+                'value' => $result->valueRanges[1]->values[0][0],
+                'vs' => 'n/d',
+                'vs_sign' => '-'
+            ),
+
             'entrate' => $result->valueRanges[0]->values[0][0],
             'uscite' => $result->valueRanges[1]->values[0][0],
         );
+
+        foreach ($array_comparison_by_category as $cat => $comparison) {
+
+            if ($comparison['comparison'] > 0) {
+
+                $dataArray['category_negative'][] = array(
+                    'name' => $cat,
+                    'value' => number_format($comparison['comparison'], 2, ',', '.')
+                );
+
+            }
+
+            if ($comparison['comparison'] <= 0) {
+
+                $dataArray['category_positive'][] = array(
+                    'name' => $cat,
+                    'value' => number_format($comparison['comparison'], 2, ',', '.')
+                );
+
+            }
+        }
 
         /**
          * Per esempio se siamo nell'ultimo trimestre e inizia il nuovo anno, per 10 giorni il JSON

@@ -41,7 +41,7 @@ class Cost extends Controller
      *
      * @return mixed
      */
-    private function getDataByCat($tipo_doc, $from_year = '')
+    public function getDataByCat($tipo_doc, $from_year = '')
     {
         if ($from_year == '') {
             $from_year = 0;
@@ -71,7 +71,7 @@ class Cost extends Controller
      *
      * @return array
      */
-    private function catCostsByMonths($from_year = '', $category = '')
+    public function catCostsByMonths($from_year = '', $category = '')
     {
         // Recupero le spese
         $costs_months_by_category = $this->getDataByCat('spesa', $from_year);
@@ -105,7 +105,7 @@ class Cost extends Controller
         return $return;
     }
 
-    private function costsByMonth($from_year = '')
+    public function costsByMonth($from_year = '')
     {
         $array_catCostsByMonths = $this->catCostsByMonths($from_year);
 
@@ -145,7 +145,7 @@ class Cost extends Controller
      *
      * @return array
      */
-    private function catCostsComparison($array_costs_months_by_category)
+    public function catCostsComparison($array_costs_months_by_category)
     {
         // Confronto spese ad oggi con l'anno precedente
         foreach ($array_costs_months_by_category as $cat => $array_cost) {
@@ -197,7 +197,7 @@ class Cost extends Controller
      *
      * @return array
      */
-    private function yearCostsComparison($array_costs_by_months)
+    public function yearCostsComparison($array_costs_by_months)
     {
         foreach ($array_costs_by_months as $y => $array_costs) {
 
