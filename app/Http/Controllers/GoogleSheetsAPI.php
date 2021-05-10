@@ -395,6 +395,50 @@ class GoogleSheetsAPI extends Controller
 
         // - - -
 
+        $income_this_year_month = 0;
+        $income_last_year_month = 0;
+
+        $mktime = mktime(0, 0, 0, date('m'), date('d') - 10, date('Y'));
+        $year = date('Y', $mktime);
+
+        if (isset($array_income_by_months[$year][$year . date('m', $mktime)]))
+        {
+            $income_this_year_month = $array_income_by_months[$year][$year . date('m', $mktime)];
+        }
+
+        $mktime = mktime(0, 0, 0, date('m'), date('d') - 10, date('Y') - 1);
+        $year = date('Y', $mktime);
+
+        if (isset($array_income_by_months[$year][$year . date('m', $mktime)]))
+        {
+            $income_last_year_month = $array_income_by_months[$year][$year . date('m', $mktime)];
+        }
+
+        $entrate_mese_corrente_vs = $income_this_year_month - $income_last_year_month;
+
+        // - - -
+
+        $costs_this_year_month = 0;
+        $costs_last_year_month = 0;
+
+        $mktime = mktime(0, 0, 0, date('m'), date('d') - 10, date('Y'));
+        $year = date('Y', $mktime);
+
+        if (isset($array_costs_by_months[$year][$year . date('m', $mktime)]))
+        {
+            $costs_this_year_month = $array_costs_by_months[$year][$year . date('m', $mktime)];
+        }
+
+        $mktime = mktime(0, 0, 0, date('m'), date('d') - 10, date('Y') - 1);
+        $year = date('Y', $mktime);
+
+        if (isset($array_costs_by_months[$year][$year . date('m', $mktime)]))
+        {
+            $costs_last_year_month = $array_costs_by_months[$year][$year . date('m', $mktime)];
+        }
+
+        $uscite_mese_corrente_vs = $costs_this_year_month - $costs_last_year_month;
+
         $dataArray = array(
             'entrate_anno_vs' => array(
                 'value' => number_format(abs($array_income_comparison_by_year['comparison']), 2, ',', '.'),
@@ -412,13 +456,13 @@ class GoogleSheetsAPI extends Controller
 
             'entrate_mese_corrente' => array(
                 'value' => $result->valueRanges[0]->values[0][0],
-                'vs' => 'n/d',
-                'vs_sign' => '-'
+                'vs' => number_format(abs($entrate_mese_corrente_vs), 2, ',', '.'),
+                'vs_sign' => $entrate_mese_corrente_vs < 0 ? '-' : '+'
             ),
             'uscite_mese_corrente' => array(
                 'value' => $result->valueRanges[1]->values[0][0],
-                'vs' => 'n/d',
-                'vs_sign' => '-'
+                'vs' => number_format(abs($uscite_mese_corrente_vs), 2, ',', '.'),
+                'vs_sign' => $uscite_mese_corrente_vs < 0 ? '-' : '+'
             ),
 
             'entrate' => $result->valueRanges[0]->values[0][0],
