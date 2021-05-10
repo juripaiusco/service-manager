@@ -367,14 +367,22 @@ class GoogleSheetsAPI extends Controller
         $result = $service->spreadsheets_values->batchGet($spreadsheetId, $params);
 
 
-        $cost = new Cost();
+        $FicData = new FattureInCloudData();
         $from_year = date('Y') - 1;
 
-        $array_costs_months_by_category = $cost->catCostsByMonths($from_year);
-        $array_comparison_by_category = $cost->catCostsComparison($array_costs_months_by_category);
+        $array_costs_months_by_category = $FicData->catDataByMonths(array(
+            'from_year' => $from_year,
+            'tipo' => 'passiva',
+            'tipo_doc' => 'spesa'
+        ));
+        $array_comparison_by_category = $FicData->catComparison($array_costs_months_by_category);
 
-        $array_costs_by_months = $cost->costsByMonth($from_year);
-        $array_comparison_by_year = $cost->yearCostsComparison($array_costs_by_months);
+        $array_costs_by_months = $FicData->dataByMonth(array(
+            'from_year' => $from_year,
+            'tipo' => 'passiva',
+            'tipo_doc' => 'spesa'
+        ));
+        $array_comparison_by_year = $FicData->yearComparison($array_costs_by_months);
 
         $dataArray = array(
             'entrate_anno_vs' => array(
