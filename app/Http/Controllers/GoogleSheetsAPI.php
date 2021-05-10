@@ -370,6 +370,15 @@ class GoogleSheetsAPI extends Controller
         $FicData = new FattureInCloudData();
         $from_year = date('Y') - 1;
 
+        $array_income_by_months = $FicData->dataByMonth(array(
+            'from_year' => $from_year,
+            'tipo' => 'attiva',
+            'tipo_doc' => 'fatture'
+        ));
+        $array_comparison_by_year = $FicData->yearComparison($array_income_by_months);
+
+        // - - -
+
         $array_costs_months_by_category = $FicData->catDataByMonths(array(
             'from_year' => $from_year,
             'tipo' => 'passiva',
@@ -384,10 +393,12 @@ class GoogleSheetsAPI extends Controller
         ));
         $array_comparison_by_year = $FicData->yearComparison($array_costs_by_months);
 
+        // - - -
+
         $dataArray = array(
             'entrate_anno_vs' => array(
-                'value' => 'n/d',
-                'sign' => '-'
+                'value' => number_format(abs($array_comparison_by_year), 2, ',', '.'),
+                'sign' => $array_comparison_by_year['comparison'] < 0 ? '-' : '+'
             ),
             'uscite_anno_vs' => array(
                 'value' => number_format(abs($array_comparison_by_year['comparison']), 2, ',', '.'),

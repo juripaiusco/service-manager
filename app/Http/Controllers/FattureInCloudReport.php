@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Model\FicDoc;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class Cost extends Controller
+class FattureInCloudReport extends Controller
 {
     /**
      * Create a new controller instance.
@@ -18,7 +17,41 @@ class Cost extends Controller
         $this->middleware('auth');
     }
 
-    public function general()
+    public function incomeGeneral()
+    {
+        $from_year = date('Y') - 1;
+
+        $FicData = new FattureInCloudData();
+
+        /*$array_income_months_by_category = $FicData->catDataByMonths(array(
+            'from_year' => $from_year,
+            'tipo' => 'attiva',
+            'tipo_doc' => 'fatture'
+        ));
+        $array_comparison_by_category = $FicData->catComparison($array_income_months_by_category);*/
+
+        $array_income_by_months = $FicData->dataByMonth(array(
+            'from_year' => $from_year,
+            'tipo' => 'attiva',
+            'tipo_doc' => 'fatture'
+        ));
+        $array_comparison_by_year = $FicData->yearComparison($array_income_by_months);
+
+        return view('analysis.income.general', [
+            'array_months' => $FicData->array_months,
+            /*'array_income_months_by_category' => $array_income_months_by_category,
+            'array_comparison_by_category' => $array_comparison_by_category,*/
+            'array_income_by_months' => $array_income_by_months,
+            'array_comparison_by_year' => $array_comparison_by_year
+        ]);
+    }
+
+    public function incomeDetail($categoria, Request $request)
+    {
+        echo 'ciao';
+    }
+
+    public function costGeneral()
     {
         $from_year = date('Y') - 1;
 
@@ -38,7 +71,7 @@ class Cost extends Controller
         ));
         $array_comparison_by_year = $FicData->yearComparison($array_costs_by_months);
 
-        return view('cost.general', [
+        return view('analysis.cost.general', [
             'array_months' => $FicData->array_months,
             'array_costs_months_by_category' => $array_costs_months_by_category,
             'array_comparison_by_category' => $array_comparison_by_category,
@@ -47,7 +80,7 @@ class Cost extends Controller
         ]);
     }
 
-    public function detail($categoria, Request $request)
+    public function costDetail($categoria, Request $request)
     {
         $FicData = new FattureInCloudData();
 
@@ -72,7 +105,7 @@ class Cost extends Controller
 
         }
 
-        return view('cost.detail', [
+        return view('analysis.cost.detail', [
             'category' => $categoria,
             'array_months' => $FicData->array_months,
             'array_costs_by_months' => $array_costs_by_months,

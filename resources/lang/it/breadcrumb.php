@@ -23,6 +23,7 @@ return [
     'create' => 'Nuovo',
     'edit' => 'Modifica',
     'cost' => 'Costi',
+    'income' => 'Entrate',
 
     'name' => ':name',
 

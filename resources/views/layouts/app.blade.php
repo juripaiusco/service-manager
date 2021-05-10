@@ -68,7 +68,8 @@
                                         Analisi
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownAnalisi">
-                                        <a class="dropdown-item" href="{{ route('cost.list') }}">Costi</a>
+                                        <a class="dropdown-item" href="{{ route('income.list') }}">Entrate</a>
+                                        <a class="dropdown-item" href="{{ route('cost.list') }}">Uscite</a>
                                     </div>
                                 </li>
 

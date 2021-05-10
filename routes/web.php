@@ -90,5 +90,8 @@ Route::get('/fic/importbydate/{date}', 'FattureInCloudAPI@getDocByDate');
 
 //Route::get('/gsheets/push-outs', 'GoogleSheetsAPI@pushOuts');
 
-Route::get('/analysis/cost', 'Cost@general')->name('cost.list');
-Route::get('/analysis/cost/{categoria}', 'Cost@detail')->name('cost.detail');
+Route::get('/analysis/income', 'FattureInCloudReport@incomeGeneral')->name('income.list');
+Route::get('/analysis/income/{categoria}', 'FattureInCloudReport@incomeDetail')->name('income.detail');
+
+Route::get('/analysis/cost', 'FattureInCloudReport@costGeneral')->name('cost.list');
+Route::get('/analysis/cost/{categoria}', 'FattureInCloudReport@costDetail')->name('cost.detail');
