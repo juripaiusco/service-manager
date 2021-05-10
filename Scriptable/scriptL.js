@@ -16,21 +16,21 @@ async function createWidget(items)
     switch(Device.model()) {
         case 'iPad':
             stackWidth = 148
-            spacer = 0
             widgetBgColor = '#1e1e1e'
+            footerLength = 10
             break;
         case 'iPhone':
             stackWidth = 158
-            spacer = 14
             widgetBgColor = '#2c2c2e'
+            footerLength = 12
             break;
     }
 
     // Configuration
     let config = {
         'stackWidth': stackWidth,
-        'spacer': spacer,
-        'widgetBgColor': widgetBgColor
+        'widgetBgColor': widgetBgColor,
+        'footerLength': footerLength
     }
 
     // -------------------------------------------------------
@@ -58,7 +58,7 @@ async function createWidget(items)
 
     // Creazione stack Header LEFT
     let stackHeaderLeft = stackHeaderElement(stackHeader, {
-        'value':        '€\u00a0' + json.entrate_anno_vs.value,
+        'value':        '€\u00a0' + json.entrate_anno_vs.sign + json.entrate_anno_vs.value,
         'valueColor':   json.entrate_anno_vs.sign == '-' ? Color.red() : Color.green(),
         'icon':         '▼',
         'elementColor': Color.green(),
@@ -69,7 +69,7 @@ async function createWidget(items)
 
     // Creazione stack Header RIGHT
     let stackHeaderRight = stackHeaderElement(stackHeader, {
-        'value':        '€\u00a0' + json.uscite_anno_vs.value,
+        'value':        '€\u00a0' + json.uscite_anno_vs.sign + json.uscite_anno_vs.value,
         'valueColor':   json.uscite_anno_vs.sign == '-' ? Color.green() : Color.red(),
         'icon':         '▲',
         'elementColor': Color.red(),
@@ -80,7 +80,7 @@ async function createWidget(items)
 
     // -------------------------------------------------------
     // Creazione andamento Trimestre
-    widget.addSpacer(15 + config['spacer'])
+    widget.addSpacer(15)
 
     let textTrimestreValue = widget.addText(json.trimestre.value)
     textTrimestreValue.font = Font.title2()
@@ -92,7 +92,7 @@ async function createWidget(items)
     textTrimestreLegend.font = Font.systemFont(12)
     textTrimestreLegend.centerAlignText()
 
-    widget.addSpacer(15 + config['spacer'])
+    widget.addSpacer(15)
     // -------------------------------------------------------
 
 
@@ -122,23 +122,12 @@ async function createWidget(items)
 
     // -------------------------------------------------------
     // Creazione stack FOOTER
-    widget.addSpacer(15)
+    widget.addSpacer(10)
 
     let stackFooter = widget.addStack()
 
-    // Creazione stack Footer LEFT
-    let stackFooterLeft = stackFooterElement(stackFooter, {
-        'items': json.category_positive,
-        'elementColor': Color.green(),
-        config
-    })
-
-    stackFooter.addSpacer(15)
-
-    // Creazione stack Header RIGHT
-    let stackFooterRight = stackFooterElement(stackFooter, {
-        'items': json.category_negative,
-        'elementColor': Color.red(),
+    let stackFooterContainer = stackFooterElement(stackFooter, {
+        'items': json.category,
         config
     })
     // -------------------------------------------------------
@@ -163,9 +152,15 @@ function stackHeaderElement(ObjStack, args)
     stack.size = new Size(args['config']['stackWidth'], 0)
     stack.setPadding(5, 10, 5, 10)
 
+    let space = '';
+    let strLength = args['value'].length;
+    for (var i = 0; i < (26 - strLength); i++) {
+        space += ' ';
+    }
+
     // Icon Stack
     let iconStack = stack.addStack();
-    let iconRight = iconStack.addText(args['icon'] + '                                                     ')
+    let iconRight = iconStack.addText(args['icon'] + space)
     iconRight.font = Font.systemFont(12)
     iconRight.textColor = args['elementColor']
 
@@ -205,14 +200,9 @@ function stackBodyElement(ObjStack, args)
 function stackFooterElement(ObjStack, args)
 {
     let stack = ObjStack.addStack()
-    stack.borderWidth = 2
-    stack.cornerRadius = 6
-    stack.borderColor = args['elementColor']
-    stack.size = new Size(args['config']['stackWidth'], 145)
-    stack.setPadding(5, 5, 5, 5)
     stack.layoutVertically()
 
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < args['config']['footerLength']; i++) {
 
         // Item Stack
         let stackItem = stack.addStack();
@@ -225,19 +215,25 @@ function stackFooterElement(ObjStack, args)
 
         if (typeof args['items'][i] !== 'undefined') {
             name = args['items'][i].name;
-            value = '€\u00a0' + args['items'][i].value;
+            value = args['items'][i].sign + '\u00a0€\u00a0' + args['items'][i].value;
         }
 
-        let textCatNameLeft = catNameStack.addText(name + '                                                     ')
+        let space = '';
+        let strLength = name.length;
+        for (var s = 0; s < (80 - strLength); s++) {
+            space += ' ';
+        }
+
+        let textCatNameLeft = catNameStack.addText(name + space)
         textCatNameLeft.font = Font.systemFont(12)
-        textCatNameLeft.textColor = args['elementColor']
+        textCatNameLeft.textColor = args['items'][i].sign == '-' ? Color.green() : Color.red()
 
         // Valute category Stack
         let catValueStack = stackItem.addStack();
 
         let textCatValueRight = catValueStack.addText(value)
         textCatValueRight.font = Font.systemFont(12)
-        textCatValueRight.textColor = args['elementColor']
+        textCatValueRight.textColor = args['items'][i].sign == '-' ? Color.green() : Color.red()
 
     }
 }

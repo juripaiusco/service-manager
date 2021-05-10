@@ -408,6 +408,12 @@ class GoogleSheetsAPI extends Controller
 
         foreach ($array_comparison_by_category as $cat => $comparison) {
 
+            $dataArray['category'][] = array(
+                'name' => $cat,
+                'value' => number_format(abs($comparison['comparison']), 2, ',', '.'),
+                'sign' => $comparison['comparison'] <= 0 ? '-' : '+'
+            );
+
             if ($comparison['comparison'] > 0) {
 
                 $dataArray['category_negative'][] = array(
