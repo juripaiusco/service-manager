@@ -375,7 +375,7 @@ class GoogleSheetsAPI extends Controller
             'tipo' => 'attiva',
             'tipo_doc' => 'fatture'
         ));
-        $array_comparison_by_year = $FicData->yearComparison($array_income_by_months);
+        $array_income_comparison_by_year = $FicData->yearComparison($array_income_by_months);
 
         // - - -
 
@@ -384,25 +384,25 @@ class GoogleSheetsAPI extends Controller
             'tipo' => 'passiva',
             'tipo_doc' => 'spesa'
         ));
-        $array_comparison_by_category = $FicData->catComparison($array_costs_months_by_category);
+        $array_costs_comparison_by_category = $FicData->catComparison($array_costs_months_by_category);
 
         $array_costs_by_months = $FicData->dataByMonth(array(
             'from_year' => $from_year,
             'tipo' => 'passiva',
             'tipo_doc' => 'spesa'
         ));
-        $array_comparison_by_year = $FicData->yearComparison($array_costs_by_months);
+        $array_costs_comparison_by_year = $FicData->yearComparison($array_costs_by_months);
 
         // - - -
 
         $dataArray = array(
             'entrate_anno_vs' => array(
-                'value' => number_format(abs($array_comparison_by_year), 2, ',', '.'),
-                'sign' => $array_comparison_by_year['comparison'] < 0 ? '-' : '+'
+                'value' => number_format(abs($array_income_comparison_by_year['comparison']), 2, ',', '.'),
+                'sign' => $array_income_comparison_by_year['comparison'] < 0 ? '-' : '+'
             ),
             'uscite_anno_vs' => array(
-                'value' => number_format(abs($array_comparison_by_year['comparison']), 2, ',', '.'),
-                'sign' => $array_comparison_by_year['comparison'] < 0 ? '-' : '+'
+                'value' => number_format(abs($array_costs_comparison_by_year['comparison']), 2, ',', '.'),
+                'sign' => $array_costs_comparison_by_year['comparison'] < 0 ? '-' : '+'
             ),
 
             'trimestre' => array(
@@ -425,7 +425,7 @@ class GoogleSheetsAPI extends Controller
             'uscite' => $result->valueRanges[1]->values[0][0],
         );
 
-        foreach ($array_comparison_by_category as $cat => $comparison) {
+        foreach ($array_costs_comparison_by_category as $cat => $comparison) {
 
             $dataArray['category'][] = array(
                 'name' => $cat,
