@@ -122,7 +122,7 @@ async function createWidget(items)
 
     // -------------------------------------------------------
     // Creazione stack FOOTER
-    widget.addSpacer(10)
+    widget.addSpacer(9)
 
     let stackFooter = widget.addStack()
 
@@ -204,6 +204,8 @@ function stackFooterElement(ObjStack, args)
 
     for (var i = 0; i < args['config']['footerLength']; i++) {
 
+        stack.addSpacer(1);
+
         // Item Stack
         let stackItem = stack.addStack();
 
@@ -234,10 +236,6 @@ function stackFooterElement(ObjStack, args)
         let textCatValueRight = catValueStack.addText(value)
         textCatValueRight.font = Font.systemFont(12)
         textCatValueRight.textColor = args['items'][i].sign == '-' ? Color.green() : Color.red()
-
-        if (i != args['config']['footerLength'] - 1) {
-            stack.addSpacer(1);
-        }
 
     }
 }
