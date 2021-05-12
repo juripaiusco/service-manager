@@ -49,8 +49,8 @@ class GoogleSheetsAPI extends Controller
         /**
          * Importo i documenti in DB
          */
-        $fic = new FattureInCloudAPI();
-        $fic->getDocToday();
+        /*$fic = new FattureInCloudAPI();
+        $fic->getDocToday();*/
 
         /**
          * Prendo i dati da fattureincloud.it
