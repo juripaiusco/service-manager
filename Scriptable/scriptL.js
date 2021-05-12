@@ -86,7 +86,7 @@ async function createWidget(items)
     textTrimestreValue.font = Font.title2()
     textTrimestreValue.centerAlignText()
 
-    widget.addSpacer(5)
+    widget.addSpacer(4)
 
     let textTrimestreLegend = widget.addText('utile ' + json.trimestre.periodo + '° trimestre')
     textTrimestreLegend.font = Font.systemFont(12)
@@ -187,7 +187,7 @@ function stackBodyElement(ObjStack, args)
     textValue.font = Font.boldSystemFont(16)
     textValue.textColor = Color.white()
 
-    stack.addSpacer(5)
+    stack.addSpacer(4)
 
     // text comparison
     let textComparison = stack.addText('( ' + args['valueComparison'] + ' )')
@@ -234,6 +234,10 @@ function stackFooterElement(ObjStack, args)
         let textCatValueRight = catValueStack.addText(value)
         textCatValueRight.font = Font.systemFont(12)
         textCatValueRight.textColor = args['items'][i].sign == '-' ? Color.green() : Color.red()
+
+        if (i != args['config']['footerLength'] - 1) {
+            stack.addSpacer(1);
+        }
 
     }
 }
