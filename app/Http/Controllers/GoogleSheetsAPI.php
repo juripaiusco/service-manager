@@ -334,6 +334,7 @@ class GoogleSheetsAPI extends Controller
         // Mostro i dati del trimestre per almeno 10 giorni passato il trimestre,
         // così da poter modificare eventuali contabilità e poterle avere sempre sotto controllo.
         $timeJSON = mktime(0, 0, 0, date('m'), (date('d') - 10), env('GOOGLE_SHEETS_YEAR'));
+
         $alpha = array('B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M');
 
         $row_in = 3;
@@ -366,78 +367,104 @@ class GoogleSheetsAPI extends Controller
         );
         $result = $service->spreadsheets_values->batchGet($spreadsheetId, $params);
 
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+        // Classe FattureInCloudData per recuperare i dati di entrate e uscite
         $FicData = new FattureInCloudData();
-        $from_year = date('Y') - 1;
 
+        // Definizione anno di partenza recupero dati
+        $from_year = env('GOOGLE_SHEETS_YEAR') - 1;
+
+        // Imposto la data anno e mese di quest'anno
+        $y_thisYear = date('Y', $timeJSON);
+        $m_thisYear = date('m', $timeJSON);
+
+        // Imposto la data anno e mese dell'anno scorso
+        $timeJSON_lastYear = mktime(
+            0,
+            0,
+            0,
+            date('m', $timeJSON),
+            1,
+            env('GOOGLE_SHEETS_YEAR') - 1
+        );
+        $y_lastYear = date('Y', $timeJSON_lastYear);
+        $m_lastYear = date('m', $timeJSON_lastYear);
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // Recupero i dati delle entrate
         $array_income_by_months = $FicData->dataByMonth(array(
             'from_year' => $from_year,
             'tipo' => 'attiva',
             'tipo_doc' => 'fatture'
         ));
-        $array_income_comparison_by_year = $FicData->yearComparison($array_income_by_months);
+        $array_income_comparison_by_year = $FicData->yearComparison(
+            $array_income_by_months,
+            env('GOOGLE_SHEETS_YEAR'),
+            date('m', $timeJSON)
+        );
 
-        // - - -
-
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // Recupero di dati delle uscite Divise per categoria
         $array_costs_months_by_category = $FicData->catDataByMonths(array(
             'from_year' => $from_year,
             'tipo' => 'passiva',
             'tipo_doc' => 'spesa'
         ));
-        $array_costs_comparison_by_category = $FicData->catComparison($array_costs_months_by_category);
+        $array_costs_comparison_by_category = $FicData->catComparison(
+            $array_costs_months_by_category,
+            env('GOOGLE_SHEETS_YEAR'),
+            date('m', $timeJSON)
+        );
 
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // Recupero di dati delle uscite
         $array_costs_by_months = $FicData->dataByMonth(array(
             'from_year' => $from_year,
             'tipo' => 'passiva',
             'tipo_doc' => 'spesa'
         ));
-        $array_costs_comparison_by_year = $FicData->yearComparison($array_costs_by_months);
+        $array_costs_comparison_by_year = $FicData->yearComparison(
+            $array_costs_by_months,
+            env('GOOGLE_SHEETS_YEAR'),
+            date('m', $timeJSON)
+        );
 
-        // - - -
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         $income_this_year_month = 0;
         $income_last_year_month = 0;
 
-        $mktime = mktime(0, 0, 0, date('m'), date('d') - 10, date('Y'));
-        $year = date('Y', $mktime);
-
-        if (isset($array_income_by_months[$year][$year . date('m', $mktime)]))
+        if (isset($array_income_by_months[$y_thisYear][$y_thisYear . $m_thisYear]))
         {
-            $income_this_year_month = $array_income_by_months[$year][$year . date('m', $mktime)];
+            $income_this_year_month = $array_income_by_months[$y_thisYear][$y_thisYear . $m_thisYear];
         }
 
-        $mktime = mktime(0, 0, 0, date('m'), date('d') - 10, date('Y') - 1);
-        $year = date('Y', $mktime);
-
-        if (isset($array_income_by_months[$year][$year . date('m', $mktime)]))
+        if (isset($array_income_by_months[$y_lastYear][$y_lastYear . $m_lastYear]))
         {
-            $income_last_year_month = $array_income_by_months[$year][$year . date('m', $mktime)];
+            $income_last_year_month = $array_income_by_months[$y_lastYear][$y_lastYear . $m_lastYear];
         }
 
         $entrate_mese_corrente_vs = $income_this_year_month - $income_last_year_month;
 
-        // - - -
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         $costs_this_year_month = 0;
         $costs_last_year_month = 0;
 
-        $mktime = mktime(0, 0, 0, date('m'), date('d') - 10, date('Y'));
-        $year = date('Y', $mktime);
-
-        if (isset($array_costs_by_months[$year][$year . date('m', $mktime)]))
+        if (isset($array_costs_by_months[$y_thisYear][$y_thisYear . $m_thisYear]))
         {
-            $costs_this_year_month = $array_costs_by_months[$year][$year . date('m', $mktime)];
+            $costs_this_year_month = $array_costs_by_months[$y_thisYear][$y_thisYear . $m_thisYear];
         }
 
-        $mktime = mktime(0, 0, 0, date('m'), date('d') - 10, date('Y') - 1);
-        $year = date('Y', $mktime);
-
-        if (isset($array_costs_by_months[$year][$year . date('m', $mktime)]))
+        if (isset($array_costs_by_months[$y_lastYear][$y_lastYear . $m_lastYear]))
         {
-            $costs_last_year_month = $array_costs_by_months[$year][$year . date('m', $mktime)];
+            $costs_last_year_month = $array_costs_by_months[$y_lastYear][$y_lastYear . $m_lastYear];
         }
 
         $uscite_mese_corrente_vs = $costs_this_year_month - $costs_last_year_month;
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         $dataArray = array(
             'entrate_anno_vs' => array(
@@ -477,24 +504,9 @@ class GoogleSheetsAPI extends Controller
                 'sign' => $comparison['comparison'] <= 0 ? '-' : '+'
             );
 
-            if ($comparison['comparison'] > 0) {
-
-                $dataArray['category_negative'][] = array(
-                    'name' => $cat,
-                    'value' => number_format($comparison['comparison'], 2, ',', '.')
-                );
-
-            }
-
-            if ($comparison['comparison'] <= 0) {
-
-                $dataArray['category_positive'][] = array(
-                    'name' => $cat,
-                    'value' => number_format($comparison['comparison'], 2, ',', '.')
-                );
-
-            }
         }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         /**
          * Per esempio se siamo nell'ultimo trimestre e inizia il nuovo anno, per 10 giorni il JSON

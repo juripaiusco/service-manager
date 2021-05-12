@@ -148,16 +148,24 @@ class FattureInCloudData extends Controller
      *
      * @return array
      */
-    public function catComparison($array_data_months_by_category)
+    public function catComparison($array_data_months_by_category, $year_comparison = '', $month_end_comparison = '')
     {
+        if (!$year_comparison) {
+            $year_comparison = date('Y');
+        }
+
+        if (!$month_end_comparison) {
+            $month_end_comparison = date('m');
+        }
+
         // Confronto i documenti ad oggi con l'anno precedente
         foreach ($array_data_months_by_category as $cat => $array_cost) {
 
             foreach ($array_cost as $cost) {
 
-                for ($y = date('Y'); $y >= date('Y') - 1; $y--) {
+                for ($y = $year_comparison; $y >= $year_comparison - 1; $y--) {
 
-                    for ($m = 1; $m <= intval(date('m')); $m++) {
+                    for ($m = 1; $m <= $month_end_comparison; $m++) {
 
                         $m = sprintf('%02d', $m);
 
@@ -177,7 +185,7 @@ class FattureInCloudData extends Controller
 
             }
 
-            $array_comparison[$cat]['comparison'] = $array_comparison[$cat][date('Y')] - $array_comparison[$cat][date('Y') - 1];
+            $array_comparison[$cat]['comparison'] = $array_comparison[$cat][$year_comparison] - $array_comparison[$cat][$year_comparison - 1];
 
         }
 
@@ -200,11 +208,19 @@ class FattureInCloudData extends Controller
      *
      * @return array
      */
-    public function yearComparison($array_data_by_months)
+    public function yearComparison($array_data_by_months, $year_comparison = '', $month_end_comparison = '')
     {
+        if (!$year_comparison) {
+            $year_comparison = date('Y');
+        }
+
+        if (!$month_end_comparison) {
+            $month_end_comparison = date('m');
+        }
+
         foreach ($array_data_by_months as $y => $array) {
 
-            for ($m = 1; $m <= intval(date('m')); $m++) {
+            for ($m = 1; $m <= $month_end_comparison; $m++) {
 
                 $m = sprintf('%02d', $m);
 
@@ -219,7 +235,7 @@ class FattureInCloudData extends Controller
             }
         }
 
-        $array_comparison['comparison'] = $array_comparison[date('Y')] - $array_comparison[date('Y') - 1];
+        $array_comparison['comparison'] = $array_comparison[$year_comparison] - $array_comparison[$year_comparison - 1];
 
         return $array_comparison;
     }
