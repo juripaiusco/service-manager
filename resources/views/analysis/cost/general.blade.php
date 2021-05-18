@@ -52,8 +52,19 @@
                 <th></th>
 
                 @foreach($array_months as $k => $month)
-                    <th class="text-center @if(($k + 1) == 5) border-primary bg-primary text-white @endif">
-                        {{ substr($month, 0, 3) }}
+                    <th class="text-center
+                                @if(($k + 1) == 5 && !$vs_select)
+                                border-primary bg-primary text-white
+                                @endif
+                                @if($k + 1 == $vs_select)
+                                table-success
+                                @endif">
+                        <a href="{{ route('cost.list', ['vs' => $k + 1]) }}" class="
+                                @if(($k + 1) == 5 && !$vs_select)
+                                text-white
+                                @endif">
+                            {{ substr($month, 0, 3) }}
+                        </a>
                     </th>
                 @endforeach
 
@@ -78,7 +89,13 @@
 
                 @for($m = 1; $m <= 12; $m++)
 
-                    <td class="text-right @if($m == 5) table-primary @endif">
+                    <td class="text-right
+                                @if($m == 5 && !$vs_select)
+                                table-primary
+                                @endif
+                                @if($m == $vs_select)
+                                table-success
+                                @endif">
                         @php
                             if ($m < 10) $m = '0' . $m;
                         @endphp
@@ -110,6 +127,89 @@
         </tbody>
 
     </table>
+
+    @if(isset($vs_select))
+
+        <br>
+
+        <h2 class="text-center">Confronto {{ $array_months[$vs_select - 1] }}</h2>
+        <div class="text-center">
+            <a href="{{ route('cost.list') }}" class="btn btn-secondary">Chiudi</a>
+        </div>
+
+        <br>
+
+        <div class="row">
+
+            @foreach($array_fatture_group as $y => $array_fatture_by_month)
+
+                <div class="col-lg-6">
+                    <div class="card">
+
+                        <div class="card-header">{{ $y }} - {{ $array_months[$vs_select - 1] }}</div>
+                        <div class="card-body">
+
+                            <table class="table table-hover table-striped table-sm"
+                                   style="font-size: .8em;">
+
+                                <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th width="20%" class="text-right">Importo</th>
+                                    <th width="20%" class="text-right">Iva</th>
+                                    <th width="20%" class="text-right">Totale</th>
+                                </tr>
+                                </thead>
+
+                                @foreach($array_fatture_by_month as $ym => $array_fatture_)
+
+                                    @if($ym == $y . sprintf('%02d', $vs_select))
+
+                                            <tbody class="@if($ym == $ym_select) date_selected @endif">
+
+                                            @foreach($array_fatture_ as $k => $fattura)
+
+                                                <tr @if($k <= 0) id="{{ $ym }}" @endif>
+                                                    <td>
+                                                        {{ \Illuminate\Support\Str::limit($fattura['nome'], 25) }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @if($fattura['importo_netto'] > 0)
+                                                        &euro; {{ number_format($fattura['importo_netto'], 2, ',', '.') }}
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @if($fattura['importo_iva'] > 0)
+                                                        &euro; {{ number_format($fattura['importo_iva'], 2, ',', '.') }}
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @if($fattura['importo_totale'] > 0)
+                                                        &euro; {{ number_format($fattura['importo_totale'], 2, ',', '.') }}
+                                                        @endif
+                                                    </td>
+                                                </tr>
+
+                                            @endforeach
+
+                                            </tbody>
+
+                                    @endif
+
+                                @endforeach
+
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            @endforeach
+
+        </div>
+
+    @endif
 
     <br>
 
