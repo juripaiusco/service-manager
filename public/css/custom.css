@@ -1,0 +1,14 @@
+table.table-sm {
+    font-size: .8em;
+}
+
+@media (max-width: 800px) {
+    .container {
+        min-width: 100%;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    table.table-sm {
+        font-size: .5em;
+    }
+}

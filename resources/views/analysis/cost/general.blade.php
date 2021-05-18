@@ -42,10 +42,10 @@
         @else
             +
         @endif
-        &euro; {{ number_format(abs($array_comparison_by_year['comparison']), 2, ',', '.') }}
+        &euro;&nbsp;{{ number_format(abs($array_comparison_by_year['comparison']), 2, ',', '.') }}
     </h1>
 
-    <table class="table table-hover table-striped table-sm table-bordered" style="font-size: .8em;">
+    <table class="table table-hover table-striped table-sm table-bordered">
 
         <thead>
             <tr>
@@ -103,7 +103,7 @@
                         @if(isset($costs_array[$y . $m]))
 
                             <a href="{{ route('cost.list', ['ym' => $y . $m]) }}#{{ $y . $m }}">
-                                &euro; {{ number_format($costs_array[$y . $m], 2, ',', '.') }}
+                                &euro;&nbsp;{{ number_format($costs_array[$y . $m], 2, ',', '.') }}
                             </a>
 
                             @php
@@ -116,7 +116,7 @@
 
                 <td class="text-right">
                     <strong>
-                        &euro; {{ number_format($importo_netto_tot, 2, ',', '.') }}
+                        &euro;&nbsp;{{ number_format($importo_netto_tot, 2, ',', '.') }}
                     </strong>
                 </td>
 
@@ -149,8 +149,7 @@
                         <div class="card-header">{{ $y }} - {{ $array_months[$vs_select - 1] }}</div>
                         <div class="card-body">
 
-                            <table class="table table-hover table-striped table-sm"
-                                   style="font-size: .8em;">
+                            <table class="table table-hover table-striped table-sm">
 
                                 <thead>
                                 <tr>
@@ -175,17 +174,17 @@
                                                     </td>
                                                     <td class="text-right">
                                                         @if($fattura['importo_netto'] > 0)
-                                                        &euro; {{ number_format($fattura['importo_netto'], 2, ',', '.') }}
+                                                        &euro;&nbsp;{{ number_format($fattura['importo_netto'], 2, ',', '.') }}
                                                         @endif
                                                     </td>
                                                     <td class="text-right">
                                                         @if($fattura['importo_iva'] > 0)
-                                                        &euro; {{ number_format($fattura['importo_iva'], 2, ',', '.') }}
+                                                        &euro;&nbsp;{{ number_format($fattura['importo_iva'], 2, ',', '.') }}
                                                         @endif
                                                     </td>
                                                     <td class="text-right">
                                                         @if($fattura['importo_totale'] > 0)
-                                                        &euro; {{ number_format($fattura['importo_totale'], 2, ',', '.') }}
+                                                        &euro;&nbsp;{{ number_format($fattura['importo_totale'], 2, ',', '.') }}
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -233,7 +232,7 @@
                                         </a>
                                     </td>
                                     <td class="text-right">
-                                        - &euro; {{ number_format(abs($comparison['comparison']), 2, ',', '.') }}
+                                        - &euro;&nbsp;{{ number_format(abs($comparison['comparison']), 2, ',', '.') }}
                                     </td>
                                 </tr>
 
@@ -266,7 +265,7 @@
                                         </a>
                                     </td>
                                     <td class="text-right">
-                                        + &euro; {{ number_format($comparison['comparison'], 2, ',', '.') }}
+                                        + &euro;&nbsp;{{ number_format($comparison['comparison'], 2, ',', '.') }}
                                     </td>
                                 </tr>
 
@@ -294,8 +293,7 @@
             </div>
             <div class="card-body">
 
-                <table class="table table-hover table-striped table-sm"
-                       style="font-size: .8em;">
+                <table class="table table-hover table-striped table-sm">
 
                     <thead>
                     <tr>
@@ -323,13 +321,13 @@
                                     {{ date('d/m/Y', strtotime($fattura->data)) }}
                                 </td>
                                 <td class="text-right">
-                                    &euro; {{ number_format($fattura->importo_netto, 2, ',', '.') }}
+                                    &euro;&nbsp;{{ number_format($fattura->importo_netto, 2, ',', '.') }}
                                 </td>
                                 <td class="text-right">
-                                    &euro; {{ number_format($fattura->importo_iva, 2, ',', '.') }}
+                                    &euro;&nbsp;{{ number_format($fattura->importo_iva, 2, ',', '.') }}
                                 </td>
                                 <td class="text-right">
-                                    &euro; {{ number_format($fattura->importo_totale, 2, ',', '.') }}
+                                    &euro;&nbsp;{{ number_format($fattura->importo_totale, 2, ',', '.') }}
                                 </td>
                             </tr>
 

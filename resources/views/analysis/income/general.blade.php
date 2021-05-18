@@ -28,10 +28,10 @@
         @else
             +
         @endif
-        &euro; {{ number_format(abs($array_comparison_by_year['comparison']), 2, ',', '.') }}
+        &euro;&nbsp;{{ number_format(abs($array_comparison_by_year['comparison']), 2, ',', '.') }}
     </h1>
 
-    <table class="table table-hover table-striped table-sm table-bordered" style="font-size: .8em;">
+    <table class="table table-hover table-striped table-sm table-bordered">
 
         <thead>
             <tr>
@@ -70,7 +70,7 @@
                         @endphp
 
                         @if(isset($income_array[$y . $m]))
-                        &euro; {{ number_format($income_array[$y . $m], 2, ',', '.') }}
+                        &euro;&nbsp;{{ number_format($income_array[$y . $m], 2, ',', '.') }}
 
                         @php
                             $importo_netto_tot += $income_array[$y . $m]
@@ -82,7 +82,7 @@
 
                 <td class="text-right">
                     <strong>
-                        &euro; {{ number_format($importo_netto_tot, 2, ',', '.') }}
+                        &euro;&nbsp;{{ number_format($importo_netto_tot, 2, ',', '.') }}
                     </strong>
                 </td>
 
@@ -116,7 +116,7 @@
 {{--                                        </a>--}}
 {{--                                    </td>--}}
 {{--                                    <td class="text-right">--}}
-{{--                                        - &euro; {{ number_format(abs($comparison['comparison']), 2, ',', '.') }}--}}
+{{--                                        - &euro;&nbsp;{{ number_format(abs($comparison['comparison']), 2, ',', '.') }}--}}
 {{--                                    </td>--}}
 {{--                                </tr>--}}
 
@@ -149,7 +149,7 @@
 {{--                                        </a>--}}
 {{--                                    </td>--}}
 {{--                                    <td class="text-right">--}}
-{{--                                        + &euro; {{ number_format($comparison['comparison'], 2, ',', '.') }}--}}
+{{--                                        + &euro;&nbsp;{{ number_format($comparison['comparison'], 2, ',', '.') }}--}}
 {{--                                    </td>--}}
 {{--                                </tr>--}}
 

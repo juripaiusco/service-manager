@@ -48,7 +48,7 @@
         &euro; {{ number_format(abs($array_comparison[$category]['comparison']), 2, ',', '.') }}
     </h1>
 
-    <table class="table table-hover table-striped table-sm table-bordered" style="font-size: .8em;">
+    <table class="table table-hover table-striped table-sm table-bordered">
 
         <thead>
         <tr>
@@ -125,8 +125,7 @@
             </div>
             <div class="card-body">
 
-                <table class="table table-hover table-striped table-sm"
-                       style="font-size: .8em;">
+                <table class="table table-hover table-striped table-sm">
 
                     <thead>
                     <tr>
