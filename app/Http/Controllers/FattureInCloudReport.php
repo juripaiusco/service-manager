@@ -113,6 +113,7 @@ class FattureInCloudReport extends Controller
 
         // - - -
         // Recupero nomi fornitori per ogni mese
+        // per confrontarli negli anni
         foreach ($fatture_group as $fattura) {
 
             $data_m = substr(str_replace('-', '', $fattura->data), 4, 2);
