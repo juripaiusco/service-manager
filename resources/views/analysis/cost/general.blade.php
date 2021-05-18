@@ -143,7 +143,7 @@
 
             @foreach($array_fatture_group as $y => $array_fatture_by_month)
 
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-sm-6">
                     <div class="card">
 
                         <div class="card-header">{{ $y }} - {{ $array_months[$vs_select - 1] }}</div>
@@ -213,7 +213,7 @@
     <br>
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-sm-6">
 
             <div class="card border-success">
                 <div class="card-header text-success border-success">Spese nella norma</div>
@@ -246,7 +246,7 @@
             </div>
 
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-sm-6">
 
             <div class="card border-danger">
                 <div class="card-header text-danger border-danger">Spese fuori controllo</div>
