@@ -51,7 +51,7 @@ class FattureInCloudReport extends Controller
         echo 'ciao';
     }
 
-    public function costGeneral()
+    public function costGeneral(Request $request)
     {
         $from_year = date('Y') - 1;
 
@@ -71,12 +71,27 @@ class FattureInCloudReport extends Controller
         ));
         $array_comparison_by_year = $FicData->yearComparison($array_costs_by_months);
 
+        $fatture = FicDoc::where('tipo', 'passiva')
+                         ->where('anno', '>=', $from_year)
+                         ->orderby('data', 'desc')
+                         ->get();
+
+        foreach ($fatture as $fattura) {
+
+            $data_i = substr(str_replace('-', '', $fattura->data), 0, 6);
+
+            $array_fatture[$fattura->anno][$data_i][] = $fattura;
+
+        }
+
         return view('analysis.cost.general', [
             'array_months' => $FicData->array_months,
             'array_costs_months_by_category' => $array_costs_months_by_category,
             'array_comparison_by_category' => $array_comparison_by_category,
             'array_costs_by_months' => $array_costs_by_months,
-            'array_comparison_by_year' => $array_comparison_by_year
+            'array_comparison_by_year' => $array_comparison_by_year,
+            'array_fatture' => $array_fatture,
+            'ym_select' => $request->input('ym')
         ]);
     }
 

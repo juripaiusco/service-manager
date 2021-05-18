@@ -9,8 +9,22 @@
     <br /><br />-->
 
     <style>
+        .card-body {
+            padding: 0;
+        }
         .table {
             margin-bottom: 0;
+        }
+        .card .table-hover tbody tr:hover {
+            background-color: lightskyblue;
+            color: #fff;
+        }
+        tbody.date_selected {
+            border: 3px solid deepskyblue !important;
+        }
+        .table-hover tbody.date_selected tr:hover {
+            background-color: deepskyblue;
+            color: #fff;
         }
     </style>
 
@@ -37,8 +51,10 @@
             <tr>
                 <th></th>
 
-                @foreach($array_months as $month)
-                    <th class="text-center">{{ substr($month, 0, 3) }}</th>
+                @foreach($array_months as $k => $month)
+                    <th class="text-center @if(($k + 1) == 5) border-primary bg-primary text-white @endif">
+                        {{ substr($month, 0, 3) }}
+                    </th>
                 @endforeach
 
                 <th></th>
@@ -52,9 +68,9 @@
 
             <tr>
 
-                <td>
+                <th class="text-center">
                     {{ $y }}
-                </td>
+                </th>
 
                 @php
                     $importo_netto_tot = 0;
@@ -62,17 +78,20 @@
 
                 @for($m = 1; $m <= 12; $m++)
 
-                    <td class="text-right">
+                    <td class="text-right @if($m == 5) table-primary @endif">
                         @php
                             if ($m < 10) $m = '0' . $m;
                         @endphp
 
                         @if(isset($costs_array[$y . $m]))
-                        &euro; {{ number_format($costs_array[$y . $m], 2, ',', '.') }}
 
-                        @php
-                            $importo_netto_tot += $costs_array[$y . $m]
-                        @endphp
+                            <a href="{{ route('cost.list', ['ym' => $y . $m]) }}#{{ $y . $m }}">
+                                &euro; {{ number_format($costs_array[$y . $m], 2, ',', '.') }}
+                            </a>
+
+                            @php
+                                $importo_netto_tot += $costs_array[$y . $m]
+                            @endphp
                         @endif
                     </td>
 
@@ -162,5 +181,71 @@
 
         </div>
     </div>
+
+    <br>
+
+    <h2 class="text-center">Fatture</h2>
+
+    @foreach($array_fatture as $y => $array_fatture_by_month)
+
+        <div class="card">
+            <div class="card-header">
+                {{ $y }} {{--{{ $array_months[intval(substr($ym, 4, 2)) - 1] }}--}}
+            </div>
+            <div class="card-body">
+
+                <table class="table table-hover table-striped table-sm"
+                       style="font-size: .8em;">
+
+                    <thead>
+                    <tr>
+                        <th width="20%">Numero</th>
+                        <th>Nome</th>
+                        <th width="10%">Tipo Doc.</th>
+                        <th width="10%" class="text-center">Data</th>
+                        <th width="10%" class="text-right">Importo</th>
+                        <th width="10%" class="text-right">IVA</th>
+                        <th width="10%" class="text-right">Totale</th>
+                    </tr>
+                    </thead>
+
+                    @foreach($array_fatture_by_month as $ym => $array_fatture_obj)
+
+                        <tbody class="@if($ym == $ym_select) date_selected @endif">
+
+                        @foreach($array_fatture_obj as $k => $fattura)
+
+                            <tr @if($k <= 0) id="{{ $ym }}" @endif>
+                                <td>{{ $fattura->numero }}</td>
+                                <td>{{ $fattura->nome }}</td>
+                                <td>{{ $fattura->tipo_doc }}</td>
+                                <td class="text-center">
+                                    {{ date('d/m/Y', strtotime($fattura->data)) }}
+                                </td>
+                                <td class="text-right">
+                                    &euro; {{ number_format($fattura->importo_netto, 2, ',', '.') }}
+                                </td>
+                                <td class="text-right">
+                                    &euro; {{ number_format($fattura->importo_iva, 2, ',', '.') }}
+                                </td>
+                                <td class="text-right">
+                                    &euro; {{ number_format($fattura->importo_totale, 2, ',', '.') }}
+                                </td>
+                            </tr>
+
+                        @endforeach
+
+                        </tbody>
+
+                    @endforeach
+
+                </table>
+
+            </div>
+        </div>
+
+        <br>
+
+    @endforeach
 
 @endsection

@@ -54,8 +54,10 @@
         <tr>
             <th></th>
 
-            @foreach($array_months as $month)
-                <th class="text-center">{{ substr($month, 0, 3) }}</th>
+            @foreach($array_months as $k => $month)
+                <th class="text-center @if(($k + 1) == 5) border-primary bg-primary text-white @endif">
+                    {{ substr($month, 0, 3) }}
+                </th>
             @endforeach
 
             <th></th>
@@ -69,9 +71,9 @@
 
             <tr>
 
-                <td>
+                <th class="text-center">
                     {{ $y }}
-                </td>
+                </th>
 
                 @php
                     $importo_netto_tot = 0;
@@ -79,7 +81,7 @@
 
                 @for($m = 1; $m <= 12; $m++)
 
-                    <td class="text-right">
+                    <td class="text-right @if($m == 5) table-primary @endif">
                         @php
                             if ($m < 10) $m = '0' . $m;
                         @endphp
