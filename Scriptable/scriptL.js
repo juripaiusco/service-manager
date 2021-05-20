@@ -17,12 +17,12 @@ async function createWidget(items)
         case 'iPad':
             stackWidth = 148
             widgetBgColor = '#1e1e1e'
-            footerLength = 10
+            footerLength = 11
             break;
         case 'iPhone':
             stackWidth = 158
             widgetBgColor = '#2c2c2e'
-            footerLength = 12
+            footerLength = 13
             break;
     }
 
@@ -154,20 +154,20 @@ function stackHeaderElement(ObjStack, args)
 
     let space = '';
     let strLength = args['value'].length;
-    for (var i = 0; i < (26 - strLength); i++) {
+    for (var i = 0; i < (18 - strLength); i++) {
         space += ' ';
     }
 
     // Icon Stack
     let iconStack = stack.addStack();
     let iconRight = iconStack.addText(args['icon'] + space)
-    iconRight.font = Font.systemFont(12)
+    iconRight.font = new Font('Menlo-Regular', 11)
     iconRight.textColor = args['elementColor']
 
     // Text Stack
     let textStack = stack.addStack();
     let text = textStack.addText(args['value'])
-    text.font = Font.systemFont(12)
+    text.font = new Font('Menlo-Regular', 11)
     text.textColor = args['valueColor']
 
     return stack
@@ -204,7 +204,7 @@ function stackFooterElement(ObjStack, args)
 
     for (var i = 0; i < args['config']['footerLength']; i++) {
 
-        stack.addSpacer(1);
+        stack.addSpacer(1.5);
 
         // Item Stack
         let stackItem = stack.addStack();
@@ -217,24 +217,46 @@ function stackFooterElement(ObjStack, args)
 
         if (typeof args['items'][i] !== 'undefined') {
             name = args['items'][i].name;
-            value = args['items'][i].sign + '\u00a0€\u00a0' + args['items'][i].value;
+
+            if (args['items'][i].value == '0,00') {
+
+                value = '-';
+
+            } else {
+
+                let valueSpace = '   ';
+
+                if (parseFloat(args['items'][i].value) > 100) {
+
+                    valueSpace = '  ';
+
+                }
+
+                if (parseFloat(args['items'][i].value) > 1000) {
+
+                    valueSpace = ' ';
+
+                }
+
+                value = '€\u00a0' + args['items'][i].sign + valueSpace + args['items'][i].value;
+            }
         }
 
         let space = '';
         let strLength = name.length;
-        for (var s = 0; s < (80 - strLength); s++) {
+        for (var s = 0; s < (100 - strLength); s++) {
             space += ' ';
         }
 
         let textCatNameLeft = catNameStack.addText(name + space)
-        textCatNameLeft.font = Font.systemFont(12)
+        textCatNameLeft.font = new Font('Menlo-Regular', 11)
         textCatNameLeft.textColor = args['items'][i].sign == '-' ? Color.green() : Color.red()
 
         // Valute category Stack
         let catValueStack = stackItem.addStack();
 
         let textCatValueRight = catValueStack.addText(value)
-        textCatValueRight.font = Font.systemFont(12)
+        textCatValueRight.font = new Font('Menlo-Regular', 11)
         textCatValueRight.textColor = args['items'][i].sign == '-' ? Color.green() : Color.red()
 
     }
