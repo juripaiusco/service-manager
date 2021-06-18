@@ -1,0 +1,23 @@
+<mat-toolbar color="primary">
+
+  <button mat-flat-button
+          color="primary">🤖 {{ title }}</button>
+
+  <button mat-flat-button
+          color="primary" hide-xs>Dashboard</button>
+
+  <button mat-flat-button
+          color="primary">Servizi</button>
+
+  <button mat-flat-button
+          color="primary">Clienti</button>
+
+  <button mat-flat-button
+          color="primary"
+          [matMenuTriggerFor]="analisiMenu">Analisi</button>
+  <mat-menu #analisiMenu="matMenu">
+    <button mat-menu-item>Entrate</button>
+    <button mat-menu-item>Uscite</button>
+  </mat-menu>
+
+</mat-toolbar>
