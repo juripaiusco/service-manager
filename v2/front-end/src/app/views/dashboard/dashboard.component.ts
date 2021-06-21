@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import { DashboardService } from "../../services/dashboard.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  expirations: any;
+
+  constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
+    this.expirations = this.dashboardService.getExpiration()
   }
 
 }

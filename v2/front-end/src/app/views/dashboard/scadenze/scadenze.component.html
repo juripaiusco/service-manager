@@ -2,7 +2,10 @@
   <thead>
   <tr>
     <th style="width: 180px;"></th>
-    <th>Cliente <small>(hai X scadenze)</small></th>
+    <th class="d-none d-sm-table-cell">
+      Cliente
+      <small style="font-weight: normal;">(hai X scadenze)</small>
+    </th>
     <th>Servizio</th>
     <th class="text-center">Scadenza</th>
     <th class="text-right">Importo</th>
@@ -11,21 +14,22 @@
 
   <tbody>
 
-  <tr>
+  <tr *ngFor="let expiration of expirations">
+
     <td class="align-middle">
 
-      <div class="row">
-        <div class="col-sm-4 d-grid">
+      <div class="row gx-2">
+        <div class="col-4 d-grid">
           <button class="btn btn-danger btn-sm">
             <fa-icon [icon]="faSync"></fa-icon>
           </button>
         </div>
-        <div class="col-sm-4 d-grid">
+        <div class="col-4 d-grid">
           <button class="btn btn-danger btn-sm">
             <fa-icon [icon]="faAt"></fa-icon>
           </button>
         </div>
-        <div class="col-sm-4 d-grid">
+        <div class="col-4 d-grid">
           <button class="btn btn-danger btn-sm">
             <fa-icon [icon]="faFileInvoiceDollar"></fa-icon>
           </button>
@@ -33,24 +37,25 @@
       </div>
 
     </td>
-    <td>
-      Mario Rossi
+    <td class="align-middle d-none d-sm-table-cell">
+      {{ expiration.company }}
       <br>
-      <small>Mario - mario.rossi@google.com</small>
+      <small>{{ expiration.name }} - {{ expiration.email }}</small>
     </td>
-    <td>
-      Hosting
+    <td class="align-middle">
+      {{ expiration.service }}
       <br>
-      <small>mariorossi.it</small>
+      <small>{{ expiration.service_reference }}</small>
     </td>
     <td class="text-center align-middle">
-      11/11/2022
+      {{ expiration.expiration }}
     </td>
-    <td class="text-right">
-      <strong>€ 122,00</strong>
+    <td class="text-right align-middle">
+      <strong>{{ expiration.price | currency:'EUR':'€ ':'':'it-IT' }}</strong>
       <br>
-      <small>120,00</small>
+      <small>{{ expiration.price_tax }}</small>
     </td>
+
   </tr>
 
   </tbody>

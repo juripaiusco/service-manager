@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { faSync, faAt, faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -11,6 +11,8 @@ export class ScadenzeComponent implements OnInit {
   faSync = faSync;
   faAt = faAt;
   faFileInvoiceDollar = faFileInvoiceDollar;
+
+  @Input() expirations: any;
 
   constructor() { }
 

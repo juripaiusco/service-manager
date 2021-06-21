@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +13,8 @@ import { ServiceComponent } from './views/service/service.component';
 import { CustomerComponent } from './views/customer/customer.component';
 import { HeaderComponent } from './header/header.component';
 import { ScadenzeComponent } from './views/dashboard/scadenze/scadenze.component';
+
+import '@angular/common/locales/global/it';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -46,7 +48,7 @@ const routes: Routes = [{
     FontAwesomeModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [{ provide: LOCALE_ID, useValue: 'it' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
