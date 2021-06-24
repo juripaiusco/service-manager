@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import { faSync, faAt, faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-scadenze-items',
+  selector: 'tbody[app-scadenze-items]',
   templateUrl: './scadenze-items.component.html',
   styleUrls: ['./scadenze-items.component.css']
 })

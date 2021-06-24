@@ -12,11 +12,7 @@
   </tr>
   </thead>
 
-  <tbody>
-
-  <app-scadenze-items *ngFor="let expiration of expirations"
-                      [expiration]="expiration"></app-scadenze-items>
-
-  </tbody>
+  <tbody app-scadenze-items *ngFor="let expiration of expirations"
+         [expiration]="expiration"></tbody>
 
 </table>

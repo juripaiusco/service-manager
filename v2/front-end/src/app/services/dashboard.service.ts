@@ -41,7 +41,16 @@ export class DashboardService {
       'date_expiration': new Date(2020, 11, 7, 0, 0, 0),
       'expiration': 'expired',
       'price': '0',
-      'price_tax': '0'
+      'price_tax': '0',
+      'service_details': [{
+        'name': 'Dominio .it (dominiofaidate.it)',
+        'reference': 'mr-j.it',
+        'price': '0'
+      }, {
+        'name': 'Hosting Mail (Shellrent)',
+        'reference': 'mr-j.it',
+        'price': '0'
+      }]
     }, {
       'id': 3,
       'company': 'Eco-Trans S.R.L.',

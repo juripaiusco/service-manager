@@ -1,7 +1,7 @@
 <tr [ngClass]="{
-      'table-danger border-danger text-danger': expiration.expiration === 'expired',
-      'table-warning border-warning': expiration.expiration === 'in_expiration'
-      }">
+'table-danger border-danger text-danger': expiration.expiration === 'expired',
+'table-warning border-warning': expiration.expiration === 'in_expiration'
+}">
 
   <td class="align-middle">
 
@@ -41,12 +41,15 @@
     </div>
 
   </td>
-  <td class="align-middle d-none d-sm-table-cell">
+  <td class="align-middle d-none d-sm-table-cell btn-row"
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      [attr.aria-controls]="'details-' + expiration.id">
     {{ expiration.company }}
     <br>
     <small>{{ expiration.name }} - {{ expiration.email }}</small>
   </td>
-  <td class="align-middle"
+  <td class="align-middle btn-row"
       (click)="isCollapsed = !isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
       [attr.aria-controls]="'details-' + expiration.id">
@@ -54,10 +57,16 @@
     <br>
     <small>{{ expiration.service_reference }}</small>
   </td>
-  <td class="text-center align-middle">
+  <td class="text-center align-middle btn-row"
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      [attr.aria-controls]="'details-' + expiration.id">
     {{ expiration.date_expiration | date:'dd/MM/yyyy' }}
   </td>
-  <td class="text-right align-middle">
+  <td class="text-right align-middle btn-row"
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      [attr.aria-controls]="'details-' + expiration.id">
     <strong>{{ expiration.price | currency:'EUR':'€ ':'':'it-IT' }}</strong>
     <br>
     <small>{{ expiration.price_tax | currency:'EUR':'€ ':'':'it-IT' }}</small>
@@ -65,15 +74,40 @@
 
 </tr>
 
-<tr>
-  <td colspan="5" style="padding: 0; margin: 0; border: 0; background-color: #fff;">
+<tr class="table-hover-custom"
+    [ngClass]="{
+    'table-danger border-danger text-danger': expiration.expiration === 'expired',
+    'table-warning border-warning': expiration.expiration === 'in_expiration'
+    }">
+  <td colspan="5" style="padding: 0; margin: 0; border: 0;">
 
     <div id="details-{{ expiration.id }}"
          [collapse]="isCollapsed"
          [isAnimated]="true"
          class="collapse">
 
-      ciao
+      <table class="table-borderless" style="width: 100%;">
+        <tr *ngFor="let service of expiration.service_details">
+
+          <td style="width: 180px;"></td>
+
+          <td style="padding-top: 10px; padding-bottom: 10px;">
+
+            {{ service.name }}
+            <br />
+            <small>
+              {{ service.reference }}
+            </small>
+
+          </td>
+          <td class="text-right align-middle">
+
+            {{ service.price | currency:'EUR':'€ ':'':'it-IT' }}
+
+          </td>
+
+        </tr>
+      </table>
 
     </div>
 

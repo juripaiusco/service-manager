@@ -1,0 +1,15 @@
+.text-right {
+  text-align: right;
+}
+small {
+  font-size: 12px;
+}
+.btn-row {
+  cursor: pointer;
+}
+.table-hover-custom td {
+  padding: .5rem;
+}
+.table-hover-custom tr:hover {
+  background-color: lightgrey;
+}
