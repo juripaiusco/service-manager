@@ -10,6 +10,7 @@ export class DashboardService {
   getExpiration() {
 
     return [{
+      'id': 1,
       'company': 'Rigoni Macchine Utensili S.r.l.',
       'name': 'Dario',
       'email': 'dario@ottomatite.com',
@@ -21,9 +22,16 @@ export class DashboardService {
       'price': '125',
       'price_tax': '152.5',
       'service_details': [{
-        
+        'name': 'Dominio .com (Shellrent)',
+        'reference': 'ottomatite.com',
+        'price': '15'
+      }, {
+        'name': 'Hosting Mail (Shellrent)',
+        'reference': 'dario@ottomatite.com; dieci@ottomatite.com; due@ottomatite.com; fiamma@ottomatite.com; info@ottomatite.com',
+        'price': '85'
       }]
     }, {
+      'id': 2,
       'company': 'Mr. J di Juri Paiusco',
       'name': 'Juri',
       'email': 'juri@mr-j.it',
@@ -35,6 +43,7 @@ export class DashboardService {
       'price': '0',
       'price_tax': '0'
     }, {
+      'id': 3,
       'company': 'Eco-Trans S.R.L.',
       'name': 'Sonia',
       'email': 'sonia@ecotrans.it',
@@ -46,6 +55,7 @@ export class DashboardService {
       'price': '80',
       'price_tax': '97.6'
     }, {
+      'id': 4,
       'company': 'Viprof S.r.l. ',
       'name': 'dott. Manea',
       'email': 'amministrazione@viprof.com',

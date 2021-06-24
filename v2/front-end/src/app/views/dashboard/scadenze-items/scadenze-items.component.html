@@ -1,0 +1,81 @@
+<tr [ngClass]="{
+      'table-danger border-danger text-danger': expiration.expiration === 'expired',
+      'table-warning border-warning': expiration.expiration === 'in_expiration'
+      }">
+
+  <td class="align-middle">
+
+    <div class="row gx-2"
+         *ngIf="expiration.expiration !== ''">
+
+      <div class="col-4 d-grid">
+        <button class="btn btn-sm"
+                [ngClass]="{
+                  'btn-danger': expiration.expiration === 'expired',
+                  'btn-warning': expiration.expiration === 'in_expiration'
+                  }">
+          <fa-icon [icon]="faSync"></fa-icon>
+        </button>
+      </div>
+
+      <div class="col-4 d-grid">
+        <button class="btn btn-sm"
+                [ngClass]="{
+                  'btn-danger': expiration.expiration === 'expired',
+                  'btn-warning': expiration.expiration === 'in_expiration'
+                  }">
+          <fa-icon [icon]="faAt"></fa-icon>
+        </button>
+      </div>
+
+      <div class="col-4 d-grid">
+        <button class="btn btn-sm"
+                [ngClass]="{
+                  'btn-danger': expiration.expiration === 'expired',
+                  'btn-warning': expiration.expiration === 'in_expiration'
+                  }">
+          <fa-icon [icon]="faFileInvoiceDollar"></fa-icon>
+        </button>
+      </div>
+
+    </div>
+
+  </td>
+  <td class="align-middle d-none d-sm-table-cell">
+    {{ expiration.company }}
+    <br>
+    <small>{{ expiration.name }} - {{ expiration.email }}</small>
+  </td>
+  <td class="align-middle"
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      [attr.aria-controls]="'details-' + expiration.id">
+    {{ expiration.service }}
+    <br>
+    <small>{{ expiration.service_reference }}</small>
+  </td>
+  <td class="text-center align-middle">
+    {{ expiration.date_expiration | date:'dd/MM/yyyy' }}
+  </td>
+  <td class="text-right align-middle">
+    <strong>{{ expiration.price | currency:'EUR':'€ ':'':'it-IT' }}</strong>
+    <br>
+    <small>{{ expiration.price_tax | currency:'EUR':'€ ':'':'it-IT' }}</small>
+  </td>
+
+</tr>
+
+<tr>
+  <td colspan="5" style="padding: 0; margin: 0; border: 0; background-color: #fff;">
+
+    <div id="details-{{ expiration.id }}"
+         [collapse]="isCollapsed"
+         [isAnimated]="true"
+         class="collapse">
+
+      ciao
+
+    </div>
+
+  </td>
+</tr>

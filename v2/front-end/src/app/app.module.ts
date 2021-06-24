@@ -1,6 +1,8 @@
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import '@angular/common/locales/global/it';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -14,7 +16,9 @@ import { CustomerComponent } from './views/customer/customer.component';
 import { HeaderComponent } from './header/header.component';
 import { ScadenzeComponent } from './views/dashboard/scadenze/scadenze.component';
 
-import '@angular/common/locales/global/it';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { ScadenzeItemsComponent } from './views/dashboard/scadenze-items/scadenze-items.component';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -40,13 +44,16 @@ const routes: Routes = [{
     ServiceComponent,
     CustomerComponent,
     HeaderComponent,
-    ScadenzeComponent
+    ScadenzeComponent,
+    ScadenzeItemsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FontAwesomeModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    BrowserAnimationsModule,
+    CollapseModule.forRoot(),
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'it' }],
   bootstrap: [AppComponent]
