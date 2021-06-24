@@ -16,7 +16,7 @@ export class DashboardService {
       'piva': '',
       'service': 'Hosting',
       'service_reference': 'ottomatite.com',
-      'expiration': '25/10/2020',
+      'expiration': new Date(2020, 10, 25, 0, 0, 0),
       'price': '125',
       'price_tax': '152.5',
       'service_details': [{
@@ -29,9 +29,29 @@ export class DashboardService {
       'piva': '',
       'service': 'Hosting',
       'service_reference': 'mr-j.it',
-      'expiration': '07/11/2020',
+      'expiration': new Date(2020, 11, 7, 0, 0, 0),
       'price': '0',
       'price_tax': '0'
+    }, {
+      'company': 'Eco-Trans S.R.L.',
+      'name': 'Sonia',
+      'email': 'sonia@ecotrans.it',
+      'piva': '',
+      'service': 'Hosting',
+      'service_reference': 'ecotrans.it',
+      'expiration': new Date(2021, 8, 5, 0, 0, 0),
+      'price': '80',
+      'price_tax': '97.6'
+    }, {
+      'company': 'Viprof S.r.l. ',
+      'name': 'dott. Manea',
+      'email': 'amministrazione@viprof.com',
+      'piva': '',
+      'service': 'Certificato SSL',
+      'service_reference': 'tsgw.viprof.com',
+      'expiration': new Date(2021, 9, 16, 0, 0, 0),
+      'price': '54',
+      'price_tax': '65.88'
     }];
 
   }

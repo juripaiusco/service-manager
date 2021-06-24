@@ -48,12 +48,12 @@
       <small>{{ expiration.service_reference }}</small>
     </td>
     <td class="text-center align-middle">
-      {{ expiration.expiration }}
+      {{ expiration.expiration | date:'dd/MM/yyyy' }}
     </td>
     <td class="text-right align-middle">
       <strong>{{ expiration.price | currency:'EUR':'€ ':'':'it-IT' }}</strong>
       <br>
-      <small>{{ expiration.price_tax }}</small>
+      <small>{{ expiration.price_tax | currency:'EUR':'€ ':'':'it-IT' }}</small>
     </td>
 
   </tr>
