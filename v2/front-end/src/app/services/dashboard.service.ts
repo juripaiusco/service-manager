@@ -16,11 +16,12 @@ export class DashboardService {
       'piva': '',
       'service': 'Hosting',
       'service_reference': 'ottomatite.com',
-      'expiration': new Date(2020, 10, 25, 0, 0, 0),
+      'date_expiration': new Date(2020, 10, 25, 0, 0, 0),
+      'expiration': 'expired',
       'price': '125',
       'price_tax': '152.5',
       'service_details': [{
-
+        
       }]
     }, {
       'company': 'Mr. J di Juri Paiusco',
@@ -29,7 +30,8 @@ export class DashboardService {
       'piva': '',
       'service': 'Hosting',
       'service_reference': 'mr-j.it',
-      'expiration': new Date(2020, 11, 7, 0, 0, 0),
+      'date_expiration': new Date(2020, 11, 7, 0, 0, 0),
+      'expiration': 'expired',
       'price': '0',
       'price_tax': '0'
     }, {
@@ -39,7 +41,8 @@ export class DashboardService {
       'piva': '',
       'service': 'Hosting',
       'service_reference': 'ecotrans.it',
-      'expiration': new Date(2021, 8, 5, 0, 0, 0),
+      'date_expiration': new Date(2021, 8, 5, 0, 0, 0),
+      'expiration': 'in_expiration',
       'price': '80',
       'price_tax': '97.6'
     }, {
@@ -49,7 +52,8 @@ export class DashboardService {
       'piva': '',
       'service': 'Certificato SSL',
       'service_reference': 'tsgw.viprof.com',
-      'expiration': new Date(2021, 9, 16, 0, 0, 0),
+      'date_expiration': new Date(2021, 9, 16, 0, 0, 0),
+      'expiration': '',
       'price': '54',
       'price_tax': '65.88'
     }];

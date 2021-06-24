@@ -4,7 +4,7 @@
     <th style="width: 180px;"></th>
     <th class="d-none d-sm-table-cell">
       Cliente
-      <small style="font-weight: normal;">(hai X scadenze)</small>
+      <small style="font-weight: normal;">(hai {{ expirations.length }} scadenze)</small>
     </th>
     <th>Servizio</th>
     <th class="text-center">Scadenza</th>
@@ -14,26 +14,47 @@
 
   <tbody>
 
-  <tr *ngFor="let expiration of expirations">
+  <tr *ngFor="let expiration of expirations"
+      [ngClass]="{
+      'table-danger border-danger text-danger': expiration.expiration === 'expired',
+      'table-warning border-warning': expiration.expiration === 'in_expiration'
+      }">
 
     <td class="align-middle">
 
-      <div class="row gx-2">
+      <div class="row gx-2"
+           *ngIf="expiration.expiration !== ''">
+
         <div class="col-4 d-grid">
-          <button class="btn btn-danger btn-sm">
+          <button class="btn btn-sm"
+                  [ngClass]="{
+                  'btn-danger': expiration.expiration === 'expired',
+                  'btn-warning': expiration.expiration === 'in_expiration'
+                  }">
             <fa-icon [icon]="faSync"></fa-icon>
           </button>
         </div>
+
         <div class="col-4 d-grid">
-          <button class="btn btn-danger btn-sm">
+          <button class="btn btn-sm"
+                  [ngClass]="{
+                  'btn-danger': expiration.expiration === 'expired',
+                  'btn-warning': expiration.expiration === 'in_expiration'
+                  }">
             <fa-icon [icon]="faAt"></fa-icon>
           </button>
         </div>
+
         <div class="col-4 d-grid">
-          <button class="btn btn-danger btn-sm">
+          <button class="btn btn-sm"
+                  [ngClass]="{
+                  'btn-danger': expiration.expiration === 'expired',
+                  'btn-warning': expiration.expiration === 'in_expiration'
+                  }">
             <fa-icon [icon]="faFileInvoiceDollar"></fa-icon>
           </button>
         </div>
+
       </div>
 
     </td>
@@ -48,7 +69,7 @@
       <small>{{ expiration.service_reference }}</small>
     </td>
     <td class="text-center align-middle">
-      {{ expiration.expiration | date:'dd/MM/yyyy' }}
+      {{ expiration.date_expiration | date:'dd/MM/yyyy' }}
     </td>
     <td class="text-right align-middle">
       <strong>{{ expiration.price | currency:'EUR':'€ ':'':'it-IT' }}</strong>
