@@ -8,10 +8,15 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ScadenzeComponent implements OnInit {
 
   @Input() expirations: any;
+  @Input() modalConfirmArgs: any;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  modalConfirm(args: any) {
+    this.modalConfirmArgs = args;
   }
 
 }

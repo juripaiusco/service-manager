@@ -13,7 +13,13 @@
                 [ngClass]="{
                   'btn-danger': expiration.expiration === 'expired',
                   'btn-warning': expiration.expiration === 'in_expiration'
-                  }">
+                  }"
+                (click)="serviceRenew({
+                  'title': 'Rinnova',
+                  'desc': 'Rinnovare il servizio <strong>' + expiration.service_reference + '</strong>?',
+                  'btnClose': 'Annulla',
+                  'btnSuccess': 'Rinnova'
+                })">
           <fa-icon [icon]="faSync"></fa-icon>
         </button>
       </div>

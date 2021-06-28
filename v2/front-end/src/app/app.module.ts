@@ -20,6 +20,7 @@ import { ScadenzeItemsComponent } from './views/dashboard/scadenze/scadenze-item
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ModalConfirmComponent } from './components/modal-confirm/modal-confirm.component';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -46,7 +47,8 @@ const routes: Routes = [{
     CustomerComponent,
     HeaderComponent,
     ScadenzeComponent,
-    ScadenzeItemsComponent
+    ScadenzeItemsComponent,
+    ModalConfirmComponent
   ],
   imports: [
     BrowserModule,
