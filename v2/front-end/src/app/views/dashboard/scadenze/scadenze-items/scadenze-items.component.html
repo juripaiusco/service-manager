@@ -33,7 +33,17 @@
                 [ngClass]="{
                   'btn-danger': expiration.expiration === 'expired',
                   'btn-warning': expiration.expiration === 'in_expiration'
-                  }">
+                  }"
+                (click)="serviceAction({
+                  'title': 'Avvisa il cliente',
+                  'desc': 'Vuoi inviare un avviso al cliente?<br><br>Email a cui verrà inviato l\'avviso:<br><strong>' + expiration.email + '</strong>',
+                  'btnClose': 'Annulla',
+                  'btnSuccess': 'Avvisa',
+                  'btnSuccessReturn': {
+                    'action': 'alert',
+                    'id': expiration.id
+                  }
+                })">
           <fa-icon [icon]="faAt"></fa-icon>
         </button>
       </div>
