@@ -14,11 +14,15 @@
                   'btn-danger': expiration.expiration === 'expired',
                   'btn-warning': expiration.expiration === 'in_expiration'
                   }"
-                (click)="serviceRenew({
+                (click)="serviceAction({
                   'title': 'Rinnova',
                   'desc': 'Rinnovare il servizio <strong>' + expiration.service_reference + '</strong>?',
                   'btnClose': 'Annulla',
-                  'btnSuccess': 'Rinnova'
+                  'btnSuccess': 'Rinnova',
+                  'btnSuccessReturn': {
+                    'action': 'renew',
+                    'id': expiration.id
+                  }
                 })">
           <fa-icon [icon]="faSync"></fa-icon>
         </button>

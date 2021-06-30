@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, OnChanges, Output} from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -8,6 +8,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 export class ModalConfirmComponent implements OnInit {
 
   @Input() modalConfirmArgs: any;
+  @Output('onClicBtnSuccess') eventModalConfirm: EventEmitter<any> = new EventEmitter();
 
   bsModalRef: any;
 
@@ -27,10 +28,19 @@ export class ModalConfirmComponent implements OnInit {
         ModalContentComponent,
         Object.assign({}, { class: 'modal-dialog modal-dialog-centered' })
       );
+
       this.bsModalRef.content.args = args;
+
+      this.bsModalRef.content.event.subscribe((d: any) => {
+        this.onClicBtnSuccess(d.data);
+      });
 
     }
 
+  }
+
+  onClicBtnSuccess(data: any) {
+    this.eventModalConfirm.emit(data);
   }
 
 }
@@ -54,14 +64,16 @@ export class ModalConfirmComponent implements OnInit {
 
       <br>
 
-      <p [innerHTML]="args?.desc"></p>
+      <p [innerHTML]="args?.desc" class="text-center"></p>
 
       <br>
 
       <div class="row">
         <div class="col-6 d-grid">
 
-          <button type="button" class="btn btn-success">{{ args?.btnSuccess }}</button>
+          <button type="button"
+                  class="btn btn-success"
+                  (click)="clickBtnSuccess()">{{ args?.btnSuccess }}</button>
 
         </div>
         <div class="col-6 d-grid">
@@ -81,10 +93,17 @@ export class ModalConfirmComponent implements OnInit {
 
 export class ModalContentComponent implements OnInit {
 
+  public event: EventEmitter<any> = new EventEmitter();
+
   args: any;
   list: any[] = [];
 
   constructor(public bsModalRef: BsModalRef) { }
 
   ngOnInit() { }
+
+  clickBtnSuccess() {
+    this.event.emit({ data: this.args?.btnSuccessReturn });
+    this.bsModalRef.hide();
+  }
 }

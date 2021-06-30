@@ -14,8 +14,9 @@
 
   <tbody app-scadenze-items *ngFor="let expiration of expirations"
          [expiration]="expiration"
-         (onUpdateService)="modalConfirm($event)"></tbody>
+         (onServiceActionEvent)="modalConfirm($event)"></tbody>
 
 </table>
 
-<app-modal-confirm [modalConfirmArgs]="modalConfirmArgs"></app-modal-confirm>
+<app-modal-confirm [modalConfirmArgs]="modalConfirmArgs"
+                   (onClicBtnSuccess)="modalConfirmSuccess($event)"></app-modal-confirm>

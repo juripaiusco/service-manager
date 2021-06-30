@@ -19,4 +19,8 @@ export class ScadenzeComponent implements OnInit {
     this.modalConfirmArgs = args;
   }
 
+  modalConfirmSuccess(e: any) {
+    console.log(e);
+  }
+
 }

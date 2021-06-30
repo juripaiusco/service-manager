@@ -9,7 +9,7 @@ import { faSync, faAt, faFileInvoiceDollar } from '@fortawesome/free-solid-svg-i
 export class ScadenzeItemsComponent implements OnInit {
 
   @Input() expiration: any;
-  @Output('onUpdateService') serviceUpdate = new EventEmitter();
+  @Output('onServiceActionEvent') serviceActionEmit = new EventEmitter();
 
   faSync = faSync;
   faAt = faAt;
@@ -21,8 +21,8 @@ export class ScadenzeItemsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  serviceRenew(args: any) {
-    this.serviceUpdate.emit(args);
+  serviceAction(args: any) {
+    this.serviceActionEmit.emit(args);
   }
 
 }
