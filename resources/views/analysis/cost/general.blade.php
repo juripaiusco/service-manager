@@ -53,14 +53,14 @@
 
                 @foreach($array_months as $k => $month)
                     <th class="text-center
-                                @if(($k + 1) == 5 && !$vs_select)
+                                @if(($k + 1) == date('n') && !$vs_select)
                                 border-primary bg-primary text-white
                                 @endif
                                 @if($k + 1 == $vs_select)
                                 table-success
                                 @endif">
                         <a href="{{ route('cost.list', ['vs' => $k + 1]) }}" class="
-                                @if(($k + 1) == 5 && !$vs_select)
+                                @if(($k + 1) == date('n') && !$vs_select)
                                 text-white
                                 @endif">
                             {{ substr($month, 0, 3) }}
@@ -90,7 +90,7 @@
                 @for($m = 1; $m <= 12; $m++)
 
                     <td class="text-right
-                                @if($m == 5 && !$vs_select)
+                                @if($m == date('n') && !$vs_select)
                                 table-primary
                                 @endif
                                 @if($m == $vs_select)
