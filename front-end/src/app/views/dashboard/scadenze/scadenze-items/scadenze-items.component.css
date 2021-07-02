@@ -10,6 +10,9 @@ small {
 .table-hover-custom td {
   padding: .5rem;
 }
-.table-hover-custom tr:hover {
-  background-color: lightgrey;
+tr.table-hover-custom:hover {
+  --bs-table-accent-bg: none;
+}
+table.table-borderless tr:hover {
+  background-color: var(--bs-table-hover-bg);
 }
