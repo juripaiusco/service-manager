@@ -23,4 +23,8 @@ export class ScadenzeComponent implements OnInit {
     console.log(e);
   }
 
+  generateInvoice(e: any) {
+    console.log(e);
+  }
+
 }

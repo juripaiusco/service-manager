@@ -1,0 +1,83 @@
+<form>
+
+  <div class="form-floating">
+
+    <input type="text"
+           class="form-control"
+           id="invoice-date"
+           placeholder="DD/MM/YYYY"
+           [value]="invoiceDate | date:'dd/MM/yyyy'">
+
+    <label for="invoice-date">
+      Data fattura
+    </label>
+
+  </div>
+
+  <br>
+
+  <div class="form-check form-switch">
+
+    <input class="form-check-input" type="checkbox" id="invoice-paid" checked>
+
+    <label class="form-check-label" for="invoice-paid">
+      Pagamento ricevuto.
+      <br>
+      <small>
+        (se lo switch è attivo, la fattura risulterà saldata)
+      </small>
+    </label>
+
+  </div>
+
+  <br>
+
+  <div class="form-check form-switch">
+
+    <input class="form-check-input" type="checkbox" id="invoice-sendemail" checked>
+
+    <label class="form-check-label" for="invoice-sendemail">
+      Inviare fattura via email
+      <br>
+      <small>
+        (se lo switch è attivo, la fattura verrà inviata via email)
+      </small>
+    </label>
+
+  </div>
+
+  <hr>
+
+  <br>
+
+  <div class="text-center">
+    Vuoi generare la fattura per il cliente
+    <br>
+    <strong>{{ InvoiceArgs.company }}</strong>?
+    <br>
+    <small>
+      (generando la fattura rinnoverai automaticamente il servizio al prossimo anno)
+    </small>
+  </div>
+
+  <div class="space"></div>
+
+  <div class="row">
+    <div class="col-6 d-grid">
+
+      <button type="button"
+              class="btn btn-success"
+              (click)="invoiceGenerate(InvoiceArgs.id)">Genera fattura</button>
+
+    </div>
+    <div class="col-6 d-grid">
+
+      <button type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              (click)="closeModal()">Annulla</button>
+
+    </div>
+  </div>
+
+</form>

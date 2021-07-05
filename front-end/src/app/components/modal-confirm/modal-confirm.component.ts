@@ -90,7 +90,6 @@ export class ModalConfirmComponent implements OnInit {
     <!--<div class="modal-footer"></div>-->
   `
 })
-
 export class ModalContentComponent implements OnInit {
 
   public event: EventEmitter<any> = new EventEmitter();

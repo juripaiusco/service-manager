@@ -53,9 +53,31 @@
                 [ngClass]="{
                   'btn-danger': expiration.expiration === 'expired',
                   'btn-warning': expiration.expiration === 'in_expiration'
-                  }">
+                  }"
+                (click)="openModalConfirmFormInvoice(templateModalConfirmFormInvoice)">
           <fa-icon [icon]="faFileInvoiceDollar"></fa-icon>
         </button>
+
+        <ng-template #templateModalConfirmFormInvoice>
+          <div class="modal-header">
+            <h4 class="modal-title pull-left">Genera fattura</h4>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    (click)="modalRef.hide()"></button>
+
+          </div>
+          <div class="modal-body">
+
+            <app-modal-confirm-form-invoice [InvoiceArgs]="expiration"
+                                            (onClicCancel)="modalRef.hide()"
+                                            (onClicGenerateInvoice)="generateInvoice($event)"></app-modal-confirm-form-invoice>
+
+          </div>
+        </ng-template>
+
       </div>
 
     </div>
