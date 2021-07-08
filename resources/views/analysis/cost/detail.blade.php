@@ -55,7 +55,7 @@
             <th></th>
 
             @foreach($array_months as $k => $month)
-                <th class="text-center @if(($k + 1) == 5) border-primary bg-primary text-white @endif">
+                <th class="text-center @if(($k + 1) == date('n')) border-primary bg-primary text-white @endif">
                     {{ substr($month, 0, 3) }}
                 </th>
             @endforeach
@@ -81,7 +81,7 @@
 
                 @for($m = 1; $m <= 12; $m++)
 
-                    <td class="text-right @if($m == 5) table-primary @endif">
+                    <td class="text-right @if($m == date('n')) table-primary @endif">
                         @php
                             if ($m < 10) $m = '0' . $m;
                         @endphp
