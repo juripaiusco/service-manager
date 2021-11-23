@@ -111,12 +111,14 @@ class Payment extends Controller
 
             $privacy_msg = Storage::disk('public')->get('privacy_template/privacy.html');
 
+//            dd($cliente['lista_clienti'][0]);
+
             return view('payment.checkout', [
                 'payment' => $payment,
                 'customer_service' => $customer_service,
                 'customers_services_details' => $customers_services_details,
                 'array_services_rows' => $array_services_rows,
-                'cliente' => $cliente['lista_clienti'][0],
+                'cliente' => isset($cliente['lista_clienti'][0]) ? $cliente['lista_clienti'][0] : '',
                 'privacy_msg' => $privacy_msg,
             ]);
         }

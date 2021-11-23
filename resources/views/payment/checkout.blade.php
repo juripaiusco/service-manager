@@ -148,134 +148,150 @@
         <div class="row">
             <div class="col-lg-7">
 
-                <div class="card">
+                <div class="card @if(!isset($cliente['mail'])) border-danger @endif">
 
-                    <div class="card-header">
-                        I tuoi dati
+                    <div class="card-header @if(!isset($cliente['mail'])) border-danger text-white bg-danger @endif">
+                        @if(isset($cliente['mail']))
+                            I tuoi dati
+                        @else
+                            Dati non trovati
+                        @endif
                     </div>
-                    <div class="card-body">
+                    <div class="card-body @if(!isset($cliente['mail'])) text-danger @endif">
 
-                        <div class="form-group">
-                            <label for="nome">Azienda</label>
-                            <input type="text"
-                                   class="form-control"
-                                   id="nome"
-                                   @if($cliente['nome'])
-                                   value="{{ $cliente['nome'] }}"
-                                   @endif
-                                   readonly>
-                        </div>
+                        @if(isset($cliente['mail']))
 
-                        <div class="form-group">
-                            <label for="indirizzo_via">Indirizzo</label>
-                            <input type="text"
-                                   class="form-control"
-                                   id="indirizzo_via"
-                                   @if($cliente['indirizzo_via'])
-                                   value="{{ $cliente['indirizzo_via'] }}"
-                                   @endif
-                                   readonly>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-3">
-
-                                <div class="form-group">
-                                    <label for="indirizzo_cap">CAP</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="indirizzo_cap"
-                                           @if($cliente['indirizzo_cap'])
-                                           value="{{ $cliente['indirizzo_cap'] }}"
-                                           @endif
-                                           readonly>
-                                </div>
-
+                            <div class="form-group">
+                                <label for="nome">Azienda</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="nome"
+                                       @if($cliente['nome'])
+                                       value="{{ $cliente['nome'] }}"
+                                       @endif
+                                       readonly>
                             </div>
-                            <div class="col-lg-7">
 
-                                <div class="form-group">
-                                    <label for="indirizzo_citta">Città</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="indirizzo_citta"
-                                           @if($cliente['indirizzo_citta'])
-                                           value="{{ $cliente['indirizzo_citta'] }}"
-                                           @endif
-                                           readonly>
-                                </div>
-
+                            <div class="form-group">
+                                <label for="indirizzo_via">Indirizzo</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="indirizzo_via"
+                                       @if($cliente['indirizzo_via'])
+                                       value="{{ $cliente['indirizzo_via'] }}"
+                                       @endif
+                                       readonly>
                             </div>
-                            <div class="col-lg-2">
 
-                                <div class="form-group">
-                                    <label for="indirizzo_provincia">Prov.</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="indirizzo_provincia"
-                                           @if($cliente['indirizzo_provincia'])
-                                           value="{{ $cliente['indirizzo_provincia'] }}"
-                                           @endif
-                                           readonly>
+                            <div class="row">
+                                <div class="col-lg-3">
+
+                                    <div class="form-group">
+                                        <label for="indirizzo_cap">CAP</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="indirizzo_cap"
+                                               @if($cliente['indirizzo_cap'])
+                                               value="{{ $cliente['indirizzo_cap'] }}"
+                                               @endif
+                                               readonly>
+                                    </div>
+
                                 </div>
+                                <div class="col-lg-7">
 
-                            </div>
-                        </div>
+                                    <div class="form-group">
+                                        <label for="indirizzo_citta">Città</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="indirizzo_citta"
+                                               @if($cliente['indirizzo_citta'])
+                                               value="{{ $cliente['indirizzo_citta'] }}"
+                                               @endif
+                                               readonly>
+                                    </div>
 
-                        <div class="form-group">
-                            <label for="paese">Paese</label>
-                            <input type="text"
-                                   class="form-control"
-                                   id="paese"
-                                   @if($cliente['paese'])
-                                   value="{{ $cliente['paese'] }}"
-                                   @endif
-                                   readonly>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-6">
-
-                                <div class="form-group">
-                                    <label for="piva">P.IVA</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="piva"
-                                           @if($cliente['piva'])
-                                           value="{{ $cliente['piva'] }}"
-                                           @endif
-                                           readonly>
                                 </div>
+                                <div class="col-lg-2">
 
-                            </div>
-                            <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="indirizzo_provincia">Prov.</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="indirizzo_provincia"
+                                               @if($cliente['indirizzo_provincia'])
+                                               value="{{ $cliente['indirizzo_provincia'] }}"
+                                               @endif
+                                               readonly>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="cf">C.F.</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="cf"
-                                           @if($cliente['cf'])
-                                           value="{{ $cliente['cf'] }}"
-                                           @endif
-                                           readonly>
                                 </div>
-
                             </div>
-                        </div>
 
-                        <hr>
+                            <div class="form-group">
+                                <label for="paese">Paese</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="paese"
+                                       @if($cliente['paese'])
+                                       value="{{ $cliente['paese'] }}"
+                                       @endif
+                                       readonly>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="mail">Email</label>
-                            <input type="text"
-                                   class="form-control"
-                                   id="mail"
-                                   @if($cliente['mail'])
-                                   value="{{ $cliente['mail'] }}"
-                                   @endif
-                                   readonly>
-                        </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+                                        <label for="piva">P.IVA</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="piva"
+                                               @if($cliente['piva'])
+                                               value="{{ $cliente['piva'] }}"
+                                               @endif
+                                               readonly>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+                                        <label for="cf">C.F.</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="cf"
+                                               @if($cliente['cf'])
+                                               value="{{ $cliente['cf'] }}"
+                                               @endif
+                                               readonly>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="form-group">
+                                <label for="mail">Email</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="mail"
+                                       @if($cliente['mail'])
+                                       value="{{ $cliente['mail'] }}"
+                                       @endif
+                                       readonly>
+                            </div>
+
+                        @else
+
+                            <h2>I tuoi dati non sono stati trovati.</h2>
+                            <br>
+                            Non ti preoccupare, semplicemente non sei ancora presente nel nostro database.
+                            <br><br>
+                            Puoi rinnovare senza problemi il tuo servizio, la fattura (nel caso sia necessaria) ti verrà inviata correttamente.
+
+                        @endif
 
                     </div>
 
