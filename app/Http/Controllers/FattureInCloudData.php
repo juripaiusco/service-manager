@@ -235,6 +235,14 @@ class FattureInCloudData extends Controller
             }
         }
 
+        if (!isset($array_comparison[$year_comparison])) {
+            $array_comparison[$year_comparison] = 0;
+        }
+
+        if (!isset($array_comparison[$year_comparison - 1])) {
+            $array_comparison[$year_comparison - 1] = 0;
+        }
+
         $array_comparison['comparison'] = $array_comparison[$year_comparison] - $array_comparison[$year_comparison - 1];
 
         return $array_comparison;
