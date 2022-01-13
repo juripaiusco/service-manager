@@ -223,7 +223,13 @@ class FattureInCloudAPI extends Controller
         $m = date('m');
         $d = date('d');
 
-        $timestamp_start = mktime(0, 0, 0, $m, $d - 15, $y);
+        $d_start = $d - 15;
+
+        if ($m == '01' && $d <= 15) {
+            $d_start = 1;
+        }
+
+        $timestamp_start = mktime(0, 0, 0, $m, $d_start, $y);
         $timestamp_end = mktime(0, 0, 0, $m, $d, $y);
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
