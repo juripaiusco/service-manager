@@ -188,7 +188,7 @@ class FattureInCloudAPI extends Controller
         if (count($customer_fic_searchByCF) > 0) {
             $array_fattura_nuova['cf'] = $customer_piva;
         }
-        
+
         if (count($customer_fic_searchByPIVA) > 0) {
             $array_fattura_nuova['piva'] = $customer_piva;
         }
