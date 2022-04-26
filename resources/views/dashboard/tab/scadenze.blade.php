@@ -89,7 +89,11 @@
                                     class="btn btn-block btn-sm btn-modal @if($customersService->payment_type)
                                     btn-success
                                     @else
-                                    {{ $btnClassName }}
+                                        @if($customersService->autorenew == 1)
+                                        btn-info
+                                        @else
+                                        {{ $btnClassName }}
+                                        @endif
                                     @endif"
                                     data-toggle="modal"
                                     data-target="#invoiceModal"

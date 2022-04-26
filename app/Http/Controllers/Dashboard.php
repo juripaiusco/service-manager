@@ -89,6 +89,8 @@ class Dashboard extends Controller
                 'customers_services.name AS name',
                 'customers_services.reference AS reference',
                 'customers_services.expiration AS expiration',
+                'customers_services.expiration_monthly AS expiration_monthly',
+                'customers_services.autorenew AS autorenew',
                 'payments.type AS payment_type',
             ])
             ->leftJoin('payments', function($join) {
