@@ -424,19 +424,62 @@
 
                         @endforeach
 
-                        <div class="form-group form-check" style="margin-bottom: 0;">
-                            <input type="checkbox"
-                                   class="form-check-input"
-                                   id="singleVoice"
-                                   name="single_voice[]"
-                                   value="1"
-                                   @if (isset($service->single_voice) && $service->single_voice == 1)
-                                   checked
-                                @endif />
+                        <div class="row">
+                            <div class="col-2">
 
-                            <label class="form-check-label" for="singleVoice">
-                                <small>Voce unica in fattura</small>
-                            </label>
+                                <div class="form-group form-check" style="margin-bottom: 0;">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           id="@if(isset($customerService->id))
+                                               service_autorenew_{{ $customerService->id }}
+                                           @else
+                                               service_autorenew
+                                           @endif"
+                                           name="service_autorenew[]"
+                                           value="1"
+                                           @if (isset($customerService->autorenew) && $customerService->autorenew == 1)
+                                           checked
+                                        @endif />
+
+                                    <label class="form-check-label"
+                                           for="@if(isset($customerService->id))
+                                               service_autorenew_{{ $customerService->id }}
+                                           @else
+                                               service_autorenew
+                                           @endif">
+                                        <small>Rinnovo automatico</small>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="col-2">
+
+                                <div class="form-group form-check" style="margin-bottom: 0;">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           id="@if(isset($customerService->id))
+                                               service_expiration_monthly_{{ $customerService->id }}
+                                           @else
+                                               service_expiration_monthly
+                                           @endif"
+                                           name="service_expiration_monthly[]"
+                                           value="1"
+                                           @if (isset($customerService->expiration_monthly) && $customerService->expiration_monthly == 1)
+                                           checked
+                                        @endif />
+
+                                    <label class="form-check-label"
+                                           for="@if(isset($customerService->id))
+                                               service_expiration_monthly_{{ $customerService->id }}
+                                           @else
+                                               service_expiration_monthly
+                                           @endif">
+                                        <small>Scadenza mensile</small>
+                                    </label>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>

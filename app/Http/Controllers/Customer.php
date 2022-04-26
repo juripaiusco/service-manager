@@ -269,6 +269,8 @@ class Customer extends Controller
          */
         $service_id = $request->input('service_id');
         $service_expiration = $request->input('service_expiration');
+        $service_expiration_monthly = $request->input('service_expiration_monthly');
+        $service_autorenew = $request->input('service_autorenew');
         $service_reference = $request->input('service_reference');
         $service_piva = $request->input('service_piva');
         $service_company = $request->input('service_company');
@@ -304,6 +306,12 @@ class Customer extends Controller
 
             if (isset($service_reference[$k]))
                 $customerService->reference = $service_reference[$k];
+
+            if (isset($service_expiration_monthly[$k]))
+                $customerService->expiration_monthly = $service_expiration_monthly[$k];
+
+            if (isset($service_autorenew[$k]))
+                $customerService->autorenew = $service_autorenew[$k];
 
             if (isset($service_piva[$k]))
                 $customerService->piva = $service_piva[$k];

@@ -24,6 +24,8 @@ class CustomersServices extends Migration
             $table->string('name');
             $table->string('reference')->nullable();
             $table->timestamp('expiration');
+            $table->string('expiration_monthly', 2)->nullable();
+            $table->string('autorenew', 2)->nullable();
 
             $table->timestamps();
         });
