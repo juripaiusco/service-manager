@@ -21,17 +21,29 @@ class FattureInCloudAPI extends Controller
         $this->middleware('auth');
     }
 
+    public function create(Request $request)
+    {
+        $this->create_fattura(array(
+            'customer_service_id' => $request->input('customer_service_id'),
+            'pagamento_saldato' => $request->input('pagamento_saldato'),
+            'date_doc' => $request->input('date_doc'),
+            'send_email' => $request->input('send_email')
+        ));
+
+        return redirect()->route('home');
+    }
+
     /**
      * Creazione fattura e invio tramite email.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create_fattura($args = array())
     {
-        $customer_service_id = $request->input('customer_service_id');
-        $pagamento_saldato = $request->input('pagamento_saldato');
-        $date_doc = $request->input('date_doc');
-        $send_email = $request->input('send_email');
+        $customer_service_id = $args['customer_service_id'];
+        $pagamento_saldato = $args['pagamento_saldato'];
+        $date_doc = $args['date_doc'];
+        $send_email = $args['send_email'];
 
         /*$info_account = $this->api(
             'info/account',
@@ -240,8 +252,6 @@ class FattureInCloudAPI extends Controller
              */
             $gSheets = new GoogleSheetsAPI();
             $gSheets->update();
-
-            return redirect()->route('home');
         }
     }
 
