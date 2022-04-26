@@ -271,6 +271,7 @@ class Customer extends Controller
         $service_expiration = $request->input('service_expiration');
         $service_expiration_monthly = $request->input('service_expiration_monthly');
         $service_autorenew = $request->input('service_autorenew');
+        $service_no_email_alert = $request->input('service_no_email_alert');
         $service_reference = $request->input('service_reference');
         $service_piva = $request->input('service_piva');
         $service_company = $request->input('service_company');
@@ -312,6 +313,9 @@ class Customer extends Controller
 
             if (isset($service_autorenew[$k]))
                 $customerService->autorenew = $service_autorenew[$k];
+
+            if (isset($service_no_email_alert[$k]))
+                $customerService->no_email_alert = $service_no_email_alert[$k];
 
             if (isset($service_piva[$k]))
                 $customerService->piva = $service_piva[$k];

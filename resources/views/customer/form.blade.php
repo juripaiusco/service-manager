@@ -480,6 +480,34 @@
                                 </div>
 
                             </div>
+
+                            <div class="col-2">
+
+                                <div class="form-group form-check" style="margin-bottom: 0;">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           id="@if(isset($customerService->id))
+                                               service_no_email_alert_{{ $customerService->id }}
+                                           @else
+                                               service_no_email_alert
+                                           @endif"
+                                           name="service_no_email_alert[]"
+                                           value="1"
+                                           @if (isset($customerService->no_email_alert) && $customerService->no_email_alert == 1)
+                                           checked
+                                        @endif />
+
+                                    <label class="form-check-label"
+                                           for="@if(isset($customerService->id))
+                                               service_no_email_alert_{{ $customerService->id }}
+                                           @else
+                                               service_no_email_alert
+                                           @endif">
+                                        <small>NO email scadenza</small>
+                                    </label>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>

@@ -77,7 +77,12 @@
                         </div>
                         <div class="col-lg-4">
                             <button type="button"
-                                    class="btn btn-block btn-sm btn-modal {{ $btnClassName }}"
+                                    class="btn btn-block btn-sm btn-modal
+                                    @if($customersService->no_email_alert == 1)
+                                    disabled bg-secondary
+                                    @else
+                                    {{ $btnClassName }}
+                                    @endif"
                                     data-toggle="modal"
                                     data-target="#sendAlertModal"
                                     data-href="{{ route('email.exp', $customersService->id) }}">
