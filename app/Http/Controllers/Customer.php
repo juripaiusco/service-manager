@@ -375,6 +375,11 @@ class Customer extends Controller
         $customerService = \App\Model\CustomersServices::find($id);
 
         $expirationTime = strtotime($customerService->expiration . ' +1 year');
+
+        if ($customerService->expiration_monthly == 1) {
+            $expirationTime = strtotime($customerService->expiration . ' +1 month');
+        }
+
         $expirationTimestamp = date('YmdHis', $expirationTime);
 
         $customerService->expiration = $expirationTimestamp;
