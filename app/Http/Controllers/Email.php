@@ -221,6 +221,7 @@ class Email extends Controller
                                                    $query->where('payments.type', '')
                                                          ->orWhereNull('payments.type');
                                                })
+                                               ->whereNull('no_email_alert')
                                                ->orderBy('expiration', 'ASC')
                                                ->get();
 
