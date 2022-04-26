@@ -21,6 +21,32 @@ class FattureInCloudAPI extends Controller
         $this->middleware('auth');
     }
 
+    public function autorenew()
+    {
+        $customers_services = CustomersServices::select([
+            'customers_services.id AS id'
+        ])
+            ->leftJoin('payments', function($join) {
+                $join->on('payments.customer_service_id', '=', 'customers_services.id');
+                $join->on('payments.customer_service_expiration', '=', 'customers_services.expiration');
+            })
+            ->where('expiration', '<=', date('YmdHis'))
+            ->where('autorenew', 1)
+            ->orderBy('expiration', 'ASC')
+            ->get();
+
+        foreach ($customers_services as $customer_services) {
+
+            $this->create_fattura(array(
+                'customer_service_id' => $customer_services->id,
+                'pagamento_saldato' => 0,
+                'date_doc' => date('d/m/Y'),
+                'send_email' => 1
+            ));
+
+        }
+    }
+
     public function create(Request $request)
     {
         $this->create_fattura(array(

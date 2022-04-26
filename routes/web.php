@@ -75,6 +75,8 @@ Route::get('/mail/show/{view}/{sid}', 'Email@show')
 
 Route::post('/fattureincloud/create', 'FattureInCloudAPI@create')
      ->name('fattureincloud.api.create');
+Route::get('/fattureincloud/autorenew', 'FattureInCloudAPI@autorenew')
+    ->name('fattureincloud.autorenew');
 
 Route::get('/payment/checkout/{sid}', 'Payment@show')
      ->name('payment.checkout');
