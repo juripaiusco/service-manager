@@ -132,30 +132,70 @@ class FattureInCloudAPI extends Controller
 
         /**
          * Fatture in Cloud
+         * Verifico se il cliente ha P.IVA o solo C.F.
+         */
+        $customer_fic_searchByPIVA = $this->get(
+            'clienti',
+            'lista',
+            array(
+                'piva' => $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva
+            )
+        );
+
+        $customer_fic_searchByCF = array();
+
+        if (count($customer_fic_searchByPIVA) <= 0) {
+
+            $customer_fic_searchByCF = $this->get(
+                'clienti',
+                'lista',
+                array(
+                    'cf' => $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva
+                )
+            );
+        }
+
+        if (count($customer_fic_searchByPIVA) <= 0 && count($customer_fic_searchByCF) <= 0) {
+            dd('Cliente non trovato in FIC');
+        }
+
+        /**
+         * Fatture in Cloud
          * Creazione nuova fattura
          */
-        $fattura_nuova = $this->api(
-            'fatture/nuovo',
-            array(
-                'nome' => $customer_service->customer_name ? $customer_service->customer_name : $customer_service->customer->name,
-                'piva' => $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva,
-                'data' => $date_doc,
-                'autocompila_anagrafica' => true,
-                'mostra_info_pagamento' => true,
-                'metodo_id' => env('FIC_metodo_id'),
-                'prezzi_ivati' => false,
-                'PA' => true,
-                'PA_tipo_cliente' => 'B2B',
-                'lista_articoli' => $lista_articoli,
-                'lista_pagamenti' => array(
-                    array(
-                        'data_scadenza' => $date_doc,
-                        'importo' => 'auto',
-                        'metodo' => $pagamento_saldato == 1 ? env('FIC_metodo_nome') : 'not',
-                        'data_saldo' => $date_doc,
-                    )
+        $array_fattura_nuova = array(
+            'nome' => $customer_service->customer_name ? $customer_service->customer_name : $customer_service->customer->name,
+            'data' => $date_doc,
+            'autocompila_anagrafica' => true,
+            'mostra_info_pagamento' => true,
+            'metodo_id' => env('FIC_metodo_id'),
+            'prezzi_ivati' => false,
+            'PA' => true,
+            'PA_tipo_cliente' => 'B2B',
+            'lista_articoli' => $lista_articoli,
+            'lista_pagamenti' => array(
+                array(
+                    'data_scadenza' => $date_doc,
+                    'importo' => 'auto',
+                    'metodo' => $pagamento_saldato == 1 ? env('FIC_metodo_nome') : 'not',
+                    'data_saldo' => $date_doc,
                 )
             )
+        );
+
+        $customer_piva = $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva;
+
+        if (count($customer_fic_searchByCF) > 0) {
+            $array_fattura_nuova['cf'] = $customer_piva;
+        }
+        
+        if (count($customer_fic_searchByPIVA) > 0) {
+            $array_fattura_nuova['piva'] = $customer_piva;
+        }
+
+        $fattura_nuova = $this->api(
+            'fatture/nuovo',
+            $array_fattura_nuova
         );
 
         $fattura_inviamail = 0;
