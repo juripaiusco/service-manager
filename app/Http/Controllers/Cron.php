@@ -11,4 +11,10 @@ class Cron extends Controller
         $fic = new FattureInCloudAPI();
         $fic->getDocToday();
     }
+
+    public function autoRenew()
+    {
+        $fic = new FattureInCloudAPI();
+        $fic->auto_renew();
+    }
 }

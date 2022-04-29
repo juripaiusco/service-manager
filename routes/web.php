@@ -75,8 +75,6 @@ Route::get('/mail/show/{view}/{sid}', 'Email@show')
 
 Route::post('/fattureincloud/create', 'FattureInCloudAPI@create')
      ->name('fattureincloud.api.create');
-Route::get('/fattureincloud/autorenew', 'FattureInCloudAPI@autorenew')
-    ->name('fattureincloud.autorenew');
 
 Route::get('/payment/checkout/{sid}', 'Payment@show')
      ->name('payment.checkout');
@@ -89,6 +87,8 @@ Route::get('/gsheets/update', 'GoogleSheetsAPI@update');
 Route::get('/scriptable/json', 'GoogleSheetsAPI@scriptableGetJSON');
 Route::get('/fic/import', 'Cron@getDocToday');
 Route::get('/fic/importbydate/{date}', 'FattureInCloudAPI@getDocByDate');
+Route::get('/fic/autorenew', 'Cron@autoRenew')
+    ->name('fattureincloud.autorenew');
 
 //Route::get('/gsheets/push-outs', 'GoogleSheetsAPI@pushOuts');
 

@@ -21,7 +21,7 @@ class FattureInCloudAPI extends Controller
         $this->middleware('auth');
     }
 
-    public function autorenew()
+    public function auto_renew()
     {
         $customers_services = CustomersServices::select([
             'customers_services.id AS id'
