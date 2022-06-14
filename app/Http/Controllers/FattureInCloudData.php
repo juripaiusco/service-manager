@@ -92,6 +92,11 @@ class FattureInCloudData extends Controller
         foreach ($ndc_months_by_category as $ndc) {
 
             $data_i = substr(str_replace('-', '', $ndc->data), 0, 6);
+
+            if (!isset($array_docs_months_by_category[$ndc->categoria][$ndc->anno][$data_i])) {
+                $array_docs_months_by_category[$ndc->categoria][$ndc->anno][$data_i] = 0;
+            }
+
             $array_docs_months_by_category[$ndc->categoria][$ndc->anno][$data_i] -= $ndc->importo_netto;
 
         }
