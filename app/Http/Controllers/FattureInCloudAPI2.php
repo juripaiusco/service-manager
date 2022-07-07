@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use FattureInCloud\Api\ClientsApi;
 use Illuminate\Http\Request;
 
 use FattureInCloud\Api\SuppliersApi;
@@ -27,6 +28,10 @@ class FattureInCloudAPI2 extends Controller
             new Client(),
             $config
         );
+        $customersApi = new ClientsApi(
+            new Client(),
+            $config
+        );
 
         try {
             // Retrieve the first company id
@@ -35,9 +40,18 @@ class FattureInCloudAPI2 extends Controller
 
             // Retrieve the list of first 10 Suppliers for the selected company
             $suppliers = $suppliersApi->listSuppliers($firstCompanyId, null, null, null, 1, 10);
+
             foreach ($suppliers->getData() as $supplier) {
                 $name = $supplier->getName();
                 echo("$name </br>\n");
+            }
+
+            echo '<hr>';
+
+            $customers = $customersApi->listClients($firstCompanyId, null, null, null, 1, 10);
+
+            foreach ($customers->getData() as $customer) {
+                echo $customer->getName() . "<br>\n";
             }
 
         } catch (\Exception $e) {
