@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use FattureInCloud\Api\ClientsApi;
+use FattureInCloud\Api\IssuedDocumentsApi;
 use Illuminate\Http\Request;
 
+use FattureInCloud\Api\ArchiveApi;
+use FattureInCloud\Api\ClientsApi;
 use FattureInCloud\Api\SuppliersApi;
 use FattureInCloud\Api\UserApi;
 use FattureInCloud\Configuration;
@@ -12,15 +14,128 @@ use GuzzleHttp\Client;
 
 class FattureInCloudAPI2 extends Controller
 {
+    protected   $config,
+                $companyId;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Recupero la configurazione per la connessione a FIC.
+     *
+     * @return Configuration
+     */
+    private function getConfig()
+    {
+        if (!isset($this->config)) {
+
+            // Retrieve the access token from the session variable
+            $accessToken = env('FIC_TOKEN');
+
+            // Get the API config and construct the service object.
+            $this->config = Configuration::getDefaultConfiguration()->setAccessToken($accessToken);
+
+        }
+
+        return $this->config;
+    }
+
+    /**
+     * Recupero l'ID dell'azienda che utilizza FIC.
+     *
+     * @return int|null
+     * @throws \FattureInCloud\ApiException
+     */
+    private function getCompanyId()
+    {
+        if (!isset($this->companyId)) {
+
+            $userApi = new UserApi(
+                new Client(),
+                $this->getConfig()
+            );
+
+            // Retrieve the first company id
+            $companies = $userApi->listUserCompanies();
+            $this->companyId = $companies->getData()->getCompanies()[0]->getId();
+
+        }
+
+        return $this->companyId;
+    }
+
+    public function get($resource, $action, $filter = array())
+    {
+        $issuedDocumentsApi = new IssuedDocumentsApi(
+            new Client(),
+            $this->getConfig()
+        );
+
+        $fic_result = $issuedDocumentsApi->listIssuedDocuments(
+            $this->getCompanyId(),
+            'invoice',
+            '',
+            '',
+            '-id',
+            1,
+            5/*,
+            'year=2022'*/
+        );
+
+        return $fic_result;
+    }
+
     public function quickstart()
     {
-        // Retrieve the access token from the session variable
-        $accessToken = env('FIC_TOKEN');
+        /*$fic = new FattureInCloudAPI();
+        $fatture_attive = $fic->get(
+            'fatture',
+            'lista',
+            array(
+                'anno' => env('GOOGLE_SHEETS_YEAR'),
+                'data_inizio' => '01/01/' . env('GOOGLE_SHEETS_YEAR'),
+                'data_fine' => '31/12/' . env('GOOGLE_SHEETS_YEAR')
+            )
+        );*/
 
-        // Get the API config and construct the service object.
-        $config = Configuration::getDefaultConfiguration()->setAccessToken($accessToken);
+        $fatture_attive = $this->get(
+            'fatture',
+            'lista',
+            array(
+                'anno' => env('GOOGLE_SHEETS_YEAR'),
+                'data_inizio' => '01/01/' . env('GOOGLE_SHEETS_YEAR'),
+                'data_fine' => '31/12/' . env('GOOGLE_SHEETS_YEAR')
+            )
+        );
 
-        $userApi = new UserApi(
+//        print_r($fatture_attive['data'][0]['date']);
+
+        // ---------------------------------------------------
+
+        /*$customersApi = new ClientsApi(
+            new Client(),
+            $this->config()
+        );
+
+        $customers = $customersApi->listClients(
+            $this->companyId(),
+            null,
+            null,
+            null,
+            1,
+            5
+        );
+
+        dd($customers);*/
+
+        /*$userApi = new UserApi(
             new Client(),
             $config
         );
@@ -31,9 +146,9 @@ class FattureInCloudAPI2 extends Controller
         $customersApi = new ClientsApi(
             new Client(),
             $config
-        );
+        );*/
 
-        try {
+        /*try {
             // Retrieve the first company id
             $companies = $userApi->listUserCompanies();
             $firstCompanyId = $companies->getData()->getCompanies()[0]->getId();
@@ -56,6 +171,6 @@ class FattureInCloudAPI2 extends Controller
 
         } catch (\Exception $e) {
             echo 'Exception when calling the API: ', $e->getMessage(), PHP_EOL;
-        }
+        }*/
     }
 }
