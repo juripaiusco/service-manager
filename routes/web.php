@@ -97,3 +97,7 @@ Route::get('/analysis/income', 'FattureInCloudReport@incomeGeneral')->name('inco
 
 Route::get('/analysis/cost', 'FattureInCloudReport@costGeneral')->name('cost.list');
 Route::get('/analysis/cost/{categoria}', 'FattureInCloudReport@costDetail')->name('cost.detail');
+
+// - - -
+
+Route::get('/fic2', 'FattureInCloudAPI2@quickstart');
