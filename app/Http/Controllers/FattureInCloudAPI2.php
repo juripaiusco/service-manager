@@ -83,13 +83,13 @@ class FattureInCloudAPI2 extends Controller
             'invoice',
             '',
             '',
-            '-id',
-            1,
-            5/*,
-            'year=2022'*/
+            '-number',
+            '',
+            '',
+            'date > ' . $filter['data_inizio'] . ' AND date < ' . $filter['data_fine']
         );
 
-        return $fic_result;
+        return $fic_result['data'];
     }
 
     public function quickstart()
@@ -103,19 +103,47 @@ class FattureInCloudAPI2 extends Controller
                 'data_inizio' => '01/01/' . env('GOOGLE_SHEETS_YEAR'),
                 'data_fine' => '31/12/' . env('GOOGLE_SHEETS_YEAR')
             )
-        );*/
+        );
 
-        $fatture_attive = $this->get(
+        echo '<table border="1">';
+        foreach ($fatture_attive as $fattura) {
+
+            echo '<tr>';
+            echo '<td>' . $fattura['data'] . '</td>';
+            echo '<td>' . $fattura['numero'] . '</td>';
+            echo '<td style="text-align: right;">' . $fattura['importo_netto'] . '</td>';
+            echo '<td>' . $fattura['nome'] . '</td>';
+            echo '</tr>';
+
+        }
+        echo '</table>';*/
+
+        /*$fatture_attive = $this->get(
             'fatture',
             'lista',
             array(
                 'anno' => env('GOOGLE_SHEETS_YEAR'),
-                'data_inizio' => '01/01/' . env('GOOGLE_SHEETS_YEAR'),
-                'data_fine' => '31/12/' . env('GOOGLE_SHEETS_YEAR')
+                'data_inizio' => env('GOOGLE_SHEETS_YEAR') . '0101',
+                'data_fine' => env('GOOGLE_SHEETS_YEAR') . '1231'
             )
         );
 
-//        print_r($fatture_attive['data'][0]['date']);
+        echo '<table border="1">';
+        foreach ($fatture_attive as $fattura) {
+
+            $date_decode = json_decode(json_encode($fattura['date']));
+            $dateTime = $date_decode->date;
+            $date = new \DateTime($dateTime);
+
+            echo '<tr>';
+            echo '<td>' . $date->format('d/m/Y') . '</td>';
+            echo '<td>' . $fattura['number'] . '</td>';
+            echo '<td style="text-align: right;">' . number_format($fattura['amount_net'], 2, '.', '') . '</td>';
+            echo '<td>' . $fattura['entity']['name'] . '</td>';
+            echo '</tr>';
+
+        }
+        echo '</table>';*/
 
         // ---------------------------------------------------
 
