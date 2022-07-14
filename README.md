@@ -1,17 +1,19 @@
 # serviceM
-Service and Project Manager
+Service and date expiration Manager
 
-ServiceM è un piccolo software per la gestione dei servizi a scadenza e dei progetti.
+ServiceM is a little software to manage expirations services.
 
-Requisiti:
-- PHP7.2
+Server Requirements:
+- PHP >= 7.2
 - Apache 2
 - MariaDB 10
 
-La gestione dei **servizi** comprende:
+ServiceM include:
 
 - Dashboard
-- Servizio
-- Utenti
+- Services
+- Customers
+- Expiration manager
+- Email alert
 
-La gestione dei progetti è in sviluppo.
+ServiceM is beta test.
