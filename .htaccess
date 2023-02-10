@@ -1,5 +1,5 @@
-<IfModule mod_rewrite.c>
-RewriteEngine On
-#RewriteBase /servicem/
-RewriteRule ^(.*)$ public/$1 [L]
-</IfModule>
+#<IfModule mod_rewrite.c>
+#RewriteEngine On
+##RewriteBase /servicem/
+#RewriteRule ^(.*)$ public/$1 [L]
+#</IfModule>

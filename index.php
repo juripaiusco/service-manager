@@ -1,1 +1,1 @@
-V3
+<?php phpinfo();
