@@ -4,7 +4,7 @@ Service and date expiration Manager
 ServiceM is a little software to manage expirations services.
 
 Server Requirements:
-- PHP >= 7.4
+- PHP >= 8.1
 - Apache 2
 - MariaDB 10
 
