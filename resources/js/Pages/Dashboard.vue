@@ -18,5 +18,16 @@ import { Head } from '@inertiajs/vue3';
                 </div>
             </div>
         </div>
+
+        <div class="container">
+
+            <div class="alert alert-success">
+
+                Ciao Mondo
+
+            </div>
+
+        </div>
+
     </AuthenticatedLayout>
 </template>
