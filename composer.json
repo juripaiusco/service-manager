@@ -32,6 +32,8 @@
         }
     },
     "autoload-dev": {
+        "exclude-from-classmap": ["vendor/inertiajs/inertia-laravel/src/Response.php"],
+        "files": ["app/Overrides/Response.php"],
         "psr-4": {
             "Tests\\": "tests/"
         }
