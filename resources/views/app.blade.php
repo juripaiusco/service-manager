@@ -14,6 +14,8 @@
         @routes
         @vite(['resources/js/app.ts', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
+
+        <x-translations />
     </head>
     <body class="font-sans antialiased">
         @inertia
