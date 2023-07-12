@@ -1,0 +1,94 @@
+<script setup lang="ts">
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head } from '@inertiajs/vue3';
+import ApplicationHeader from "@/Components/ApplicationHeader.vue";
+import ApplicationContainer from "@/Components/ApplicationContainer.vue";
+
+defineProps({
+    filters: Object,
+});
+
+</script>
+
+<template>
+    <Head title="Dashboard" />
+
+    <AuthenticatedLayout>
+
+        <template #header>
+
+            <ApplicationHeader :breadcrumb-array="['Dashboard']" />
+
+        </template>
+
+        <ApplicationContainer>
+
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+
+                    <button class="w-[180px] nav-link active"
+                            id="nav-home-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-home"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-home"
+                            aria-selected="true">Scadenze</button>
+
+                    <button class="w-[180px] nav-link"
+                            id="nav-profile-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-profile"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-profile"
+                            aria-selected="false">Entrate per mese</button>
+
+                    <button class="w-[180px] nav-link"
+                            id="nav-contact-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-contact"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-contact"
+                            aria-selected="false">Utile</button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+
+                <div class="tab-pane fade show active"
+                     id="nav-home"
+                     role="tabpanel"
+                     aria-labelledby="nav-home-tab"
+                     tabindex="0">
+
+                    Scadenze
+
+                </div>
+
+                <div class="tab-pane fade"
+                     id="nav-profile"
+                     role="tabpanel"
+                     aria-labelledby="nav-profile-tab"
+                     tabindex="0">
+
+                    Guadagno per mese
+
+                </div>
+
+                <div class="tab-pane fade"
+                     id="nav-contact"
+                     role="tabpanel"
+                     aria-labelledby="nav-contact-tab"
+                     tabindex="0">
+
+                    Utile
+                    
+                </div>
+
+            </div>
+
+        </ApplicationContainer>
+
+    </AuthenticatedLayout>
+</template>
