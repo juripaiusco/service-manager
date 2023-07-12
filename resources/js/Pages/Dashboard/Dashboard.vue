@@ -5,6 +5,7 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 
 defineProps({
+    services: Object,
     filters: Object,
 });
 
@@ -62,13 +63,12 @@ defineProps({
                      aria-labelledby="nav-expiration-tab"
                      tabindex="0">
 
-
                     <table class="table">
 
                         <thead>
 
                         <tr>
-                            <th></th>
+                            <th class="w-[200px]"></th>
                             <th>Cliente</th>
                             <th>Servizio</th>
                             <th>Scadenza</th>
@@ -79,11 +79,33 @@ defineProps({
 
                         <tbody>
 
-                        <tr>
+                        <tr v-for="service in services">
                             <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>
+
+                                {{ service.company ? service.company : service.customer.company }}
+
+                                <br>
+                                <span class="text-xs">
+                                    {{ service.customer_name ? service.customer_name : service.customer.name }}
+                                    -
+                                    {{ service.email ? service.email : service.customer.email }}
+                                </span>
+                            </td>
+                            <td>
+
+                                {{ service.name }}
+                                <br>
+                                <span class="text-xs">
+                                    {{ service.reference }}
+                                </span>
+
+                            </td>
+                            <td>
+
+                                {{ service.expiration }}
+
+                            </td>
                             <td></td>
                         </tr>
 

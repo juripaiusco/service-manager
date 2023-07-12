@@ -31,9 +31,7 @@ Route::middleware('auth')->group(function () {
         return to_route('dashboard');
     });
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard/Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\Dashboard::class, 'index'])->name('dashboard');
 
 
     Route::get('/service', [\App\Http\Controllers\Service::class, 'index'])->name('service.index');
