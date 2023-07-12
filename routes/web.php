@@ -28,11 +28,11 @@ use Inertia\Inertia;
 Route::middleware('auth')->group(function () {
 
     Route::get('/', function () {
-        return Inertia::render('Dashboard');
+        return to_route('dashboard');
     });
 
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboard/Dashboard');
     })->name('dashboard');
 
 
