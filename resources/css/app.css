@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.logo {
+    background-image: url('../img/servicem-logo.png');
+    background-size: cover;
+}
