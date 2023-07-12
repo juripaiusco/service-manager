@@ -27,49 +27,77 @@ defineProps({
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
 
                     <button class="w-[180px] nav-link active"
-                            id="nav-home-tab"
+                            id="nav-expiration-tab"
                             data-bs-toggle="tab"
-                            data-bs-target="#nav-home"
+                            data-bs-target="#nav-expiration"
                             type="button"
                             role="tab"
-                            aria-controls="nav-home"
+                            aria-controls="nav-expiration"
                             aria-selected="true">Scadenze</button>
 
                     <button class="w-[180px] nav-link"
-                            id="nav-profile-tab"
+                            id="nav-incoming-tab"
                             data-bs-toggle="tab"
-                            data-bs-target="#nav-profile"
+                            data-bs-target="#nav-incoming"
                             type="button"
                             role="tab"
-                            aria-controls="nav-profile"
+                            aria-controls="nav-incoming"
                             aria-selected="false">Entrate per mese</button>
 
                     <button class="w-[180px] nav-link"
-                            id="nav-contact-tab"
+                            id="nav-profit-tab"
                             data-bs-toggle="tab"
-                            data-bs-target="#nav-contact"
+                            data-bs-target="#nav-profit"
                             type="button"
                             role="tab"
-                            aria-controls="nav-contact"
+                            aria-controls="nav-profit"
                             aria-selected="false">Utile</button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
 
-                <div class="tab-pane fade show active"
-                     id="nav-home"
+                <div class="tab-pane fade show active pt-4"
+                     id="nav-expiration"
                      role="tabpanel"
-                     aria-labelledby="nav-home-tab"
+                     aria-labelledby="nav-expiration-tab"
                      tabindex="0">
 
-                    Scadenze
+
+                    <table class="table">
+
+                        <thead>
+
+                        <tr>
+                            <th></th>
+                            <th>Cliente</th>
+                            <th>Servizio</th>
+                            <th>Scadenza</th>
+                            <th>Importo</th>
+                        </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
 
                 </div>
 
                 <div class="tab-pane fade"
-                     id="nav-profile"
+                     id="nav-incoming"
                      role="tabpanel"
-                     aria-labelledby="nav-profile-tab"
+                     aria-labelledby="nav-incoming-tab"
                      tabindex="0">
 
                     Guadagno per mese
@@ -77,13 +105,13 @@ defineProps({
                 </div>
 
                 <div class="tab-pane fade"
-                     id="nav-contact"
+                     id="nav-profit"
                      role="tabpanel"
-                     aria-labelledby="nav-contact-tab"
+                     aria-labelledby="nav-profit-tab"
                      tabindex="0">
 
                     Utile
-                    
+
                 </div>
 
             </div>
