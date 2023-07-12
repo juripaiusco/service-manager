@@ -41,7 +41,7 @@ const submit = () => {
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full form-control"
                     v-model="form.email"
                     required
                     autofocus
@@ -57,7 +57,7 @@ const submit = () => {
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full form-control"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
@@ -84,7 +84,7 @@ const submit = () => {
                     {{ __('login.forgot_password') }}
                 </Link>
 
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton class="ml-4 btn btn-primary" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     {{ __('login.login') }}
                 </PrimaryButton>
             </div>
