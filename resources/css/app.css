@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+sky: #38bdf8
+blue: #0369a1
+*/
+
 .logo {
     background-image: url('../img/servicem-logo.png');
     background-size: cover;
@@ -11,6 +16,14 @@
 }
 .breadcrumb-item.active {
     color: unset !important;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+    color: #0369a1 !important;
+}
+.nav-link {
+    color: gray !important;
 }
 
 #nprogress .bar {
