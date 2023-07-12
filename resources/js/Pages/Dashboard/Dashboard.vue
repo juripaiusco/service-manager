@@ -3,11 +3,22 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
+import {__date} from "../../ComponentsExt/Date";
+import {__currency} from "../../ComponentsExt/Currency";
 
 defineProps({
     services: Object,
+    today: String,
     filters: Object,
 });
+
+function getDate(dateValute, addDays = 0)
+{
+    let date = new Date(dateValute);
+    let newDate = new Date(date.setDate(date.getDate() + addDays));
+
+    return newDate;
+}
 
 </script>
 
@@ -63,14 +74,17 @@ defineProps({
                      aria-labelledby="nav-expiration-tab"
                      tabindex="0">
 
-                    <table class="table">
+                    <table class="table table-striped table-hover">
 
                         <thead>
 
                         <tr>
-                            <th class="w-[200px]"></th>
-                            <th>Cliente</th>
-                            <th>Servizio</th>
+                            <th></th>
+                            <th class="text-left">
+                                Cliente
+                                <span class="text-xs font-normal">(hai {{ services.length }} scadenze)</span>
+                            </th>
+                            <th class="text-left">Servizio</th>
                             <th>Scadenza</th>
                             <th>Importo</th>
                         </tr>
@@ -79,9 +93,75 @@ defineProps({
 
                         <tbody>
 
-                        <tr v-for="service in services">
-                            <td></td>
-                            <td>
+                        <tr v-for="service in services"
+                            :class="{
+                                'table-danger': getDate(today) > getDate(service.expiration),
+                                'table-warning': getDate(today, 60) > getDate(service.expiration),
+                            }">
+                            <td class="align-middle">
+
+                                <div class="flex w-full"
+                                     :class="{
+                                        'hidden': getDate(today, 60) < getDate(service.expiration),
+                                     }">
+
+                                    <div class="flex-initial mr-2">
+
+                                        <button class="btn btn-primary btn-sm"
+                                                :class="{
+                                                    'btn-danger': getDate(today) > getDate(service.expiration),
+                                                    'btn-warning': getDate(today, 60) > getDate(service.expiration),
+                                                }">
+
+                                            <svg class="w-4 h-4"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                            </svg>
+
+                                        </button>
+
+                                    </div>
+
+                                    <div class="flex-initial mr-2">
+
+                                        <button class="btn btn-primary btn-sm"
+                                                :class="{
+                                                    'btn-danger': getDate(today) > getDate(service.expiration),
+                                                    'btn-warning': getDate(today, 60) > getDate(service.expiration) && service.expiration_monthly ==! 1,
+                                                    'btn-secondary disabled': service.expiration_monthly == 1,
+                                                }">
+
+                                            <svg class="w-4 h-4"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25" />
+                                            </svg>
+
+                                        </button>
+
+                                    </div>
+
+                                    <div class="flex-initial">
+
+                                        <button class="btn btn-primary btn-sm"
+                                                :class="{
+                                                    'btn-danger': getDate(today) > getDate(service.expiration),
+                                                    'btn-warning': getDate(today, 60) > getDate(service.expiration) && service.autorenew ==! 1,
+                                                    'btn-info': service.autorenew == 1,
+                                                }">
+
+                                            <svg class="w-4 h-4"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 100 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+                            <td class="align-middle">
 
                                 {{ service.company ? service.company : service.customer.company }}
 
@@ -92,7 +172,7 @@ defineProps({
                                     {{ service.email ? service.email : service.customer.email }}
                                 </span>
                             </td>
-                            <td>
+                            <td class="align-middle">
 
                                 {{ service.name }}
                                 <br>
@@ -101,12 +181,22 @@ defineProps({
                                 </span>
 
                             </td>
-                            <td>
+                            <td class="align-middle text-center">
 
-                                {{ service.expiration }}
+                                {{ __date(service.expiration, 'day') }}
 
                             </td>
-                            <td></td>
+                            <td class="align-middle text-right">
+
+                                <span class="font-semibold">
+                                    {{ __currency(service.total_notax, 'EUR') }}
+                                </span>
+                                <br>
+                                <span class="text-xs">
+                                    {{ __currency(service.total_tax, 'EUR') }}
+                                </span>
+
+                            </td>
                         </tr>
 
                         </tbody>
