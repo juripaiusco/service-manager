@@ -11,4 +11,9 @@ class CustomerServiceDetail extends Model
 
     protected $table = 'customers_services_details';
 
+    public function service()
+    {
+        return $this->hasOne(Service::class, 'id', 'service_id');
+    }
+
 }

@@ -15,6 +15,7 @@ class Dashboard extends Controller
 
         $services = $services->with('customer');
         $services = $services->with('details');
+        $services = $services->with('details.service');
         $services = $services->withSum('details AS total_notax', 'price_sell');
 
         $services = $services->addSelect(DB::raw(
