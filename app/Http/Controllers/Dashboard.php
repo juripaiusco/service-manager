@@ -29,6 +29,8 @@ class Dashboard extends Controller
             ) AS `total_tax`'
         ));
 
+        $services->addSelect(DB::raw('false AS isExpanded'));
+
         $services = $services->orderBy('expiration');
         $services = $services->get();
 

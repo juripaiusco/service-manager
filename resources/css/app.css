@@ -26,6 +26,13 @@ blue: #0369a1
     color: gray !important;
 }
 
+.table-hover .no-hover:hover > * {
+    --bs-table-bg-state: none;
+}
+.service-detail tr:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 #nprogress .bar {
     display: none;
 }

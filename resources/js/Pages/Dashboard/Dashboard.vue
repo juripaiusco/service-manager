@@ -6,6 +6,8 @@ import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {__date} from "../../ComponentsExt/Date";
 import {__currency} from "../../ComponentsExt/Currency";
 
+import { Collapse } from "vue-collapsed";
+
 defineProps({
     services: Object,
     today: String,
@@ -99,14 +101,14 @@ function getDate(dateValute: any, addDays = 0)
 
                         <tbody>
 
-                        <template v-for="service in services">
+                        <template v-for="(service, index) in services">
 
-                            <tr :class="{
+                            <tr class="cursor-pointer"
+                                :class="{
                                     'table-danger': getDate(today) > getDate(service.expiration),
                                     'table-warning': getDate(today, 60) > getDate(service.expiration),
-                                }"
-                                class="cursor-pointer"
-                                @click="collapse('service-' + service.id)">
+                                }">
+
                                 <td class="align-middle">
 
                                     <div class="flex w-full"
@@ -170,71 +172,93 @@ function getDate(dateValute: any, addDays = 0)
                                     </div>
 
                                 </td>
-                                <td class="align-middle">
+                                <td class="align-middle"
+                                    @click="collapse(index)">
 
                                     {{ service.company ? service.company : service.customer.company }}
 
                                     <br>
                                     <span class="text-xs">
-                                    {{ service.customer_name ? service.customer_name : service.customer.name }}
-                                    -
-                                    {{ service.email ? service.email : service.customer.email }}
-                                </span>
+                                        {{ service.customer_name ? service.customer_name : service.customer.name }}
+                                        -
+                                        {{ service.email ? service.email : service.customer.email }}
+                                    </span>
+
                                 </td>
-                                <td class="align-middle">
+                                <td class="align-middle"
+                                    @click="collapse(index)">
 
                                     {{ service.name }}
                                     <br>
                                     <span class="text-xs">
-                                    {{ service.reference }}
-                                </span>
+                                        {{ service.reference }}
+                                    </span>
 
                                 </td>
-                                <td class="align-middle text-center">
+                                <td class="align-middle text-center"
+                                    @click="collapse(index)">
 
                                     {{ __date(service.expiration, 'day') }}
 
                                 </td>
-                                <td class="align-middle text-right">
+                                <td class="align-middle text-right"
+                                    @click="collapse(index)">
 
-                                <span class="font-semibold">
-                                    {{ __currency(service.total_notax, 'EUR') }}
-                                </span>
+                                    <span class="text-lg font-semibold">
+                                        {{ __currency(service.total_notax, 'EUR') }}
+                                    </span>
                                     <br>
                                     <span class="text-xs">
-                                    {{ __currency(service.total_tax, 'EUR') }}
-                                </span>
+                                        {{ __currency(service.total_tax, 'EUR') }}
+                                    </span>
 
                                 </td>
                             </tr>
 
-                            <tr class="!p-0 !m-0 !border-0 service-detail hidden"
-                                :class="'service-' + service.id"
-                                :ref="'service-' + service.id">
+                            <tr class="!p-0 !m-0 !border-0 no-hover">
 
-                                <td colspan="5">
+<!--                                <td class="!pt-0 !mt-0 !pb-0 !mb-0 !border-0"
+                                    :class="{
+                                    'table-danger': getDate(today) > getDate(service.expiration),
+                                    'table-warning': getDate(today, 60) > getDate(service.expiration),
+                                    }"></td>-->
+                                <td class="!p-0 !m-0 !border-0"
+                                    :class="{
+                                    'table-danger': getDate(today) > getDate(service.expiration),
+                                    'table-warning': getDate(today, 60) > getDate(service.expiration),
+                                    }"
+                                    colspan="5">
 
-                                    <table class="table w-full">
+                                    <Collapse as="section" :when="Boolean(service.isExpanded)" class="v-collapse">
 
-                                        <tr v-for="serviceDetail in service.details">
+                                        <table class="table table-hover service-detail !mb-0 w-full"
+                                               :class="{
+                                                    'table-danger': getDate(today) > getDate(service.expiration),
+                                                    'table-warning': getDate(today, 60) > getDate(service.expiration),
+                                               }">
 
-                                            <td class="w-[140px]"></td>
-                                            <td>
+                                            <tr v-for="serviceDetail in service.details"
+                                                class="!border-sky-600 !border-b-[0.5px]">
 
-                                                {{ serviceDetail.service.name }}
-                                                <br>
-                                                <span class="!p-0 !m-0 text-xs">
-                                                    {{ serviceDetail.reference }}
-                                                </span>
+                                                <td class="w-[140px]"></td>
+                                                <td class="pl-8 pt-1 pb-1">
 
-                                            </td>
-                                            <td class="align-middle text-right">
-                                                {{ __currency(serviceDetail.price_sell, 'EUR') }}
-                                            </td>
+                                                    {{ serviceDetail.service.name }}
+                                                    <br>
+                                                    <span class="!p-0 !m-0 !border-0 text-xs !bg-transparent">
+                                                        {{ serviceDetail.reference }}
+                                                    </span>
 
-                                        </tr>
+                                                </td>
+                                                <td class="pr-3 align-bottom text-right">
+                                                    {{ __currency(serviceDetail.price_sell, 'EUR') }}
+                                                </td>
 
-                                    </table>
+                                            </tr>
+
+                                        </table>
+
+                                    </Collapse>
 
                                 </td>
 
@@ -283,11 +307,21 @@ export default {
         return {}
     },
     methods: {
-        collapse(selector: String)
+        collapse(indexSelected: Number)
         {
-            console.log(this.$refs[selector]);
+            let services = this.$props.services;
+
+            services.forEach((_, index) => {
+                services[index].isExpanded = indexSelected === index ? !services[index].isExpanded : false;
+            });
         }
     }
 }
 
 </script>
+
+<style>
+.v-collapse {
+    transition: height 300ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+</style>
