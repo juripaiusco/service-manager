@@ -12,7 +12,7 @@ defineProps({
     filters: Object,
 });
 
-function getDate(dateValute, addDays = 0)
+function getDate(dateValute: any, addDays = 0)
 {
     let date = new Date(dateValute);
     let newDate = new Date(date.setDate(date.getDate() + addDays));
@@ -74,7 +74,7 @@ function getDate(dateValute, addDays = 0)
                      aria-labelledby="nav-expiration-tab"
                      tabindex="0">
 
-                    <table class="table table-striped table-hover">
+                    <table class="table table-hover">
 
                         <thead>
 
@@ -84,120 +84,163 @@ function getDate(dateValute, addDays = 0)
                                 Cliente
                                 <span class="text-xs font-normal">(hai {{ services.length }} scadenze)</span>
                             </th>
-                            <th class="text-left">Servizio</th>
-                            <th>Scadenza</th>
-                            <th>Importo</th>
+                            <th class="text-left">
+                                Servizio
+                            </th>
+                            <th>
+                                Scadenza
+                            </th>
+                            <th>
+                                Importo
+                            </th>
                         </tr>
 
                         </thead>
 
                         <tbody>
 
-                        <tr v-for="service in services"
-                            :class="{
-                                'table-danger': getDate(today) > getDate(service.expiration),
-                                'table-warning': getDate(today, 60) > getDate(service.expiration),
-                            }">
-                            <td class="align-middle">
+                        <template v-for="service in services">
 
-                                <div class="flex w-full"
-                                     :class="{
+                            <tr :class="{
+                                    'table-danger': getDate(today) > getDate(service.expiration),
+                                    'table-warning': getDate(today, 60) > getDate(service.expiration),
+                                }"
+                                class="cursor-pointer"
+                                @click="collapse('service-' + service.id)">
+                                <td class="align-middle">
+
+                                    <div class="flex w-full"
+                                         :class="{
                                         'hidden': getDate(today, 60) < getDate(service.expiration),
                                      }">
 
-                                    <div class="flex-initial mr-2">
+                                        <div class="flex-initial mr-2">
 
-                                        <button class="btn btn-primary btn-sm"
-                                                :class="{
+                                            <button class="btn btn-primary btn-sm"
+                                                    :class="{
                                                     'btn-danger': getDate(today) > getDate(service.expiration),
                                                     'btn-warning': getDate(today, 60) > getDate(service.expiration),
                                                 }">
 
-                                            <svg class="w-4 h-4"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                                            </svg>
+                                                <svg class="w-4 h-4"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                                </svg>
 
-                                        </button>
+                                            </button>
 
-                                    </div>
+                                        </div>
 
-                                    <div class="flex-initial mr-2">
+                                        <div class="flex-initial mr-2">
 
-                                        <button class="btn btn-primary btn-sm"
-                                                :class="{
+                                            <button class="btn btn-primary btn-sm"
+                                                    :class="{
                                                     'btn-danger': getDate(today) > getDate(service.expiration),
                                                     'btn-warning': getDate(today, 60) > getDate(service.expiration) && service.expiration_monthly ==! 1,
                                                     'btn-secondary disabled': service.expiration_monthly == 1,
                                                 }">
 
-                                            <svg class="w-4 h-4"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25" />
-                                            </svg>
+                                                <svg class="w-4 h-4"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25" />
+                                                </svg>
 
-                                        </button>
+                                            </button>
 
-                                    </div>
+                                        </div>
 
-                                    <div class="flex-initial">
+                                        <div class="flex-initial">
 
-                                        <button class="btn btn-primary btn-sm"
-                                                :class="{
+                                            <button class="btn btn-primary btn-sm"
+                                                    :class="{
                                                     'btn-danger': getDate(today) > getDate(service.expiration),
                                                     'btn-warning': getDate(today, 60) > getDate(service.expiration) && service.autorenew ==! 1,
                                                     'btn-info': service.autorenew == 1,
                                                 }">
 
-                                            <svg class="w-4 h-4"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 100 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
+                                                <svg class="w-4 h-4"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 100 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
 
-                                        </button>
+                                            </button>
+
+                                        </div>
 
                                     </div>
 
-                                </div>
+                                </td>
+                                <td class="align-middle">
 
-                            </td>
-                            <td class="align-middle">
+                                    {{ service.company ? service.company : service.customer.company }}
 
-                                {{ service.company ? service.company : service.customer.company }}
-
-                                <br>
-                                <span class="text-xs">
+                                    <br>
+                                    <span class="text-xs">
                                     {{ service.customer_name ? service.customer_name : service.customer.name }}
                                     -
                                     {{ service.email ? service.email : service.customer.email }}
                                 </span>
-                            </td>
-                            <td class="align-middle">
+                                </td>
+                                <td class="align-middle">
 
-                                {{ service.name }}
-                                <br>
-                                <span class="text-xs">
+                                    {{ service.name }}
+                                    <br>
+                                    <span class="text-xs">
                                     {{ service.reference }}
                                 </span>
 
-                            </td>
-                            <td class="align-middle text-center">
+                                </td>
+                                <td class="align-middle text-center">
 
-                                {{ __date(service.expiration, 'day') }}
+                                    {{ __date(service.expiration, 'day') }}
 
-                            </td>
-                            <td class="align-middle text-right">
+                                </td>
+                                <td class="align-middle text-right">
 
                                 <span class="font-semibold">
                                     {{ __currency(service.total_notax, 'EUR') }}
                                 </span>
-                                <br>
-                                <span class="text-xs">
+                                    <br>
+                                    <span class="text-xs">
                                     {{ __currency(service.total_tax, 'EUR') }}
                                 </span>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+
+                            <tr class="!p-0 !m-0 !border-0 service-detail hidden"
+                                :class="'service-' + service.id"
+                                :ref="'service-' + service.id">
+
+                                <td colspan="5">
+
+                                    <table class="table w-full">
+
+                                        <tr v-for="serviceDetail in service.details">
+
+                                            <td class="w-[140px]"></td>
+                                            <td>
+
+                                                {{ serviceDetail.service.name }}
+                                                <br>
+                                                <span class="!p-0 !m-0 text-xs">
+                                                    {{ serviceDetail.reference }}
+                                                </span>
+
+                                            </td>
+                                            <td class="align-middle text-right">
+                                                {{ __currency(serviceDetail.price_sell, 'EUR') }}
+                                            </td>
+
+                                        </tr>
+
+                                    </table>
+
+                                </td>
+
+                            </tr>
+
+                        </template>
 
                         </tbody>
 
@@ -232,3 +275,19 @@ function getDate(dateValute, addDays = 0)
 
     </AuthenticatedLayout>
 </template>
+
+<script lang="ts">
+
+export default {
+    data() {
+        return {}
+    },
+    methods: {
+        collapse(selector: String)
+        {
+            console.log(this.$refs[selector]);
+        }
+    }
+}
+
+</script>
