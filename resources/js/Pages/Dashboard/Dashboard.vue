@@ -8,7 +8,7 @@ import {__currency} from "../../ComponentsExt/Currency";
 
 import { Collapse } from "vue-collapsed";
 
-defineProps({
+const props = defineProps({
     services: Object,
     today: String,
     filters: Object,
@@ -22,7 +22,22 @@ function getDate(dateValute: any, addDays = 0)
     return newDate;
 }
 
+function collapse(indexSelected: Number)
+{
+    let services = props.services;
+
+    services.forEach((_, index) => {
+        services[index].isExpanded = indexSelected === index ? !services[index].isExpanded : false;
+    });
+}
+
 </script>
+
+<style>
+.v-collapse {
+    transition: height 300ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+</style>
 
 <template>
     <Head title="Dashboard" />
@@ -216,12 +231,7 @@ function getDate(dateValute: any, addDays = 0)
                             </tr>
 
                             <tr class="!p-0 !m-0 !border-0 no-hover">
-
-<!--                                <td class="!pt-0 !mt-0 !pb-0 !mb-0 !border-0"
-                                    :class="{
-                                    'table-danger': getDate(today) > getDate(service.expiration),
-                                    'table-warning': getDate(today, 60) > getDate(service.expiration),
-                                    }"></td>-->
+                                
                                 <td class="!p-0 !m-0 !border-0"
                                     :class="{
                                     'table-danger': getDate(today) > getDate(service.expiration),
@@ -299,29 +309,3 @@ function getDate(dateValute: any, addDays = 0)
 
     </AuthenticatedLayout>
 </template>
-
-<script lang="ts">
-
-export default {
-    data() {
-        return {}
-    },
-    methods: {
-        collapse(indexSelected: Number)
-        {
-            let services = this.$props.services;
-
-            services.forEach((_, index) => {
-                services[index].isExpanded = indexSelected === index ? !services[index].isExpanded : false;
-            });
-        }
-    }
-}
-
-</script>
-
-<style>
-.v-collapse {
-    transition: height 300ms cubic-bezier(0.33, 1, 0.68, 1);
-}
-</style>
