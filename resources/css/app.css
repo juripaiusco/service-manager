@@ -29,9 +29,6 @@ blue: #0369a1
 .table-hover .no-hover:hover > * {
     --bs-table-bg-state: none;
 }
-.service-detail tr:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
 
 #nprogress .bar {
     display: none;

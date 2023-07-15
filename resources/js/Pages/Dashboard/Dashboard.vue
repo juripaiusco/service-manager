@@ -27,13 +27,53 @@ function collapse(indexSelected: Number)
     let services = props.services;
 
     services.forEach((_, index) => {
+
         services[index].isExpanded = indexSelected === index ? !services[index].isExpanded : false;
+
+        document.getElementById('service-header-' + index).classList.remove('service-header-selected');
+        document.getElementById('service-body-' + index).classList.remove('service-body-selected');
+
     });
+
+    if (services[indexSelected].isExpanded === true) {
+
+        document.getElementById('service-header-' + indexSelected).classList.add('service-header-selected');
+        document.getElementById('service-body-' + indexSelected).classList.add('service-body-selected');
+
+    }
 }
 
 </script>
 
 <style>
+.service-detail tr:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.service-header,
+.service-body {
+    transition: all .3s !important;
+}
+.service-header-selected {
+    border-top: 2px solid #38bdf8 !important;
+    border-right: 2px solid #38bdf8 !important;
+    border-left: 2px solid #38bdf8 !important;
+}
+.service-body-selected {
+    border-bottom: 2px solid #38bdf8 !important;
+    border-right: 2px solid #38bdf8 !important;
+    border-left: 2px solid #38bdf8 !important;
+}
+.table-hover > tbody > tr.service-header-selected > *,
+.service-body-selected tr {
+    background-color: rgb(240 249 255) !important;
+    --bs-table-bg-state: none;
+}
+.table-hover > tbody > tr.service-header-selected:hover > *,
+.service-body-selected tr:hover {
+    background-color: white !important;
+    --bs-table-bg-state: none;
+}
+
 .v-collapse {
     transition: height 300ms cubic-bezier(0.33, 1, 0.68, 1);
 }
@@ -118,11 +158,12 @@ function collapse(indexSelected: Number)
 
                         <template v-for="(service, index) in services">
 
-                            <tr class="cursor-pointer"
+                            <tr class="cursor-pointer service-header"
                                 :class="{
                                     'table-danger': getDate(today) > getDate(service.expiration),
                                     'table-warning': getDate(today, 60) > getDate(service.expiration),
-                                }">
+                                }"
+                                :id="'service-header-' + index">
 
                                 <td class="align-middle">
 
@@ -230,8 +271,9 @@ function collapse(indexSelected: Number)
                                 </td>
                             </tr>
 
-                            <tr class="!p-0 !m-0 !border-0 no-hover">
-                                
+                            <tr class="!p-0 !m-0 no-hover service-body"
+                                :id="'service-body-' + index">
+
                                 <td class="!p-0 !m-0 !border-0"
                                     :class="{
                                     'table-danger': getDate(today) > getDate(service.expiration),
