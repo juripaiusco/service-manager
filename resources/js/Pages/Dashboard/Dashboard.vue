@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {__date} from "../../ComponentsExt/Date";
@@ -8,6 +8,7 @@ import {__currency} from "../../ComponentsExt/Currency";
 import { Collapse } from "vue-collapsed";
 import ModalReady from "@/Components/ModalReady.vue";
 import {ref} from "vue";
+import Modal from "@/Components/Modal.vue";
 
 const props = defineProps({
     services: Object,
@@ -17,6 +18,8 @@ const props = defineProps({
 
 const modalShow = ref(false);
 const modalData = ref();
+
+const modalInvoiceShow = ref(false);
 
 function getDate(dateValute: any, addDays = 0)
 {
@@ -218,7 +221,7 @@ function collapse(indexSelected: Number)
                                                         modalShow = true
                                                         modalData = {
                                                             title: 'Avvisa Cliente',
-                                                            msg: 'Invia avviso a ' + (service.customer_name ? service.customer_name : service.customer.name) + ' per la scadenza di ',
+                                                            msg: 'Avvisa ' + (service.customer_name ? service.customer_name : service.customer.name) + ' per la scadenza di ',
                                                             service: service.name + ' ' + service.reference,
                                                             confirmBtnClass: 'btn-success',
                                                             confirmBtnText: 'Invia avviso',
@@ -242,7 +245,18 @@ function collapse(indexSelected: Number)
                                                     'btn-danger': getDate(today) > getDate(service.expiration),
                                                     'btn-warning': getDate(today, 60) > getDate(service.expiration) && service.autorenew ==! 1,
                                                     'btn-info': service.autorenew == 1,
-                                                }">
+                                                    }"
+                                                    @click="() => {
+                                                        modalInvoiceShow = true,
+                                                        modalData = {
+                                                            customer: service.customer_name ? service.customer_name : service.customer.name,
+                                                            service: service.name + ' ' + service.reference,
+                                                            price: __currency(service.total_notax, 'EUR'),
+                                                            confirmBtnClass: 'btn-success',
+                                                            confirmBtnText: 'Invia avviso',
+                                                            confirmURL: route('dashboard')
+                                                        }
+                                                    }">
 
                                                 <svg class="w-4 h-4"
                                                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -389,6 +403,129 @@ function collapse(indexSelected: Number)
                 </template>
 
             </ModalReady>
+
+            <Modal :show="modalInvoiceShow"
+                   @close="modalInvoiceShow = false">
+
+                <div class="p-8 dark:text-white">
+
+                    <div class="inline-flex w-full">
+
+                        <div class="w-1/2 font-semibold">
+
+                            Genera Fattura
+
+                        </div>
+
+                        <div class="w-1/2 text-right">
+
+                            <button @click="modalInvoiceShow = false">
+
+                                <svg class="w-5 h-5"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-6 mb-10">
+
+                        <div class="inline-flex w-full">
+
+                            <div class="w-1/2 mr-2">
+
+                                <label for="invoice-date">Data fattura</label>
+                                <input id="invoice-date"
+                                       class="form-control"
+                                       type="text"
+                                       :value="__date(today, 'day')" />
+
+                            </div>
+
+                            <div class="w-1/2 ml-2">
+
+                                <div class="form-check">
+                                    <label class="form-check-label"
+                                           for="invoice-payment">
+                                        Pagamento ricevuto.
+                                        <br>
+                                        <span class="text-xs">
+                                            (se lo switch è attivo, la fattura risulterà saldata)
+                                        </span>
+                                    </label>
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value=""
+                                           id="invoice-payment" checked>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <hr class="mt-10 mb-5">
+
+                        <div class="text-sm text-center">
+                            <span class="font-semibold">
+                                Nota:
+                            </span>
+                            <span>
+                                Generando la fattura rinnoverai automaticamente il servizio alla prossima scadenza.
+                            </span>
+                        </div>
+
+                        <hr class="mt-5 mb-10">
+
+                        <div class="text-xl text-center mb-10">
+
+                            Vuoi inviare la fattura a <span class="font-semibold">{{ modalData.customer }}</span>?
+                            <br>
+                            <span class="text-sm">
+                                {{ modalData.service }}
+                                <span class="font-semibold">
+                                    {{ modalData.price }} + IVA
+                                </span>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="inline-flex w-full">
+
+                        <div class="w-1/2 mr-2">
+
+                            <div class="btn btn-secondary w-full"
+                                 @click="modalInvoiceShow = false">Annulla</div>
+
+                        </div>
+
+                        <div class="w-1/4 mr-2 ml-2">
+
+                            <button class="btn btn-danger w-full">
+                                No
+                            </button>
+
+                        </div>
+
+                        <div class="w-1/4 ml-2">
+
+                            <button class="btn btn-success w-full">
+                                Sì
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </Modal>
 
         </ApplicationContainer>
 
