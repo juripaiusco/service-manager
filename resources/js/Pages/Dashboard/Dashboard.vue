@@ -50,7 +50,9 @@ function collapse(indexSelected: Number)
     background-color: rgba(0, 0, 0, 0.1);
 }
 .service-header,
-.service-body {
+.service-header *,
+.service-body,
+.service-body * {
     transition: all .3s !important;
 }
 .service-header-selected {
