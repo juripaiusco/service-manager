@@ -57,13 +57,13 @@ function collapse(indexSelected: Number)
 }
 .service-header-selected {
     border-top: 2px solid #38bdf8 !important;
-    border-right: 2px solid #38bdf8 !important;
-    border-left: 2px solid #38bdf8 !important;
+    /*border-right: 2px solid #38bdf8 !important;
+    border-left: 2px solid #38bdf8 !important;*/
 }
 .service-body-selected {
     border-bottom: 2px solid #38bdf8 !important;
-    border-right: 2px solid #38bdf8 !important;
-    border-left: 2px solid #38bdf8 !important;
+    /*border-right: 2px solid #38bdf8 !important;
+    border-left: 2px solid #38bdf8 !important;*/
 }
 .table-hover > tbody > tr.service-header-selected > *,
 .service-body-selected tr {
