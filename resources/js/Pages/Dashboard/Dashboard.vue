@@ -98,21 +98,6 @@ function collapse(indexSelected: Number)
 
         <ApplicationContainer>
 
-            <ModalReady :show="modalShow"
-                        :data="modalData"
-                        @close="modalShow = false">
-
-                <template #title>{{ modalData.title }}</template>
-                <template #body>
-                    {{ modalData.msg }}
-                    <br>
-                    <span class="font-semibold">
-                        {{ modalData.service }}
-                    </span>
-                </template>
-
-            </ModalReady>
-
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
 
@@ -389,6 +374,21 @@ function collapse(indexSelected: Number)
                 </div>
 
             </div>
+
+            <ModalReady :show="modalShow"
+                        :data="modalData"
+                        @close="modalShow = false">
+
+                <template #title>{{ modalData.title }}</template>
+                <template #body>
+                    {{ modalData.msg }}
+                    <br>
+                    <span class="font-semibold">
+                        {{ modalData.service }}
+                    </span>
+                </template>
+
+            </ModalReady>
 
         </ApplicationContainer>
 
