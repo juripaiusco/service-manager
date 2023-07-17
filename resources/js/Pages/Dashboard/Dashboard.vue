@@ -5,14 +5,18 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {__date} from "../../ComponentsExt/Date";
 import {__currency} from "../../ComponentsExt/Currency";
-
 import { Collapse } from "vue-collapsed";
+import ModalReady from "@/Components/ModalReady.vue";
+import {ref} from "vue";
 
 const props = defineProps({
     services: Object,
     today: String,
     filters: Object,
 });
+
+const modalShow = ref(false);
+const modalData = ref();
 
 function getDate(dateValute: any, addDays = 0)
 {
@@ -93,6 +97,21 @@ function collapse(indexSelected: Number)
         </template>
 
         <ApplicationContainer>
+
+            <ModalReady :show="modalShow"
+                        :data="modalData"
+                        @close="modalShow = false">
+
+                <template #title>{{ modalData.title }}</template>
+                <template #body>
+                    {{ modalData.msg }}
+                    <br>
+                    <span class="font-semibold">
+                        {{ modalData.service }}
+                    </span>
+                </template>
+
+            </ModalReady>
 
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -180,7 +199,18 @@ function collapse(indexSelected: Number)
                                                     :class="{
                                                     'btn-danger': getDate(today) > getDate(service.expiration),
                                                     'btn-warning': getDate(today, 60) > getDate(service.expiration),
-                                                }">
+                                                    }"
+                                                    @click="() => {
+                                                        modalShow = true
+                                                        modalData = {
+                                                            title: 'Rinnova Servizio',
+                                                            msg: 'Rinnova il servizio',
+                                                            service: service.name + ' ' + service.reference,
+                                                            confirmBtnClass: 'btn-success',
+                                                            confirmBtnText: 'Sì, rinnova',
+                                                            confirmURL: route('dashboard')
+                                                        }
+                                                    }">
 
                                                 <svg class="w-4 h-4"
                                                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -198,7 +228,18 @@ function collapse(indexSelected: Number)
                                                     'btn-danger': getDate(today) > getDate(service.expiration),
                                                     'btn-warning': getDate(today, 60) > getDate(service.expiration) && service.expiration_monthly ==! 1,
                                                     'btn-secondary disabled': service.expiration_monthly == 1,
-                                                }">
+                                                    }"
+                                                    @click="() => {
+                                                        modalShow = true
+                                                        modalData = {
+                                                            title: 'Avvisa Cliente',
+                                                            msg: 'Invia avviso a ' + (service.customer_name ? service.customer_name : service.customer.name) + ' per la scadenza di ',
+                                                            service: service.name + ' ' + service.reference,
+                                                            confirmBtnClass: 'btn-success',
+                                                            confirmBtnText: 'Invia avviso',
+                                                            confirmURL: route('dashboard')
+                                                        }
+                                                    }">
 
                                                 <svg class="w-4 h-4"
                                                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
