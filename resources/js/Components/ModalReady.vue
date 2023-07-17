@@ -15,11 +15,11 @@ const props = defineProps({
 
     <Modal :show="show">
 
-        <div class="p-8">
+        <div class="p-8 dark:text-white">
 
             <div class="inline-flex w-full">
 
-                <div class="w-1/2 font-semibold dark:text-white">
+                <div class="w-1/2 font-semibold">
 
                     <slot name="title" />
 
@@ -29,7 +29,7 @@ const props = defineProps({
 
                     <button @click="$emit('close')">
 
-                        <svg class="w-5 h-5 dark:text-white"
+                        <svg class="w-5 h-5"
                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -40,7 +40,7 @@ const props = defineProps({
 
             </div>
 
-            <div class="mt-6 mb-10 text-center dark:text-white">
+            <div class="mt-6 mb-10 text-center">
 
                 <slot name="body" />
 
