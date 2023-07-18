@@ -15,6 +15,7 @@ const props = defineProps({
     services_exp: Object,
     months_array: Object,
     months_incoming: Object,
+    trim_incoming: Object,
     customers_count: Number,
     customers_avg: Number,
     services: Object,
@@ -423,8 +424,10 @@ function collapse(indexSelected: any)
                                     '!font-semibold': index >= __date(today!, 'n'),
                                 }">
                                 {{ __currency(month.profit, 'EUR') }}</td>
-                            <td rowspan="">
-
+                            <td class="text-right align-middle"
+                                v-if="index % 3 === 1"
+                                :rowspan="index % 3 === 1 ? 3 : ''">
+                                {{ __currency(trim_incoming[index], 'EUR') }}
                             </td>
                         </tr>
                         </tbody>

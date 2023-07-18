@@ -172,6 +172,21 @@ class Dashboard extends Controller
 
         ksort($months_incoming);
 
+        $trim_incoming = array();
+
+        foreach ($months_incoming as $k => $month_incoming) {
+
+            if (!isset($trim_incoming[$k]))
+                $trim_incoming[$k] = 0;
+
+            if ($k % 3 == 1) {
+                $trim_incoming[$k] += $months_incoming[$k]['profit'];
+                $trim_incoming[$k] += $months_incoming[$k + 1]['profit'];
+                $trim_incoming[$k] += $months_incoming[$k + 2]['profit'];
+            }
+
+        }
+
         // -------------------------------------------------
 
         return Inertia::render('Dashboard/Dashboard', [
@@ -180,6 +195,7 @@ class Dashboard extends Controller
             'today' => date('Y-m-d H:i:s'),
             'months_array' => $months_array,
             'months_incoming' => $months_incoming,
+            'trim_incoming' => $trim_incoming,
             'customers_count' => $customers_count,
             'customers_avg' => $services_total_sell / $customers_count,
             'services' => $services,
