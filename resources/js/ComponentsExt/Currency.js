@@ -6,7 +6,7 @@ export function __currency(data, currency) {
 
         case 'EUR':
 
-            currencyFormat = Intl.NumberFormat('en', {
+            currencyFormat = Intl.NumberFormat('it', {
                 style: 'currency',
                 currency: 'EUR',
             });

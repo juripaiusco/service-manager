@@ -9,9 +9,12 @@ import { Collapse } from "vue-collapsed";
 import ModalReady from "@/Components/ModalReady.vue";
 import { ref } from "vue";
 import Modal from "@/Components/Modal.vue";
+import number = CSS.number;
 
 const props = defineProps({
     services_exp: Object,
+    months_array: Object,
+    months_incoming: Object,
     today: String,
     filters: Object,
 });
@@ -369,17 +372,49 @@ function collapse(indexSelected: any)
 
                 </div>
 
-                <div class="tab-pane fade"
+                <div class="tab-pane fade pt-4"
                      id="nav-incoming"
                      role="tabpanel"
                      aria-labelledby="nav-incoming-tab"
                      tabindex="0">
 
-                    Guadagno per mese
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-left">Mese</th>
+                            <th>Entrate</th>
+                            <th>Uscite</th>
+                            <th>Utile</th>
+                            <th>U. Trimestre</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(month, index) in months_incoming"
+                            :class="{
+                            'table-secondary': index < __date(today!, 'n'),
+                            'line-through': index < __date(today!, 'n'),
+                            'table-warning': index == __date(today!, 'n'),
+                            }">
+                            <td class="capitalize w-1/2">
+                                {{ months_array[index - 1] }}
+                            </td>
+                            <td class="text-right"
+                                :class="{
+                                    '!text-green-600': index >= __date(today!, 'n'),
+                                    '!font-semibold': index >= __date(today!, 'n'),
+                                }">
+                                {{ __currency(month.incoming, 'EUR') }}
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
 
                 </div>
 
-                <div class="tab-pane fade"
+                <div class="tab-pane fade pt-4"
                      id="nav-profit"
                      role="tabpanel"
                      aria-labelledby="nav-profit-tab"

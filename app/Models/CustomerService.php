@@ -29,6 +29,7 @@ class CustomerService extends Model
             'customer_service_id',
             'id',
             'id',
-            'service_id');
+            'service_id'
+        );
     }
 }

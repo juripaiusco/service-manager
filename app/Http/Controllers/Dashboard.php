@@ -26,7 +26,8 @@ class Dashboard extends Controller
                   `sm_customers_services`.`id` = `sm_customers_services_details`.`customer_service_id`
             ) AS `total_sell_tax`'
         ));
-        $services_exp = $services_exp->withSum('detailsService AS total_buy_notax', 'price_buy');
+        $services_exp = $services_exp->with('detailsService');
+//        $services_exp = $services_exp->withSum('detailsService AS total_buy_notax', 'price_buy');
         $services_exp->addSelect(DB::raw('false AS isExpanded'));
 
         $services_exp = $services_exp->orderBy('expiration');
@@ -49,10 +50,33 @@ class Dashboard extends Controller
             'dicembre'
         );
 
+        $months_incoming = array();
+
+        foreach ($services_exp as $service) {
+
+            $m = date('n', strtotime($service->expiration));
+
+            if (!isset($months_incoming[$m]))
+                $months_incoming[$m] = array(
+                    'incoming' => 0,
+//                    'outcoming' => 0,
+                );
+
+            $months_incoming[$m]['incoming'] += $service->total_sell_notax;
+//            $months_incoming[$m]['outcoming'] += $service->total_buy_notax;
+
+        }
+
+        ksort($months_incoming);
+
+        // -------------------------------------------------
+
         return Inertia::render('Dashboard/Dashboard', [
 
             'services_exp' => $services_exp,
-            'today' => date('Y-m-d H:i:s')
+            'today' => date('Y-m-d H:i:s'),
+            'months_array' => $months_array,
+            'months_incoming' => $months_incoming
 
         ]);
     }
