@@ -11,14 +11,14 @@ class Dashboard extends Controller
 {
     public function index()
     {
-        $services = \App\Models\CustomerService::query();
+        $services_exp = \App\Models\CustomerService::query();
 
-        $services = $services->with('customer');
-        $services = $services->with('details');
-        $services = $services->with('details.service');
-        $services = $services->withSum('details AS total_notax', 'price_sell');
+        $services_exp = $services_exp->with('customer');
+        $services_exp = $services_exp->with('details');
+        $services_exp = $services_exp->with('details.service');
+        $services_exp = $services_exp->withSum('details AS total_notax', 'price_sell');
 
-        $services = $services->addSelect(DB::raw(
+        $services_exp = $services_exp->addSelect(DB::raw(
             '(
                 SELECT
                   sum(`sm_customers_services_details`.`price_sell`) * 1.22
@@ -29,14 +29,14 @@ class Dashboard extends Controller
             ) AS `total_tax`'
         ));
 
-        $services->addSelect(DB::raw('false AS isExpanded'));
+        $services_exp->addSelect(DB::raw('false AS isExpanded'));
 
-        $services = $services->orderBy('expiration');
-        $services = $services->get();
+        $services_exp = $services_exp->orderBy('expiration');
+        $services_exp = $services_exp->get();
 
         return Inertia::render('Dashboard/Dashboard', [
 
-            'services' => $services,
+            'services_exp' => $services_exp,
             'today' => date('Y-m-d H:i:s')
 
         ]);

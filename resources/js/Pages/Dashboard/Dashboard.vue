@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, Link} from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
-import {__date} from "../../ComponentsExt/Date";
-import {__currency} from "../../ComponentsExt/Currency";
+import { __date } from "@/ComponentsExt/Date";
+import { __currency } from "@/ComponentsExt/Currency";
 import { Collapse } from "vue-collapsed";
 import ModalReady from "@/Components/ModalReady.vue";
-import {ref} from "vue";
+import { ref } from "vue";
 import Modal from "@/Components/Modal.vue";
 
 const props = defineProps({
-    services: Object,
+    services_exp: Object,
     today: String,
     filters: Object,
 });
@@ -24,16 +24,16 @@ const modalInvoiceShow = ref(false);
 function getDate(dateValute: any, addDays = 0)
 {
     let date = new Date(dateValute);
-    let newDate = new Date(date.setDate(date.getDate() + addDays));
 
-    return newDate;
+    return new Date(date.setDate(date.getDate() + addDays));
 }
 
-function collapse(indexSelected: Number)
+function collapse(indexSelected: any)
 {
-    let services = props.services;
+    let services:any = props.services_exp;
+    let document:any = window.document;
 
-    services.forEach((_, index) => {
+    services.forEach((_:any, index:any) => {
 
         services[index].isExpanded = indexSelected === index ? !services[index].isExpanded : false;
 
@@ -89,7 +89,9 @@ function collapse(indexSelected: Number)
 </style>
 
 <template>
-    <Head title="Dashboard" />
+    <Head>
+        <title>Dashboard</title>
+    </Head>
 
     <AuthenticatedLayout>
 
@@ -148,7 +150,7 @@ function collapse(indexSelected: Number)
                             <th></th>
                             <th class="text-left">
                                 Cliente
-                                <span class="text-xs font-normal">(hai {{ services.length }} scadenze)</span>
+                                <span class="text-xs font-normal">(hai {{ services_exp!.length }} scadenze)</span>
                             </th>
                             <th class="text-left">
                                 Servizio
@@ -165,7 +167,7 @@ function collapse(indexSelected: Number)
 
                         <tbody>
 
-                        <template v-for="(service, index) in services">
+                        <template v-for="(service, index) in services_exp">
 
                             <tr class="cursor-pointer service-header"
                                 :class="{
