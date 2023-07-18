@@ -16,7 +16,6 @@ class Dashboard extends Controller
         $services_exp = $services_exp->with('details');
         $services_exp = $services_exp->with('details.service');
         $services_exp = $services_exp->withSum('details AS total_sell_notax', 'price_sell');
-
         $services_exp = $services_exp->addSelect(DB::raw(
             '(
                 SELECT
@@ -27,7 +26,7 @@ class Dashboard extends Controller
                   `sm_customers_services`.`id` = `sm_customers_services_details`.`customer_service_id`
             ) AS `total_sell_tax`'
         ));
-
+        $services_exp = $services_exp->withSum('detailsService AS total_buy_notax', 'price_buy');
         $services_exp->addSelect(DB::raw('false AS isExpanded'));
 
         $services_exp = $services_exp->orderBy('expiration');
@@ -49,8 +48,6 @@ class Dashboard extends Controller
             'novembre',
             'dicembre'
         );
-
-//        dd($services_exp[0]);
 
         return Inertia::render('Dashboard/Dashboard', [
 
