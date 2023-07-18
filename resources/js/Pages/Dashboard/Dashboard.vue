@@ -420,13 +420,29 @@ function collapse(indexSelected: any)
                             </td>
                             <td class="text-right"
                                 :class="{
-                                    '!text-red-600': index >= __date(today!, 'n'),
                                     '!font-semibold': index >= __date(today!, 'n'),
                                 }">
                                 {{ __currency(month.profit, 'EUR') }}</td>
-                            <td></td>
+                            <td rowspan="">
+
+                            </td>
                         </tr>
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <th></th>
+                            <th class="text-right">
+                                {{ __currency(services_total_sell, 'EUR') }}
+                            </th>
+                            <th class="text-right">
+                                {{ __currency(services_total_buy, 'EUR') }}
+                            </th>
+                            <th class="text-right">
+                                {{ __currency(services_total_profit, 'EUR') }}
+                            </th>
+                            <th class="text-right"></th>
+                        </tr>
+                        </tfoot>
                     </table>
 
                 </div>
