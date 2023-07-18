@@ -388,10 +388,10 @@ function collapse(indexSelected: any)
                         <thead>
                         <tr>
                             <th class="text-left">Mese</th>
-                            <th>Entrate</th>
-                            <th>Uscite</th>
-                            <th>Utile</th>
-                            <th>U. Trimestre</th>
+                            <th class="text-right">Entrate</th>
+                            <th class="text-right">Uscite</th>
+                            <th class="text-right">Utile</th>
+                            <th class="text-right">U. Trimestre</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -411,8 +411,19 @@ function collapse(indexSelected: any)
                                 }">
                                 {{ __currency(month.incoming, 'EUR') }}
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td class="text-right"
+                                :class="{
+                                    '!text-red-600': index >= __date(today!, 'n'),
+                                    '!font-semibold': index >= __date(today!, 'n'),
+                                }">
+                                {{ __currency(month.outcoming, 'EUR') }}
+                            </td>
+                            <td class="text-right"
+                                :class="{
+                                    '!text-red-600': index >= __date(today!, 'n'),
+                                    '!font-semibold': index >= __date(today!, 'n'),
+                                }">
+                                {{ __currency(month.profit, 'EUR') }}</td>
                             <td></td>
                         </tr>
                         </tbody>
