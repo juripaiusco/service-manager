@@ -496,7 +496,6 @@ function collapse(indexSelected: any)
                         </div>
                         <div class="col">
 
-
                             <div class="card">
                                 <div class="card-body text-center">
 
@@ -505,7 +504,7 @@ function collapse(indexSelected: any)
                                     </div>
 
                                     <div class="p-2">
-                                        spesa media per cliente
+                                        spende mediamente ogni cliente
                                     </div>
 
                                 </div>
@@ -513,6 +512,49 @@ function collapse(indexSelected: any)
 
                         </div>
                     </div>
+
+                    <br>
+
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="w-1/2 text-left">Servizio</th>
+                            <th class="text-right">Entrate</th>
+                            <th class="text-right">Uscite</th>
+                            <th class="text-right">Utile</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="service in services">
+                            <td class="align-middle">
+
+                                {{ service.name }}
+                                <span class="text-xs">
+                                    ( x {{ service.customers_count }} )
+                                </span>
+
+                            </td>
+                            <td class="text-right align-middle !text-green-600">
+
+                                {{ service.total_service_sell > 0 ? __currency(service.total_service_sell, 'EUR') : '-' }}
+
+                            </td>
+                            <td class="text-right !text-red-600">
+
+                                {{ service.total_service_buy > 0 ? __currency(service.total_service_buy, 'EUR') : '-' }}
+
+                            </td>
+                            <td class="text-right align-middle font-bold"
+                                :class="{
+                                '!text-red-600': service.total_service_profit <= 0
+                                }">
+
+                                {{ __currency(service.total_service_profit, 'EUR') }}
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
                 </div>
 

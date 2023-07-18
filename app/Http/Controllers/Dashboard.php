@@ -93,7 +93,46 @@ class Dashboard extends Controller
 
                     ) AS total_service_buy'
         ));
+        $services->addSelect(DB::raw(
+            '(
+                    SELECT
+                      sum(`sm_customers_services_details`.`price_sell`)
+                    FROM
+                      `sm_customers_services_details`
+                    WHERE
+                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                    ) AS total_service_sell'
+        ));
+        $services = $services->addSelect(DB::raw(
+            '((
+                    SELECT
+                      sum(`sm_customers_services_details`.`price_sell`)
+                    FROM
+                      `sm_customers_services_details`
+                    WHERE
+                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                    )
+                    -
+                    (IF(
+                    is_share = 1,
+
+                    (price_buy),
+
+                    (price_buy * (
+                    SELECT
+                      count(*)
+                    FROM
+                      `sm_customers_services_details`
+                    WHERE
+                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                    ))
+
+                    ))) AS total_service_profit'
+        ));
+        $services = $services->orderBy('total_service_profit', 'DESC');
         $services = $services->get();
+
+//        dd($services);
 
         $services_total_buy = 0;
         foreach ($services as $service) {
