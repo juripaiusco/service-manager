@@ -9,7 +9,6 @@ import { Collapse } from "vue-collapsed";
 import ModalReady from "@/Components/ModalReady.vue";
 import { ref } from "vue";
 import Modal from "@/Components/Modal.vue";
-import number = CSS.number;
 
 const props = defineProps({
     services_exp: Object,
@@ -112,6 +111,20 @@ function collapse(indexSelected: any)
         </template>
 
         <ApplicationContainer>
+
+            <div class="inline-flex w-full">
+
+                <div class="w-3/4"></div>
+
+                <div class="w-1/4">
+
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Cerca servizio o cliente" />
+
+                </div>
+
+            </div>
 
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
