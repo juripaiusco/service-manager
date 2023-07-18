@@ -13,4 +13,9 @@ class Customer extends Model
     {
         return $this->hasMany(Service::class, 'customer_id', 'id');
     }
+
+    public function servicesDetails()
+    {
+        return $this->hasMany(CustomerServiceDetail::class, 'customer_id', 'id');
+    }
 }

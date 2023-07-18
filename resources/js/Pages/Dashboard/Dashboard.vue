@@ -15,6 +15,12 @@ const props = defineProps({
     services_exp: Object,
     months_array: Object,
     months_incoming: Object,
+    customers_count: Number,
+    customers_avg: Number,
+    services: Object,
+    services_total_sell: Number,
+    services_total_buy: Number,
+    services_total_profit: Number,
     today: String,
     filters: Object,
 });
@@ -420,7 +426,93 @@ function collapse(indexSelected: any)
                      aria-labelledby="nav-profit-tab"
                      tabindex="0">
 
-                    Utile
+                    <div class="row">
+                        <div class="col-6">
+
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <div class="inline-flex w-full">
+
+                                        <div class="w-1/2 text-3xl font-semibold text-center pt-6">
+
+                                            {{ __currency(services_total_profit, 'EUR') }}
+
+                                        </div>
+                                        <div class="w-1/2">
+
+                                            <div class="inline-flex w-full p-2">
+                                                <div class="w-1/2">
+                                                    Entrate
+                                                </div>
+                                                <div class="w-1/2 text-right text-green-600">
+                                                    {{ __currency(services_total_sell, 'EUR') }}
+                                                </div>
+                                            </div>
+
+                                            <div class="inline-flex w-full p-2">
+                                                <div class="w-1/2">
+                                                    Uscite
+                                                </div>
+                                                <div class="w-1/2 text-right text-red-600">
+                                                    {{ __currency(services_total_buy, 'EUR') }}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col">
+
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <div class="inline-flex w-full p-2">
+                                        <div class="w-1/4 font-bold">
+                                            {{ customers_count }}
+                                        </div>
+                                        <div>
+                                            Clienti attivi
+                                        </div>
+                                    </div>
+
+                                    <div class="inline-flex w-full p-2">
+                                        <div class="w-1/4 font-bold">
+                                            {{ services_exp!.length }}
+                                        </div>
+                                        <div>
+                                            Abbonamenti attivi
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col">
+
+
+                            <div class="card">
+                                <div class="card-body text-center">
+
+                                    <div class="p-2 font-bold">
+                                        {{ __currency(customers_avg, 'EUR') }}
+                                    </div>
+
+                                    <div class="p-2">
+                                        spesa media per cliente
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
 
                 </div>
 
