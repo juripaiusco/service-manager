@@ -19,11 +19,17 @@ const emit = defineEmits(['close']);
 watch(
     () => props.show,
     () => {
+
+        let appWrapperClass: string = 'blur-sm';
+
         if (props.show) {
             document.body.style.overflow = 'hidden';
+            document.getElementById('#app-wrapper')!.classList.add(appWrapperClass);
         } else {
             document.body.style.overflow = 'visible';
+            document.getElementById('#app-wrapper')!.classList.remove(appWrapperClass);
         }
+
     }
 );
 
