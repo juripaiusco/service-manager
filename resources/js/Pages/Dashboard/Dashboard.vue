@@ -253,7 +253,7 @@ function collapse(indexSelected: any)
                                                         modalData = {
                                                             customer: service.customer_name ? service.customer_name : service.customer.name,
                                                             service: service.name + ' ' + service.reference,
-                                                            price: __currency(service.total_notax, 'EUR'),
+                                                            price: __currency(service.total_sell_notax, 'EUR'),
                                                             confirmBtnClass: 'btn-success',
                                                             confirmBtnText: 'Invia avviso',
                                                             confirmURL: route('dashboard')
@@ -305,11 +305,11 @@ function collapse(indexSelected: any)
                                     @click="collapse(index)">
 
                                     <span class="text-lg font-semibold">
-                                        {{ __currency(service.total_notax, 'EUR') }}
+                                        {{ __currency(service.total_sell_notax, 'EUR') }}
                                     </span>
                                     <br>
                                     <span class="text-xs">
-                                        {{ __currency(service.total_tax, 'EUR') }}
+                                        {{ __currency(service.total_sell_tax, 'EUR') }}
                                     </span>
 
                                 </td>

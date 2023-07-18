@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomerServiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -16,7 +15,7 @@ class Dashboard extends Controller
         $services_exp = $services_exp->with('customer');
         $services_exp = $services_exp->with('details');
         $services_exp = $services_exp->with('details.service');
-        $services_exp = $services_exp->withSum('details AS total_notax', 'price_sell');
+        $services_exp = $services_exp->withSum('details AS total_sell_notax', 'price_sell');
 
         $services_exp = $services_exp->addSelect(DB::raw(
             '(
@@ -26,13 +25,32 @@ class Dashboard extends Controller
                   `sm_customers_services_details`
                 WHERE
                   `sm_customers_services`.`id` = `sm_customers_services_details`.`customer_service_id`
-            ) AS `total_tax`'
+            ) AS `total_sell_tax`'
         ));
 
         $services_exp->addSelect(DB::raw('false AS isExpanded'));
 
         $services_exp = $services_exp->orderBy('expiration');
         $services_exp = $services_exp->get();
+
+        // -------------------------------------------------
+
+        $months_array = array(
+            'gennaio',
+            'febbraio',
+            'marzo',
+            'aprile',
+            'maggio',
+            'giugno',
+            'luglio',
+            'agosto',
+            'settembre',
+            'ottobre',
+            'novembre',
+            'dicembre'
+        );
+
+//        dd($services_exp[0]);
 
         return Inertia::render('Dashboard/Dashboard', [
 
