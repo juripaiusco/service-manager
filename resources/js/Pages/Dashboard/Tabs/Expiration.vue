@@ -83,7 +83,7 @@ function collapse(indexSelected)
                 }"
                 :id="'service-header-' + index">
 
-                <td class="align-middle">
+                <td class="align-middle w-[140px]">
 
                     <div class="flex w-full"
                          :class="{
