@@ -114,27 +114,28 @@ const props = defineProps({
             <td class="align-middle">
 
                 {{ service.name }}
-                <span class="text-xs">
+                <span v-if="service.customers_count"
+                      class="text-xs">
                     ( x {{ service.customers_count }} )
                 </span>
 
             </td>
             <td class="text-right align-middle !text-green-600">
 
-                {{ service.total_service_sell > 0 ? __currency(service.total_service_sell, 'EUR') : '-' }}
+                {{ service.incoming > 0 ? __currency(service.incoming, 'EUR') : '-' }}
 
             </td>
             <td class="text-right !text-red-600">
 
-                {{ service.total_service_buy > 0 ? __currency(service.total_service_buy, 'EUR') : '-' }}
+                {{ service.outcoming > 0 ? __currency(service.outcoming, 'EUR') : '-' }}
 
             </td>
             <td class="text-right align-middle font-bold"
                 :class="{
-                    '!text-red-600': service.total_service_profit <= 0
+                    '!text-red-600': service.profit <= 0
                 }">
 
-                {{ __currency(service.total_service_profit, 'EUR') }}
+                {{ service.profit > 0 ? __currency(service.profit, 'EUR') : '-' }}
 
             </td>
         </tr>

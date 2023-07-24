@@ -201,9 +201,10 @@ class Dashboard extends Controller
         // Data TAB Services Profit
         // ====================================================
 
-        $services_list = array();
         $array_customer_id = array();
+        $services_buy = array();
         $services_total_buy = 0;
+        $services_sell = array();
         $services_total_sell = 0;
 
         foreach ($services_exp as $service_exp) {
@@ -211,8 +212,16 @@ class Dashboard extends Controller
             // Count Price BUY and SELL
             foreach ($service_exp->details as $detail) {
 
+                if (!isset($services_buy[$detail->service->id]))
+                    $services_buy[$detail->service->id] = 0;
+
+                if (!isset($services_sell[$detail->service->id]))
+                    $services_sell[$detail->service->id] = 0;
+
+                // BUY
                 if ($detail->service->is_share != 1) {
 
+                    $services_buy[$detail->service->id] += $detail->service->price_buy;
                     $services_total_buy += $detail->service->price_buy;
 
                 } else {
@@ -221,17 +230,18 @@ class Dashboard extends Controller
                     $services->find($detail->service->id);
                     $services = $services->first();
 
+                    $services_buy[$detail->service->id] += $detail->service->price_buy / $services->customers_count;
                     $services_total_buy += $detail->service->price_buy / $services->customers_count;
                 }
 
+                // SELL
+                $services_sell[$detail->service->id] += $detail->price_sell;
                 $services_total_sell += $detail->price_sell;
 
                 // Count Active Customer
                 if ($detail->price_sell > 0) {
                     $array_customer_id[$service_exp->customer->id] = 1;
                 }
-
-//                $services_list[$detail->service->id][] = $detail;
 
             }
         }
@@ -244,7 +254,47 @@ class Dashboard extends Controller
         }
         // -------------------------------------------------
 
-        $services_list = $this->services()->get();
+        $services = $this->services()->get();
+        $services_list = array();
+
+        foreach ($services as $service) {
+
+            $services_list[$service->id] = array(
+                'name' => $service->name,
+                'customers_count' => 0,
+                'incoming' => 0,
+                'outcoming' => 0,
+                'profit' => 0,
+            );
+
+            foreach ($services_exp as $service_exp) {
+
+                foreach ($service_exp->details as $detail) {
+
+                    if ($service->id == $detail->service->id) {
+
+                        if (!isset($service_count[$service->id]))
+                            $service_count[$service->id] = 0;
+
+                        $service_count[$service->id]++;
+
+                        $services_list[$service->id] = array(
+                            'name' => $service->name,
+                            'customers_count' => $service_count[$service->id],
+                            'incoming' => $services_sell[$service->id],
+                            'outcoming' => $services_buy[$service->id],
+                            'profit' => $services_sell[$service->id] - $services_buy[$service->id],
+                        );
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        $services_list = array_values($services_list);
 
         return Inertia::render('Dashboard/Dashboard', [
 
