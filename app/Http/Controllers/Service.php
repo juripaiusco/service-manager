@@ -13,15 +13,18 @@ class Service extends Controller
      */
     public function index()
     {
-        $request_validate_array = [
-            'monitoring_buy',
-            'cod',
-            'type',
+        $request_search_array = [
+            'fic_cod',
             'name',
-            'kg_total',
-            'amount_total',
-            'points',
+            'name_customer_view',
         ];
+
+        $request_validate_array = array_merge($request_search_array, [
+            'is_share',
+            'total_service_sell',
+            'price_buy',
+            'total_service_profit',
+        ]);
 
         // Query data
         $data = \App\Models\Service::query();
@@ -34,9 +37,9 @@ class Service extends Controller
 
         // Filtro RICERCA
         if (request('s')) {
-            $data->where(function ($q) use ($request_validate_array) {
+            $data->where(function ($q) use ($request_search_array) {
 
-                foreach ($request_validate_array as $field) {
+                foreach ($request_search_array as $field) {
                     $q->orWhere($field, 'like', '%' . request('s') . '%');
                 }
 
@@ -46,6 +49,8 @@ class Service extends Controller
         // Filtro ORDINAMENTO
         if (request('orderby') && request('ordertype')) {
             $data->orderby(request('orderby'), strtoupper(request('ordertype')));
+        } else {
+            $data->orderby('total_service_profit', 'DESC');
         }
 
         $data = $data->select();
@@ -104,7 +109,7 @@ class Service extends Controller
 
                     ))) AS total_service_profit'
         ));
-        $data = $data->orderBy('total_service_profit', 'DESC');
+//        $data = $data->orderBy('total_service_profit', 'DESC');
 
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 

@@ -5,6 +5,7 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import Table from "@/Components/Table/Table.vue";
 import {__currency} from "@/ComponentsExt/Currency";
+import TableSearch from "@/Components/Table/TableSearch.vue";
 
 defineProps({
     data: Object,
@@ -26,10 +27,24 @@ defineProps({
 
         <ApplicationContainer>
 
+            <div class="inline-flex w-full mb-6">
+
+                <div class="w-3/4"></div>
+
+                <div class="w-1/4">
+
+                    <TableSearch placeholder="Cerca servizio"
+                                 route-search="service.index"
+                                 :filters="filters"></TableSearch>
+
+                </div>
+
+            </div>
+
             <Table class="table-striped"
                    :data="{
                         filters: filters,
-                        routeSearch: 'products.index',
+                        routeSearch: 'service.index',
                         data: data.data,
                         structure: [{
                             class: 'text-left w-[5%]',
