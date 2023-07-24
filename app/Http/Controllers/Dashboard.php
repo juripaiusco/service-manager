@@ -13,9 +13,6 @@ class Dashboard extends Controller
     {
         $services = \App\Models\Service::query();
         $services = $services->with('customersServicesDetails');
-        /*$services = $services->whereHas('customersServicesDetails', function ($q) {
-            $q->where('reference', 'LIKE', '%blue%');
-        });*/
         $services->withCount('customersServicesDetails AS customers_count');
         $services->addSelect(DB::raw(
             'IF(
@@ -72,8 +69,6 @@ class Dashboard extends Controller
         ));
         $services = $services->orderBy('total_service_profit', 'DESC');
 
-//        dd($services->get()[0]);
-
         return $services;
     }
 
@@ -88,7 +83,8 @@ class Dashboard extends Controller
             'reference',
         ];
 
-        // -------------------------------------------------
+        // Data TAB Services Expiration
+        // ====================================================
 
         $services_exp = \App\Models\CustomerService::query();
 
@@ -124,29 +120,8 @@ class Dashboard extends Controller
         $services_exp = $services_exp->orderBy('expiration');
         $services_exp = $services_exp->get();
 
-        // -------------------------------------------------
-
-        $services = $this->services();
-        $services = $services->get();
-
-//        dd($services[0]);
-
-        $services_total_buy = 0;
-        foreach ($services as $service) {
-            $services_total_buy += $service->total_service_buy;
-        }
-
-        $services_details = \App\Models\CustomerServiceDetail::query();
-        $services_total_sell = $services_details->sum('price_sell');
-
-        // Conto i clienti che hanno abbonamenti attivi, cioè producono entrate
-        $customers_count = Customer::query();
-        $customers_count = $customers_count->with('servicesDetails');
-        $customers_count = $customers_count->withSum('servicesDetails AS customer_incoming', 'price_sell');
-        $customers_count = $customers_count->having('customer_incoming', '>', 0);
-        $customers_count = $customers_count->count();
-
-        // -------------------------------------------------
+        // Data TAB Services Incoming
+        // ====================================================
 
         $months_array = array(
             'gennaio',
@@ -226,7 +201,49 @@ class Dashboard extends Controller
 
         }
 
+        // Data TAB Services Profit
+        // ====================================================
+
+        $array_customer_id = array();
+        $services_total_buy = 0;
+        $services_total_sell = 0;
+
+        foreach ($services_exp as $service_exp) {
+
+            // Count Price BUY and SELL
+            foreach ($service_exp->details as $detail) {
+
+                if ($detail->service->is_share != 1) {
+
+                    $services_total_buy += $detail->service->price_buy;
+
+                } else {
+
+                    $services = $this->services();
+                    $services->find($detail->service->id);
+                    $services = $services->first();
+
+                    $services_total_buy += $detail->service->price_buy / $services->customers_count;
+                }
+
+                $services_total_sell += $detail->price_sell;
+
+                // Count Active Customer
+                if ($detail->price_sell > 0) {
+                    $array_customer_id[$service_exp->customer->id] = 1;
+                }
+            }
+        }
+
+        $customers_count = count($array_customer_id);
+
+        $customers_avg = 0;
+        if ($customers_count > 0) {
+            $customers_avg = $services_total_sell / $customers_count;
+        }
         // -------------------------------------------------
+
+        $services = $this->services()->get();
 
         return Inertia::render('Dashboard/Dashboard', [
 
@@ -237,7 +254,7 @@ class Dashboard extends Controller
                 'months_incoming' => $months_incoming,
                 'trim_incoming' => $trim_incoming,
                 'customers_count' => $customers_count,
-                'customers_avg' => $services_total_sell / $customers_count,
+                'customers_avg' => $customers_avg,
                 'services' => $services,
                 'services_total_sell' => $services_total_sell,
                 'services_total_buy' => $services_total_buy,
