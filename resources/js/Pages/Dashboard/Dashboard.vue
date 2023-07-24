@@ -12,17 +12,7 @@ import Modal from "@/Components/Modal.vue";
 import TableSearch from "@/Components/Table/TableSearch.vue";
 
 const props = defineProps({
-    services_exp: Object,
-    months_array: Object,
-    months_incoming: Object,
-    trim_incoming: Object,
-    customers_count: Number,
-    customers_avg: Number,
-    services: Object,
-    services_total_sell: Number,
-    services_total_buy: Number,
-    services_total_profit: Number,
-    today: String,
+    data: Object,
     filters: Object,
 });
 
@@ -40,7 +30,7 @@ function getDate(dateValute: any, addDays = 0)
 
 function collapse(indexSelected: any)
 {
-    let services:any = props.services_exp;
+    let services:any = props.data!.services_exp;
     let document:any = window.document;
 
     services.forEach((_:any, index:any) => {
@@ -174,7 +164,7 @@ function collapse(indexSelected: any)
                             <th></th>
                             <th class="text-left">
                                 Cliente
-                                <span class="text-xs font-normal">(hai {{ services_exp!.length }} scadenze)</span>
+                                <span class="text-xs font-normal">(hai {{ props.data!.services_exp.length }} scadenze)</span>
                             </th>
                             <th class="text-left">
                                 Servizio
@@ -191,12 +181,12 @@ function collapse(indexSelected: any)
 
                         <tbody>
 
-                        <template v-for="(service, index) in services_exp">
+                        <template v-for="(service, index) in props.data!.services_exp">
 
                             <tr class="cursor-pointer service-header"
                                 :class="{
-                                    'table-danger': getDate(today) > getDate(service.expiration),
-                                    'table-warning': getDate(today, 60) > getDate(service.expiration),
+                                    'table-danger': getDate(props.data!.today) > getDate(service.expiration),
+                                    'table-warning': getDate(props.data!.today, 60) > getDate(service.expiration),
                                 }"
                                 :id="'service-header-' + index">
 
@@ -204,15 +194,15 @@ function collapse(indexSelected: any)
 
                                     <div class="flex w-full"
                                          :class="{
-                                        'hidden': getDate(today, 60) < getDate(service.expiration),
+                                        'hidden': getDate(props.data!.today, 60) < getDate(service.expiration),
                                      }">
 
                                         <div class="flex-initial mr-2">
 
                                             <button class="btn btn-primary btn-sm"
                                                     :class="{
-                                                    'btn-danger': getDate(today) > getDate(service.expiration),
-                                                    'btn-warning': getDate(today, 60) > getDate(service.expiration),
+                                                    'btn-danger': getDate(props.data!.today) > getDate(service.expiration),
+                                                    'btn-warning': getDate(props.data!.today, 60) > getDate(service.expiration),
                                                     }"
                                                     @click="() => {
                                                         modalShow = true
@@ -239,8 +229,8 @@ function collapse(indexSelected: any)
 
                                             <button class="btn btn-primary btn-sm"
                                                     :class="{
-                                                    'btn-danger': getDate(today) > getDate(service.expiration),
-                                                    'btn-warning': getDate(today, 60) > getDate(service.expiration) && service.expiration_monthly ==! 1,
+                                                    'btn-danger': getDate(props.data!.today) > getDate(service.expiration),
+                                                    'btn-warning': getDate(props.data!.today, 60) > getDate(service.expiration) && service.expiration_monthly ==! 1,
                                                     'btn-secondary disabled': service.expiration_monthly == 1,
                                                     }"
                                                     @click="() => {
@@ -268,8 +258,8 @@ function collapse(indexSelected: any)
 
                                             <button class="btn btn-primary btn-sm"
                                                     :class="{
-                                                    'btn-danger': getDate(today) > getDate(service.expiration),
-                                                    'btn-warning': getDate(today, 60) > getDate(service.expiration) && service.autorenew ==! 1,
+                                                    'btn-danger': getDate(props.data!.today) > getDate(service.expiration),
+                                                    'btn-warning': getDate(props.data!.today, 60) > getDate(service.expiration) && service.autorenew ==! 1,
                                                     'btn-info': service.autorenew == 1,
                                                     }"
                                                     @click="() => {
@@ -344,8 +334,8 @@ function collapse(indexSelected: any)
 
                                 <td class="!p-0 !m-0 !border-0"
                                     :class="{
-                                    'table-danger': getDate(today) > getDate(service.expiration),
-                                    'table-warning': getDate(today, 60) > getDate(service.expiration),
+                                    'table-danger': getDate(props.data!.today) > getDate(service.expiration),
+                                    'table-warning': getDate(props.data!.today, 60) > getDate(service.expiration),
                                     }"
                                     colspan="5">
 
@@ -353,8 +343,8 @@ function collapse(indexSelected: any)
 
                                         <table class="table table-hover service-detail !mb-0 w-full"
                                                :class="{
-                                                    'table-danger': getDate(today) > getDate(service.expiration),
-                                                    'table-warning': getDate(today, 60) > getDate(service.expiration),
+                                                    'table-danger': getDate(props.data!.today) > getDate(service.expiration),
+                                                    'table-warning': getDate(props.data!.today, 60) > getDate(service.expiration),
                                                }">
 
                                             <tr v-for="serviceDetail in service.details"
@@ -410,38 +400,38 @@ function collapse(indexSelected: any)
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(month, index) in months_incoming"
+                        <tr v-for="(month, index) in props.data!.months_incoming"
                             :class="{
-                            'table-secondary': index < __date(today!, 'n'),
-                            'line-through': index < __date(today!, 'n'),
-                            'table-warning': index == __date(today!, 'n'),
+                            'table-secondary': index < __date(props.data!.today, 'n'),
+                            'line-through': index < __date(props.data!.today, 'n'),
+                            'table-warning': index == __date(props.data!.today, 'n'),
                             }">
                             <td class="capitalize w-1/2">
-                                {{ months_array[index - 1] }}
+                                {{ props.data!.months_array[index - 1] }}
                             </td>
                             <td class="text-right"
                                 :class="{
-                                    '!text-green-600': index >= __date(today!, 'n'),
-                                    '!font-semibold': index >= __date(today!, 'n'),
+                                    '!text-green-600': index >= __date(props.data!.today, 'n'),
+                                    '!font-semibold': index >= __date(props.data!.today, 'n'),
                                 }">
                                 {{ __currency(month.incoming, 'EUR') }}
                             </td>
                             <td class="text-right"
                                 :class="{
-                                    '!text-red-600': index >= __date(today!, 'n'),
-                                    '!font-semibold': index >= __date(today!, 'n'),
+                                    '!text-red-600': index >= __date(props.data!.today, 'n'),
+                                    '!font-semibold': index >= __date(props.data!.today, 'n'),
                                 }">
                                 {{ __currency(month.outcoming, 'EUR') }}
                             </td>
                             <td class="text-right"
                                 :class="{
-                                    '!font-semibold': index >= __date(today!, 'n'),
+                                    '!font-semibold': index >= __date(props.data!.today, 'n'),
                                 }">
                                 {{ __currency(month.profit, 'EUR') }}</td>
                             <td class="text-right align-middle"
                                 v-if="index % 3 === 1"
                                 :rowspan="index % 3 === 1 ? 3 : ''">
-                                {{ __currency(trim_incoming[index], 'EUR') }}
+                                {{ __currency(props.data!.trim_incoming[index], 'EUR') }}
                             </td>
                         </tr>
                         </tbody>
@@ -449,13 +439,13 @@ function collapse(indexSelected: any)
                         <tr>
                             <th></th>
                             <th class="text-right">
-                                {{ __currency(services_total_sell, 'EUR') }}
+                                {{ __currency(props.data!.services_total_sell, 'EUR') }}
                             </th>
                             <th class="text-right">
-                                {{ __currency(services_total_buy, 'EUR') }}
+                                {{ __currency(props.data!.services_total_buy, 'EUR') }}
                             </th>
                             <th class="text-right">
-                                {{ __currency(services_total_profit, 'EUR') }}
+                                {{ __currency(props.data!.services_total_profit, 'EUR') }}
                             </th>
                             <th class="text-right"></th>
                         </tr>
@@ -480,7 +470,7 @@ function collapse(indexSelected: any)
 
                                         <div class="w-1/2 text-3xl font-semibold text-center pt-6">
 
-                                            {{ __currency(services_total_profit, 'EUR') }}
+                                            {{ __currency(props.data!.services_total_profit, 'EUR') }}
 
                                         </div>
                                         <div class="w-1/2">
@@ -490,7 +480,7 @@ function collapse(indexSelected: any)
                                                     Entrate
                                                 </div>
                                                 <div class="w-1/2 text-right text-green-600">
-                                                    {{ __currency(services_total_sell, 'EUR') }}
+                                                    {{ __currency(props.data!.services_total_sell, 'EUR') }}
                                                 </div>
                                             </div>
 
@@ -499,7 +489,7 @@ function collapse(indexSelected: any)
                                                     Uscite
                                                 </div>
                                                 <div class="w-1/2 text-right text-red-600">
-                                                    {{ __currency(services_total_buy, 'EUR') }}
+                                                    {{ __currency(props.data!.services_total_buy, 'EUR') }}
                                                 </div>
                                             </div>
 
@@ -518,7 +508,7 @@ function collapse(indexSelected: any)
 
                                     <div class="inline-flex w-full p-2">
                                         <div class="w-1/4 font-bold">
-                                            {{ customers_count }}
+                                            {{ props.data!.customers_count }}
                                         </div>
                                         <div>
                                             Clienti attivi
@@ -527,7 +517,7 @@ function collapse(indexSelected: any)
 
                                     <div class="inline-flex w-full p-2">
                                         <div class="w-1/4 font-bold">
-                                            {{ services_exp!.length }}
+                                            {{ props.data!.services_exp!.length }}
                                         </div>
                                         <div>
                                             Abbonamenti attivi
@@ -544,7 +534,7 @@ function collapse(indexSelected: any)
                                 <div class="card-body text-center">
 
                                     <div class="p-2 font-bold">
-                                        {{ __currency(customers_avg, 'EUR') }}
+                                        {{ __currency(props.data!.customers_avg, 'EUR') }}
                                     </div>
 
                                     <div class="p-2">
@@ -569,7 +559,7 @@ function collapse(indexSelected: any)
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="service in services">
+                        <tr v-for="service in props.data!.services">
                             <td class="align-middle">
 
                                 {{ service.name }}
@@ -657,7 +647,7 @@ function collapse(indexSelected: any)
                                 <input id="invoice-date"
                                        class="form-control"
                                        type="text"
-                                       :value="__date(today, 'day')" />
+                                       :value="__date(props.data!.today, 'day')" />
 
                             </div>
 

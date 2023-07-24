@@ -230,17 +230,19 @@ class Dashboard extends Controller
 
         return Inertia::render('Dashboard/Dashboard', [
 
-            'services_exp' => $services_exp,
-            'today' => date('Y-m-d H:i:s'),
-            'months_array' => $months_array,
-            'months_incoming' => $months_incoming,
-            'trim_incoming' => $trim_incoming,
-            'customers_count' => $customers_count,
-            'customers_avg' => $services_total_sell / $customers_count,
-            'services' => $services,
-            'services_total_sell' => $services_total_sell,
-            'services_total_buy' => $services_total_buy,
-            'services_total_profit' => $services_total_sell - $services_total_buy,
+            'data' => array(
+                'services_exp' => $services_exp,
+                'today' => date('Y-m-d H:i:s'),
+                'months_array' => $months_array,
+                'months_incoming' => $months_incoming,
+                'trim_incoming' => $trim_incoming,
+                'customers_count' => $customers_count,
+                'customers_avg' => $services_total_sell / $customers_count,
+                'services' => $services,
+                'services_total_sell' => $services_total_sell,
+                'services_total_buy' => $services_total_buy,
+                'services_total_profit' => $services_total_sell - $services_total_buy,
+            ),
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
 
         ]);
