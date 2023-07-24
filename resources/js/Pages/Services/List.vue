@@ -75,10 +75,10 @@ defineProps({
                             class: 'text-right w-[10%]',
                             classData: '!text-green-600',
                             label: 'Entrate',
-                            field: 'total_service_sell',
+                            field: 'price_sell',
                             fnc: function (d) {
 
-                                return d.total_service_sell > 0 ? __currency(d.total_service_sell, 'EUR') : '-'
+                                return d.price_sell > 0 ? __currency(d.price_sell, 'EUR') : '-'
 
                             }
                         }, {
@@ -94,6 +94,15 @@ defineProps({
                         }, {
                             class: 'text-right w-[10%]',
                             label: 'Utile',
+                            field: 'profit',
+                            fnc: function (d) {
+
+                                return d.is_share == 1 ? __currency(d.total_service_profit, 'EUR') : __currency(d.profit, 'EUR')
+
+                            }
+                        }, {
+                            class: 'text-right w-[10%]',
+                            label: '% Ut.Tot.',
                             field: 'total_service_profit',
                             fnc: function (d) {
 

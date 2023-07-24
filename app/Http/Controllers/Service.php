@@ -57,6 +57,11 @@ class Service extends Controller
         $data = $data->with('customersServicesDetails');
         $data->withCount('customersServicesDetails AS customers_count');
         $data->addSelect(DB::raw(
+            '
+            (price_sell - price_buy) AS profit
+            '
+        ));
+        $data->addSelect(DB::raw(
             'IF(
                     is_share = 1,
 
@@ -109,7 +114,6 @@ class Service extends Controller
 
                     ))) AS total_service_profit'
         ));
-//        $data = $data->orderBy('total_service_profit', 'DESC');
 
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
