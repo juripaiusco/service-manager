@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -97,11 +98,23 @@ class Dashboard extends Controller
             $services_exp->where(function ($q) use ($request_validate_array) {
 
                 foreach ($request_validate_array as $field) {
-                    $q->orWhere($field, 'like', '%' . request('s') . '%');
+                    $q->orWhere('customers_services.' . $field, 'like', '%' . request('s') . '%');
                 }
+
+                $q->orWhere('customers.name', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.company', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.piva', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.email', 'like', '%' . request('s') . '%');
 
             });
         }
+
+        $services_exp = $services_exp->join(
+            'customers',
+            'customers.id',
+            '=',
+            'customers_services.customer_id'
+        );
 
         $services_exp = $services_exp->with('customer');
         $services_exp = $services_exp->with('details');
