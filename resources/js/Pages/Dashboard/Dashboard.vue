@@ -3,11 +3,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
-import { __date } from "@/ComponentsExt/Date";
 import { __currency } from "@/ComponentsExt/Currency";
 import TableSearch from "@/Components/Table/TableSearch.vue";
 
 import Expiration from "@/Pages/Dashboard/Tabs/Expiration.vue";
+import Incoming from "@/Pages/Dashboard/Tabs/Incoming.vue";
 
 const props = defineProps({
     data: Object,
@@ -86,7 +86,6 @@ const props = defineProps({
 
                     <Expiration :data="data"></Expiration>
 
-
                 </div>
 
                 <div class="tab-pane fade pt-4"
@@ -95,68 +94,7 @@ const props = defineProps({
                      aria-labelledby="nav-incoming-tab"
                      tabindex="0">
 
-                    <table class="table table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th class="text-left">Mese</th>
-                            <th class="text-right">Entrate</th>
-                            <th class="text-right">Uscite</th>
-                            <th class="text-right">Utile</th>
-                            <th class="text-right">U. Trimestre</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="(month, index) in props.data!.months_incoming"
-                            :class="{
-                            'table-secondary': index < __date(props.data!.today, 'n'),
-                            'line-through': index < __date(props.data!.today, 'n'),
-                            'table-warning': index == __date(props.data!.today, 'n'),
-                            }">
-                            <td class="capitalize w-1/2">
-                                {{ props.data!.months_array[index - 1] }}
-                            </td>
-                            <td class="text-right"
-                                :class="{
-                                    '!text-green-600': index >= __date(props.data!.today, 'n'),
-                                    '!font-semibold': index >= __date(props.data!.today, 'n'),
-                                }">
-                                {{ __currency(month.incoming, 'EUR') }}
-                            </td>
-                            <td class="text-right"
-                                :class="{
-                                    '!text-red-600': index >= __date(props.data!.today, 'n'),
-                                    '!font-semibold': index >= __date(props.data!.today, 'n'),
-                                }">
-                                {{ __currency(month.outcoming, 'EUR') }}
-                            </td>
-                            <td class="text-right"
-                                :class="{
-                                    '!font-semibold': index >= __date(props.data!.today, 'n'),
-                                }">
-                                {{ __currency(month.profit, 'EUR') }}</td>
-                            <td class="text-right align-middle"
-                                v-if="index % 3 === 1"
-                                :rowspan="index % 3 === 1 ? 3 : ''">
-                                {{ __currency(props.data!.trim_incoming[index], 'EUR') }}
-                            </td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <th></th>
-                            <th class="text-right">
-                                {{ __currency(props.data!.services_total_sell, 'EUR') }}
-                            </th>
-                            <th class="text-right">
-                                {{ __currency(props.data!.services_total_buy, 'EUR') }}
-                            </th>
-                            <th class="text-right">
-                                {{ __currency(props.data!.services_total_profit, 'EUR') }}
-                            </th>
-                            <th class="text-right"></th>
-                        </tr>
-                        </tfoot>
-                    </table>
+                    <Incoming :data="data"></Incoming>
 
                 </div>
 
