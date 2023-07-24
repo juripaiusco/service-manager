@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -114,9 +113,7 @@ class Dashboard extends Controller
             ) AS `total_sell_tax`'
         ));
         $services_exp = $services_exp->with('detailsService');
-//        $services_exp = $services_exp->withSum('detailsService AS total_buy_notax', 'price_buy');
         $services_exp->addSelect(DB::raw('false AS isExpanded'));
-
         $services_exp = $services_exp->orderBy('expiration');
         $services_exp = $services_exp->get();
 
@@ -204,6 +201,7 @@ class Dashboard extends Controller
         // Data TAB Services Profit
         // ====================================================
 
+        $services_list = array();
         $array_customer_id = array();
         $services_total_buy = 0;
         $services_total_sell = 0;
@@ -232,6 +230,9 @@ class Dashboard extends Controller
                 if ($detail->price_sell > 0) {
                     $array_customer_id[$service_exp->customer->id] = 1;
                 }
+
+//                $services_list[$detail->service->id][] = $detail;
+
             }
         }
 
@@ -243,7 +244,7 @@ class Dashboard extends Controller
         }
         // -------------------------------------------------
 
-        $services = $this->services()->get();
+        $services_list = $this->services()->get();
 
         return Inertia::render('Dashboard/Dashboard', [
 
@@ -255,7 +256,7 @@ class Dashboard extends Controller
                 'trim_incoming' => $trim_incoming,
                 'customers_count' => $customers_count,
                 'customers_avg' => $customers_avg,
-                'services' => $services,
+                'services' => $services_list,
                 'services_total_sell' => $services_total_sell,
                 'services_total_buy' => $services_total_buy,
                 'services_total_profit' => $services_total_sell - $services_total_buy,
