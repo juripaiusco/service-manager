@@ -13,6 +13,9 @@ class Dashboard extends Controller
     {
         $services = \App\Models\Service::query();
         $services = $services->with('customersServicesDetails');
+        /*$services = $services->whereHas('customersServicesDetails', function ($q) {
+            $q->where('reference', 'LIKE', '%blue%');
+        });*/
         $services->withCount('customersServicesDetails AS customers_count');
         $services->addSelect(DB::raw(
             'IF(
@@ -69,12 +72,36 @@ class Dashboard extends Controller
         ));
         $services = $services->orderBy('total_service_profit', 'DESC');
 
+//        dd($services->get()[0]);
+
         return $services;
     }
 
     public function index()
     {
+        $request_validate_array = [
+            'piva',
+            'company',
+            'email',
+            'customer_name',
+            'name',
+            'reference',
+        ];
+
+        // -------------------------------------------------
+
         $services_exp = \App\Models\CustomerService::query();
+
+        // Filtro RICERCA
+        if (request('s')) {
+            $services_exp->where(function ($q) use ($request_validate_array) {
+
+                foreach ($request_validate_array as $field) {
+                    $q->orWhere($field, 'like', '%' . request('s') . '%');
+                }
+
+            });
+        }
 
         $services_exp = $services_exp->with('customer');
         $services_exp = $services_exp->with('details');
@@ -101,6 +128,8 @@ class Dashboard extends Controller
 
         $services = $this->services();
         $services = $services->get();
+
+//        dd($services[0]);
 
         $services_total_buy = 0;
         foreach ($services as $service) {
@@ -136,16 +165,19 @@ class Dashboard extends Controller
 
         $months_incoming = array();
 
+        foreach ($months_array as $m => $month) {
+
+            $months_incoming[$m + 1] = array(
+                'incoming' => 0,
+                'outcoming' => 0,
+                'profit' => 0,
+            );
+
+        }
+
         foreach ($services_exp as $service) {
 
             $m = date('n', strtotime($service->expiration));
-
-            if (!isset($months_incoming[$m]))
-                $months_incoming[$m] = array(
-                    'incoming' => 0,
-                    'outcoming' => 0,
-                    'profit' => 0,
-                );
 
             $months_incoming[$m]['incoming'] += $service->total_sell_notax;
 
@@ -180,9 +212,16 @@ class Dashboard extends Controller
                 $trim_incoming[$k] = 0;
 
             if ($k % 3 == 1) {
-                $trim_incoming[$k] += $months_incoming[$k]['profit'];
-                $trim_incoming[$k] += $months_incoming[$k + 1]['profit'];
-                $trim_incoming[$k] += $months_incoming[$k + 2]['profit'];
+
+                if (isset($months_incoming[$k]['profit']))
+                    $trim_incoming[$k] += $months_incoming[$k]['profit'];
+
+                if (isset($months_incoming[$k + 1]['profit']))
+                    $trim_incoming[$k] += $months_incoming[$k + 1]['profit'];
+
+                if (isset($months_incoming[$k + 2]['profit']))
+                    $trim_incoming[$k] += $months_incoming[$k + 2]['profit'];
+
             }
 
         }
@@ -202,6 +241,7 @@ class Dashboard extends Controller
             'services_total_sell' => $services_total_sell,
             'services_total_buy' => $services_total_buy,
             'services_total_profit' => $services_total_sell - $services_total_buy,
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
 
         ]);
     }

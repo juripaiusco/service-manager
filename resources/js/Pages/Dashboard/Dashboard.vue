@@ -9,6 +9,7 @@ import { Collapse } from "vue-collapsed";
 import ModalReady from "@/Components/ModalReady.vue";
 import { ref } from "vue";
 import Modal from "@/Components/Modal.vue";
+import TableSearch from "@/Components/Table/TableSearch.vue";
 
 const props = defineProps({
     services_exp: Object,
@@ -118,9 +119,9 @@ function collapse(indexSelected: any)
 
                 <div class="w-1/4">
 
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Cerca servizio o cliente" />
+                    <TableSearch placeholder="Cerca servizio o cliente"
+                                 route-search="dashboard"
+                                 :filters="filters"></TableSearch>
 
                 </div>
 
