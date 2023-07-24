@@ -54,6 +54,11 @@ defineProps({
                             class: 'text-left',
                             label: 'Nome',
                             field: 'name',
+                            fnc: function (d) {
+
+                                return d.name + '<br><span class=\'text-xs\'>Venduti ' + d.customers_count + '</span>';
+
+                            }
                         }, {
                             class: 'text-center w-[5%]',
                             label: 'Share',
@@ -97,7 +102,7 @@ defineProps({
                             field: 'profit',
                             fnc: function (d) {
 
-                                return d.is_share == 1 ? __currency(d.total_service_profit, 'EUR') : __currency(d.profit, 'EUR')
+                                return d.profit > 0 ? __currency(d.profit, 'EUR') : '-'
 
                             }
                         }, {

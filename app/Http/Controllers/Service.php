@@ -21,8 +21,9 @@ class Service extends Controller
 
         $request_validate_array = array_merge($request_search_array, [
             'is_share',
-            'total_service_sell',
+            'price_sell',
             'price_buy',
+            'profit',
             'total_service_profit',
         ]);
 
@@ -50,16 +51,45 @@ class Service extends Controller
         if (request('orderby') && request('ordertype')) {
             $data->orderby(request('orderby'), strtoupper(request('ordertype')));
         } else {
-            $data->orderby('total_service_profit', 'DESC');
+            $data->orderby('profit', 'DESC');
         }
 
         $data = $data->select();
         $data = $data->with('customersServicesDetails');
+        $data = $data->withSum('customersServicesDetails AS price_sell', 'price_sell');
         $data->withCount('customersServicesDetails AS customers_count');
         $data->addSelect(DB::raw(
-            '
-            (price_sell - price_buy) AS profit
-            '
+            'IF(
+                is_share = 1,
+
+                ((
+                    SELECT
+                      sum(`sm_customers_services_details`.`price_sell`)
+                    FROM
+                      `sm_customers_services_details`
+                    WHERE
+                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                    )
+                    -
+                    (IF(
+                    is_share = 1,
+
+                    (price_buy),
+
+                    (price_buy * (
+                    SELECT
+                      count(*)
+                    FROM
+                      `sm_customers_services_details`
+                    WHERE
+                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                    ))
+
+                ))),
+
+                (price_sell - price_buy)
+
+            ) AS profit'
         ));
         $data->addSelect(DB::raw(
             'IF(
@@ -115,6 +145,7 @@ class Service extends Controller
                     ))) AS total_service_profit'
         ));
 
+//        dd($data->get()[0]);
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
         return Inertia::render('Services/List', [
