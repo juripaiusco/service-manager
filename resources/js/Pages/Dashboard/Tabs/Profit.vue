@@ -135,11 +135,25 @@ const props = defineProps({
                     '!text-red-600': service.profit <= 0
                 }">
 
-                {{ service.profit > 0 ? __currency(service.profit, 'EUR') : '-' }}
+                {{ service.profit != 0 ? __currency(service.profit, 'EUR') : '-' }}
 
             </td>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+            <th></th>
+            <th class="text-right">
+                {{ __currency(props.data.services_total_sell, 'EUR') }}
+            </th>
+            <th class="text-right">
+                {{ __currency(props.data.services_total_buy, 'EUR') }}
+            </th>
+            <th class="text-right">
+                {{ __currency(props.data.services_total_profit, 'EUR') }}
+            </th>
+        </tr>
+        </tfoot>
     </table>
 
 </template>

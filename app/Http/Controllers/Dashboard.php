@@ -8,6 +8,11 @@ use Inertia\Inertia;
 
 class Dashboard extends Controller
 {
+    /**
+     * Servizi
+     *
+     * @return \App\Models\Service|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
+     */
     public function services()
     {
         $services = \App\Models\Service::query();
@@ -147,6 +152,7 @@ class Dashboard extends Controller
 
         }
 
+        // Suddivizione entrate per mese e tipo servizio
         foreach ($services_exp as $service) {
 
             $m = date('n', strtotime($service->expiration));
@@ -176,6 +182,7 @@ class Dashboard extends Controller
 
         ksort($months_incoming);
 
+        // Suddivizione profitto per trimestre
         $trim_incoming = array();
 
         foreach ($months_incoming as $k => $month_incoming) {
@@ -201,11 +208,11 @@ class Dashboard extends Controller
         // Data TAB Services Profit
         // ====================================================
 
-        $array_customer_id = array();
-        $services_buy = array();
-        $services_total_buy = 0;
-        $services_sell = array();
-        $services_total_sell = 0;
+        $array_customer_id = array();   // Serve per conteggio cliente con contratto attivo
+        $services_buy = array();        // Totale spese per servizio
+        $services_total_buy = 0;        // Totale spese
+        $services_sell = array();       // Totale entrate per servizio
+        $services_total_sell = 0;       // Totale entrate
 
         foreach ($services_exp as $service_exp) {
 
@@ -248,12 +255,13 @@ class Dashboard extends Controller
 
         $customers_count = count($array_customer_id);
 
+        // Media spesa per ogni cliente
         $customers_avg = 0;
         if ($customers_count > 0) {
             $customers_avg = $services_total_sell / $customers_count;
         }
-        // -------------------------------------------------
 
+        // Tramite la lista servizio conto: entrate / uscite / profitto / numero di clienti
         $services = $this->services()->get();
         $services_list = array();
 
@@ -295,6 +303,8 @@ class Dashboard extends Controller
         }
 
         $services_list = array_values($services_list);
+
+        // -------------------------------------------------
 
         return Inertia::render('Dashboard/Dashboard', [
 
