@@ -76,7 +76,7 @@ class Dashboard extends Controller
         return $services;
     }
 
-    public function getData()
+    public function getData($search = true)
     {
         $request_validate_array = [
             'piva',
@@ -93,7 +93,7 @@ class Dashboard extends Controller
         $services_exp = \App\Models\CustomerService::query();
 
         // Filtro RICERCA
-        if (request('s')) {
+        if (request('s') && $search) {
             $services_exp->where(function ($q) use ($request_validate_array) {
 
                 foreach ($request_validate_array as $field) {

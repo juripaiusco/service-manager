@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerServiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -56,8 +57,25 @@ class Service extends Controller
 
         $data = $data->select();
         $data = $data->with('customersServicesDetails');
-        $data = $data->withSum('customersServicesDetails AS price_sell', 'price_sell');
+//        $data = $data->withSum('customersServicesDetails AS price_sell', 'price_sell');
         $data->withCount('customersServicesDetails AS customers_count');
+        $data->addSelect(DB::raw(
+            'IF(
+                is_share = 1,
+
+                (
+                    SELECT
+                      sum(`sm_customers_services_details`.`price_sell`)
+                    FROM
+                      `sm_customers_services_details`
+                    WHERE
+                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                ),
+
+                `price_sell`
+
+                ) AS `price_sell`'
+        ));
         $data->addSelect(DB::raw(
             'IF(
                 is_share = 1,
@@ -145,7 +163,12 @@ class Service extends Controller
                     ))) AS total_service_profit'
         ));
 
-//        dd($data->get()[0]);
+        $dashboard = new Dashboard();
+        $data_services_exp = $dashboard->getData(false);
+        $data = $data->addSelect(DB::raw($data_services_exp['services_total_sell'] . ' AS services_total_sell'));
+        $data = $data->addSelect(DB::raw($data_services_exp['services_total_buy'] . ' AS services_total_buy'));
+        $data = $data->addSelect(DB::raw($data_services_exp['services_total_profit'] . ' AS services_total_profit'));
+
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
         return Inertia::render('Services/List', [

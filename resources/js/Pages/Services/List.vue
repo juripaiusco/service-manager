@@ -45,9 +45,9 @@ defineProps({
                    :data="{
                         filters: filters,
                         routeSearch: 'service.index',
-                        data: data.data,
+                        data: data!.data,
                         structure: [{
-                            class: 'text-left w-[5%]',
+                            class: 'text-left !align-top w-[5%]',
                             label: 'Cod.',
                             field: 'fic_cod',
                         }, {
@@ -56,11 +56,17 @@ defineProps({
                             field: 'name',
                             fnc: function (d) {
 
-                                return d.name + '<br><span class=\'text-xs\'>Venduti ' + d.customers_count + '</span>';
+                                let html = '';
+                                html += d.name;
+                                html += '<br><span class=\'text-xs\'>Venduti ';
+                                html += '<span class=\'font-semibold\'>' + d.customers_count + '</span>';
+                                html += '</span>';
+
+                                return html;
 
                             }
                         }, {
-                            class: 'text-center w-[5%]',
+                            class: 'text-center !align-top w-[5%]',
                             label: 'Share',
                             field: 'is_share',
                             fnc: function (d) {
@@ -77,7 +83,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right w-[10%]',
+                            class: 'text-right !align-top w-[10%]',
                             classData: '!text-green-600',
                             label: 'Entrate',
                             field: 'price_sell',
@@ -87,7 +93,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right w-[10%]',
+                            class: 'text-right !align-top w-[10%]',
                             classData: '!text-red-600',
                             label: 'Uscite',
                             field: 'price_buy',
@@ -97,7 +103,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right w-[10%]',
+                            class: 'text-right !align-top w-[10%] font-semibold',
                             label: 'Utile',
                             field: 'profit',
                             fnc: function (d) {
@@ -106,12 +112,28 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right w-[10%]',
+                            class: 'text-right !align-top w-[10%]',
                             label: '% Ut.Tot.',
                             field: 'total_service_profit',
                             fnc: function (d) {
 
-                                return d.total_service_profit > 0 ? __currency(d.total_service_profit, 'EUR') : '-'
+                                let html = '';
+                                html += d.total_service_profit > 0 ? __currency(d.total_service_profit, 'EUR') : '-';
+                                html += '<br>';
+
+                                if (d.total_service_profit > 0) {
+
+                                    html += '<span class=\'text-xs\'>';
+                                    /*html += parseFloat(d.total_service_profit) + ' | ';
+                                    html += parseFloat(d.services_total_profit) + ' | ';*/
+                                    html += parseFloat(
+                                        parseFloat(d.total_service_profit) / parseFloat(d.services_total_profit) * 100
+                                    ).toFixed(2);
+                                    html += '%</span>';
+
+                                }
+
+                                return html;
 
                             }
                         }/*, {
