@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -14,7 +13,7 @@ class Dashboard extends Controller
      *
      * @return \App\Models\Service|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
-    public function services()
+    public function getServices()
     {
         $services = \App\Models\Service::query();
         $services = $services->with('customersServicesDetails');
@@ -77,7 +76,7 @@ class Dashboard extends Controller
         return $services;
     }
 
-    public function index()
+    public function getData()
     {
         $request_validate_array = [
             'piva',
@@ -180,7 +179,7 @@ class Dashboard extends Controller
 
                 } else {
 
-                    $services_q = $this->services();
+                    $services_q = $this->getServices();
                     $services_q = $services_q->where('id', $detailService->id);
                     $services_q = $services_q->first();
 
@@ -246,7 +245,7 @@ class Dashboard extends Controller
 
                 } else {
 
-                    $services = $this->services();
+                    $services = $this->getServices();
                     $services->find($detail->service->id);
                     $services = $services->first();
 
@@ -275,7 +274,7 @@ class Dashboard extends Controller
         }
 
         // Tramite la lista servizio conto: entrate / uscite / profitto / numero di clienti
-        $services = $this->services()->get();
+        $services = $this->getServices()->get();
         $services_list = array();
 
         foreach ($services as $service) {
@@ -319,21 +318,28 @@ class Dashboard extends Controller
 
         // -------------------------------------------------
 
+        return array(
+            'services_exp' => $services_exp,
+            'today' => date('Y-m-d H:i:s'),
+            'months_array' => $months_array,
+            'months_incoming' => $months_incoming,
+            'trim_incoming' => $trim_incoming,
+            'customers_count' => $customers_count,
+            'customers_avg' => $customers_avg,
+            'services' => $services_list,
+            'services_total_sell' => $services_total_sell,
+            'services_total_buy' => $services_total_buy,
+            'services_total_profit' => $services_total_sell - $services_total_buy,
+        );
+    }
+
+    public function index()
+    {
+        $data = $this->getData();
+
         return Inertia::render('Dashboard/Dashboard', [
 
-            'data' => array(
-                'services_exp' => $services_exp,
-                'today' => date('Y-m-d H:i:s'),
-                'months_array' => $months_array,
-                'months_incoming' => $months_incoming,
-                'trim_incoming' => $trim_incoming,
-                'customers_count' => $customers_count,
-                'customers_avg' => $customers_avg,
-                'services' => $services_list,
-                'services_total_sell' => $services_total_sell,
-                'services_total_buy' => $services_total_buy,
-                'services_total_profit' => $services_total_sell - $services_total_buy,
-            ),
+            'data' => $data,
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
 
         ]);
