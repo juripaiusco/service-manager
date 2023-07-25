@@ -123,8 +123,8 @@ function collapse(indexSelected)
                             <button class="btn btn-primary btn-sm"
                                     :class="{
                                         'btn-danger': getDate(props.data.today) > getDate(service.expiration),
-                                        'btn-warning': getDate(props.data.today, 60) > getDate(service.expiration) && service.expiration_monthly ==! 1,
-                                        'btn-secondary disabled': service.expiration_monthly == 1,
+                                        'btn-warning': getDate(props.data.today, 60) > getDate(service.expiration),
+                                        'btn-secondary disabled': service.expiration_monthly === '1',
                                     }"
                                     @click="() => {
                                         modalShow = true
@@ -152,8 +152,8 @@ function collapse(indexSelected)
                             <button class="btn btn-primary btn-sm"
                                     :class="{
                                         'btn-danger': getDate(props.data.today) > getDate(service.expiration),
-                                        'btn-warning': getDate(props.data.today, 60) > getDate(service.expiration) && service.autorenew ==! 1,
-                                        'btn-info': service.autorenew == 1,
+                                        'btn-warning': getDate(props.data.today, 60) > getDate(service.expiration),
+                                        'btn-info': service.autorenew === '1',
                                     }"
                                     @click="() => {
                                         modalInvoiceShow = true,
