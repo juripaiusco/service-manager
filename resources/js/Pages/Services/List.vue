@@ -124,8 +124,6 @@ defineProps({
                                 if (d.total_service_profit > 0) {
 
                                     html += '<span class=\'text-xs\'>';
-                                    /*html += parseFloat(d.total_service_profit) + ' | ';
-                                    html += parseFloat(d.services_total_profit) + ' | ';*/
                                     html += parseFloat(
                                         parseFloat(d.total_service_profit) / parseFloat(d.services_total_profit) * 100
                                     ).toFixed(2);

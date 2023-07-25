@@ -164,7 +164,7 @@ class Service extends Controller
         ));
 
         $dashboard = new Dashboard();
-        $data_services_exp = $dashboard->getData(false);
+        $data_services_exp = $dashboard->getData(true);
         $data = $data->addSelect(DB::raw($data_services_exp['services_total_sell'] . ' AS services_total_sell'));
         $data = $data->addSelect(DB::raw($data_services_exp['services_total_buy'] . ' AS services_total_buy'));
         $data = $data->addSelect(DB::raw($data_services_exp['services_total_profit'] . ' AS services_total_profit'));
