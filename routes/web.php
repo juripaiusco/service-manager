@@ -36,7 +36,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/service', [\App\Http\Controllers\Service::class, 'index'])->name('service.index');
     Route::get('/service/create', [\App\Http\Controllers\Service::class, 'create'])->name('service.create');
+    Route::post('/service/store', [\App\Http\Controllers\Service::class, 'store'])->name('service.store');
     Route::get('/service/edit/{id}', [\App\Http\Controllers\Service::class, 'edit'])->name('service.edit');
+    Route::post('/service/update/{id}', [\App\Http\Controllers\Service::class, 'update'])->name('service.update');
     Route::get('/service/destroy/{id}', [\App\Http\Controllers\Service::class, 'destroy'])->name('service.destroy');
 
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\CustomerServiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
 class Service extends Controller
@@ -182,7 +184,26 @@ class Service extends Controller
      */
     public function create()
     {
-        return Inertia::render('Services/Form');
+        // Creo un oggetto di dati vuoto
+        $columns = Schema::getColumnListing('services');
+
+        $customers_array = array();
+        foreach ($columns as $customers_field) {
+            $customers_array[$customers_field] = null;
+        }
+
+        unset($customers_array['id']);
+        unset($customers_array['deleted_at']);
+        unset($customers_array['created_at']);
+        unset($customers_array['updated_at']);
+
+        $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
+
+        $data = json_decode(json_encode($customers_array), true);
+
+        return Inertia::render('Services/Form', [
+            'data' => $data
+        ]);
     }
 
     /**
@@ -206,7 +227,13 @@ class Service extends Controller
      */
     public function edit(string $id)
     {
-        return Inertia::render('Services/Form');
+        $data = \App\Models\Service::find($id);
+
+        $data->saveRedirect = Redirect::back()->getTargetUrl();
+
+        return Inertia::render('Services/Form', [
+            'data' => $data
+        ]);
     }
 
     /**

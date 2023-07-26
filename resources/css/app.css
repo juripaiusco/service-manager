@@ -30,6 +30,17 @@ blue: #0369a1
     --bs-table-bg-state: none;
 }
 
+label.form-label {
+    font-size: 0.9em;
+    padding: 0 10px 0 10px;
+    display: block;
+    color: gray;
+    margin-bottom: 5px;
+}
+.form-check.form-switch .form-check-input:checked {
+    background-position: 8px center !important;
+}
+
 #nprogress .bar {
     display: none;
 }
