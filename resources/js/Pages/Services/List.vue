@@ -3,13 +3,17 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
+import {Link} from "@inertiajs/vue3";
 import Table from "@/Components/Table/Table.vue";
 import {__currency} from "@/ComponentsExt/Currency";
 import TableSearch from "@/Components/Table/TableSearch.vue";
+import ModalReady from "@/Components/ModalReady.vue";
 
 defineProps({
     data: Object,
     filters: Object,
+    modalShow: false,
+    modalData: Object,
 })
 </script>
 
@@ -29,7 +33,14 @@ defineProps({
 
             <div class="inline-flex w-full mb-6">
 
-                <div class="w-3/4"></div>
+                <div class="w-3/4">
+
+                    <Link class="btn btn-primary w-[120px]"
+                          :href="route('service.create')">
+                        Nuovo
+                    </Link>
+
+                </div>
 
                 <div class="w-1/4">
 
@@ -134,16 +145,40 @@ defineProps({
                                 return html;
 
                             }
-                        }/*, {
-                            class: 'w-[1%]',
-                            btnEdit: true,
-                            route: 'products.edit'
                         }, {
                             class: 'w-[1%]',
+                            classBtn: 'w-[48px] min-h-[48px] !pt-[14px] !pl-[15px] ml-[8px] btn-dark',
+                            btnEdit: true,
+                            route: 'service.edit'
+                        }, {
+                            class: 'w-[1%]',
+                            classBtn: 'w-[48px] min-h-[48px] !pt-[5px] !pl-[15px] mr-[8px] btn-dark',
                             btnDel: true,
-                            route: 'products.destroy'
-                        }*/],
-                    }" />
+                            route: 'service.destroy'
+                        }],
+                    }"
+                   @openModal="(data, route) => {
+                       modalData = data;
+                       modalData.confirmURL = route;
+                       modalData.confirmBtnClass = 'btn-danger';
+                       modalData.confirmBtnText = 'Sì';
+                       modalShow = true;
+                   }" />
+
+            <ModalReady :show="modalShow"
+                        :data="modalData"
+                        @close="modalShow = false">
+
+                <template #title>Elimina servizio</template>
+                <template #body>
+                    Vuoi eliminare
+                    <span class="font-semibold">
+                        {{ modalData.name }}
+                    </span>
+                    ?
+                </template>
+
+            </ModalReady>
 
         </ApplicationContainer>
 

@@ -38,7 +38,7 @@ const showingNavigationDropdown = ref(false);
 
                                 <NavLink class="w-[100px] text-center"
                                          :href="route('service.index')"
-                                         :active="route().current('service.index')">
+                                         :active="route().current().search('service') === 0 ? true : false">
                                     Servizi
                                 </NavLink>
 

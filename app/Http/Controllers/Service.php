@@ -182,7 +182,7 @@ class Service extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Services/Form');
     }
 
     /**
@@ -206,7 +206,7 @@ class Service extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return Inertia::render('Services/Form');
     }
 
     /**
@@ -222,6 +222,8 @@ class Service extends Controller
      */
     public function destroy(string $id)
     {
-        //
+//        \App\Models\Service::destroy($id);
+
+        return to_route('service.index');
     }
 }

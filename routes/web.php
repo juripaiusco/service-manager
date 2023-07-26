@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/service', [\App\Http\Controllers\Service::class, 'index'])->name('service.index');
+    Route::get('/service/create', [\App\Http\Controllers\Service::class, 'create'])->name('service.create');
+    Route::get('/service/edit/{id}', [\App\Http\Controllers\Service::class, 'edit'])->name('service.edit');
+    Route::get('/service/destroy/{id}', [\App\Http\Controllers\Service::class, 'destroy'])->name('service.destroy');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

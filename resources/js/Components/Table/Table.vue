@@ -93,7 +93,8 @@ defineProps({
                     <!-- Button Edit -->
                     <template v-if="struct.btnEdit === true">
 
-                        <Link class="btn btn-warning btn-sm"
+                        <Link class="btn btn-warning"
+                              :class="struct.classBtn"
                               :href="route(struct.route, d.id)">
 
                             <svg class="w-4 h-4"
@@ -108,7 +109,8 @@ defineProps({
                     <!-- Button Delete -->
                     <template v-if="struct.btnDel === true">
 
-                        <button class="btn btn-danger btn-sm"
+                        <button class="btn btn-danger"
+                                :class="struct.classBtn"
                                 @click="$emit('openModal', d, route(struct.route, d.id))">
 
                             <svg class="w-4 h-4"
