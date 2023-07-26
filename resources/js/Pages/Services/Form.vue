@@ -3,7 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, useForm} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
-import Checkbox from "@/Components/Checkbox.vue";
 import {__} from "../../ComponentsExt/Translations";
 
 const props = defineProps({
@@ -139,6 +138,12 @@ const form = useForm(dataForm);
                 </div>
 
             </form>
+
+            <hr class="m-10">
+
+            <h2 class="text-3xl mb-2">Clienti che utilizzano questo servizio</h2>
+
+            <br>
 
         </ApplicationContainer>
 
