@@ -189,7 +189,7 @@ class Service extends Controller
 
         $customers_array = array();
         foreach ($columns as $customers_field) {
-            $customers_array[$customers_field] = null;
+            $customers_array[$customers_field] = '';
         }
 
         unset($customers_array['id']);
