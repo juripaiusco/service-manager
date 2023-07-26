@@ -9,10 +9,15 @@ class Customer extends Model
 {
     use HasFactory;
 
-    /*public function service()
+    public function service()
     {
         return $this->hasMany(Service::class, 'customer_id', 'id');
-    }*/
+    }
+
+    public function customerService()
+    {
+        return $this->hasMany(CustomerService::class, 'customer_id', 'id');
+    }
 
     public function servicesDetails()
     {

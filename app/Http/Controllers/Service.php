@@ -264,6 +264,12 @@ class Service extends Controller
         /*$customers = $customers->with(['servicesDetails' => function ($q) use ($id) {
             $q->where('service_id', $id);
         }]);*/
+        $customers = $customers->with(['customerService.details' => function ($q) use ($id) {
+            $q->where('service_id', $id);
+        }]);
+        $customers = $customers->with(['customerService.detailsService' => function ($q) use ($id) {
+            $q->where('service_id', $id);
+        }]);
         $customers = $customers->with(['servicesDetails.service' => function ($q) use ($id) {
             $q->where('id', $id);
         }]);
@@ -304,9 +310,10 @@ class Service extends Controller
             'customers.name',
             'customers.email',
         ]);*/
+        $customers = $customers->addSelect(DB::raw('false AS isExpanded'));
         $customers = $customers->groupBy('customers.id');
         $customers = $customers->orderBy('customers.company');
-//        dd($customers->get());
+//        dd($customers->get()[0]);
         $customers = $customers->get();
 
         return Inertia::render('Services/Form', [

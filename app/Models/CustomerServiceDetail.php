@@ -16,4 +16,9 @@ class CustomerServiceDetail extends Model
         return $this->hasOne(Service::class, 'id', 'service_id');
     }
 
+    public function customerService()
+    {
+        return $this->hasMany(CustomerService::class, 'id', 'customer_service_id');
+    }
+
 }
