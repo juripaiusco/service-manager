@@ -14,7 +14,8 @@ defineProps({
     filters: Object,
     modalShow: false,
     modalData: Object,
-})
+});
+
 </script>
 
 <template>
@@ -55,6 +56,7 @@ defineProps({
             <Table class="table-striped"
                    :data="{
                         filters: filters,
+                        tblName: 'service',
                         routeSearch: 'service.index',
                         data: data!.data,
                         structure: [{
@@ -157,7 +159,7 @@ defineProps({
                             route: 'service.destroy'
                         }],
                     }"
-                   @openModal="(data, route) => {
+                   @openModal="(data: any, route: any) => {
                        modalData = data;
                        modalData.confirmURL = route;
                        modalData.confirmBtnClass = 'btn-danger';

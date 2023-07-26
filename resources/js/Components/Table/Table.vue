@@ -23,7 +23,7 @@ defineProps({
         </tr>
         </thead>
         <tbody>
-        <tr v-for="d in data.data">
+        <tr v-for="d in data.data" :key="d.id" :id="(data.tblName ? data.tblName : 'row') + '-' + d.id">
             <template v-for="struct in data.structure">
 
                 <td class="align-middle"

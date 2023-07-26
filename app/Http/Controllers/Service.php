@@ -169,6 +169,7 @@ class Service extends Controller
         $data = $data->addSelect(DB::raw($data_services_exp['services_total_sell'] . ' AS services_total_sell'));
         $data = $data->addSelect(DB::raw($data_services_exp['services_total_buy'] . ' AS services_total_buy'));
         $data = $data->addSelect(DB::raw($data_services_exp['services_total_profit'] . ' AS services_total_profit'));
+//        $data = $data->addSelect(DB::raw('"' . url()->full() . '" AS saveRedirect'));
 
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
@@ -280,8 +281,8 @@ class Service extends Controller
      */
     public function destroy(string $id)
     {
-//        \App\Models\Service::destroy($id);
+        \App\Models\Service::destroy($id);
 
-        return to_route('service.index');
+        return \redirect()->back();
     }
 }
