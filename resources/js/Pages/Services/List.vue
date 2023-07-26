@@ -36,7 +36,7 @@ defineProps({
 
                 <div class="w-3/4">
 
-                    <Link class="btn btn-primary w-[120px]"
+                    <Link class="btn btn-dark w-[120px]"
                           :href="route('service.create')">
                         Nuovo
                     </Link>
