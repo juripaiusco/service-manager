@@ -4,9 +4,11 @@ import {Head, useForm} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {__} from "../../ComponentsExt/Translations";
+import {__currency} from "@/ComponentsExt/Currency";
 
 const props = defineProps({
     data: Object,
+    customers: Object,
 })
 
 const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
@@ -149,6 +151,39 @@ const form = useForm(dataForm);
             <h2 class="text-3xl mb-2">Clienti che utilizzano questo servizio</h2>
 
             <br>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="text-left">Cliente</th>
+                    <th class="text-right">Entrate</th>
+                    <th class="text-right">Uscite</th>
+                    <th class="text-right">Utile</th>
+                    <th class="text-right"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="customer in customers">
+                        <td>
+                            {{ customer.company }}
+<!--                            {{ customer.services_details }}-->
+                        </td>
+                        <td class="text-right !text-green-600">
+                            {{ customer.customer_total_sell_notax === 0 ? '-' : __currency(customer.customer_total_sell_notax, 'EUR') }}
+                        </td>
+                        <td class="text-right !text-red-600">
+                            {{ __currency(customer.customer_total_buy_notax, 'EUR') }}
+                        </td>
+                        <td class="text-right font-semibold"
+                            :class="{
+                                '!text-red-600': (customer.customer_total_sell_notax - customer.customer_total_buy_notax < 0)
+                            }">
+                            {{ __currency(customer.customer_total_sell_notax - customer.customer_total_buy_notax, 'EUR') }}
+                        </td>
+                        <td class="text-right"></td>
+                    </tr>
+                </tbody>
+            </table>
 
         </ApplicationContainer>
 

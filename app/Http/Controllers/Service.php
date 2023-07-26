@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -66,11 +67,11 @@ class Service extends Controller
 
                 (
                     SELECT
-                      sum(`sm_customers_services_details`.`price_sell`)
+                      sum(`' . env('DB_PREFIX') . 'customers_services_details`.`price_sell`)
                     FROM
-                      `sm_customers_services_details`
+                      `' . env('DB_PREFIX') . 'customers_services_details`
                     WHERE
-                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
                 ),
 
                 `price_sell`
@@ -83,11 +84,11 @@ class Service extends Controller
 
                 ((
                     SELECT
-                      sum(`sm_customers_services_details`.`price_sell`)
+                      sum(`' . env('DB_PREFIX') . 'customers_services_details`.`price_sell`)
                     FROM
-                      `sm_customers_services_details`
+                      `' . env('DB_PREFIX') . 'customers_services_details`
                     WHERE
-                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
                     )
                     -
                     (IF(
@@ -99,9 +100,9 @@ class Service extends Controller
                     SELECT
                       count(*)
                     FROM
-                      `sm_customers_services_details`
+                      `' . env('DB_PREFIX') . 'customers_services_details`
                     WHERE
-                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
                     ))
 
                 ))),
@@ -120,9 +121,9 @@ class Service extends Controller
                     SELECT
                       count(*)
                     FROM
-                      `sm_customers_services_details`
+                      `' . env('DB_PREFIX') . 'customers_services_details`
                     WHERE
-                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
                     ))
 
                     ) AS total_service_buy'
@@ -130,21 +131,21 @@ class Service extends Controller
         $data->addSelect(DB::raw(
             '(
                     SELECT
-                      sum(`sm_customers_services_details`.`price_sell`)
+                      sum(`' . env('DB_PREFIX') . 'customers_services_details`.`price_sell`)
                     FROM
-                      `sm_customers_services_details`
+                      `' . env('DB_PREFIX') . 'customers_services_details`
                     WHERE
-                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
                     ) AS total_service_sell'
         ));
         $data = $data->addSelect(DB::raw(
             '((
                     SELECT
-                      sum(`sm_customers_services_details`.`price_sell`)
+                      sum(`' . env('DB_PREFIX') . 'customers_services_details`.`price_sell`)
                     FROM
-                      `sm_customers_services_details`
+                      `' . env('DB_PREFIX') . 'customers_services_details`
                     WHERE
-                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
                     )
                     -
                     (IF(
@@ -156,9 +157,9 @@ class Service extends Controller
                     SELECT
                       count(*)
                     FROM
-                      `sm_customers_services_details`
+                      `' . env('DB_PREFIX') . 'customers_services_details`
                     WHERE
-                      `sm_services`.`id` = `sm_customers_services_details`.`service_id`
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
                     ))
 
                     ))) AS total_service_profit'
@@ -246,8 +247,71 @@ class Service extends Controller
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
 
+        $customers = Customer::query();
+        $customers = $customers->join(
+            'customers_services_details',
+            'customers_services_details.customer_id',
+            '=',
+            'customers.id'
+        );
+        $customers = $customers->join(
+            'services',
+            'services.id',
+            '=',
+            'customers_services_details.service_id'
+        );
+        $customers = $customers->where('customers_services_details.service_id', $id);
+        /*$customers = $customers->with(['servicesDetails' => function ($q) use ($id) {
+            $q->where('service_id', $id);
+        }]);*/
+        $customers = $customers->with(['servicesDetails.service' => function ($q) use ($id) {
+            $q->where('id', $id);
+        }]);
+        $customers = $customers->withSum([
+            'servicesDetails AS customer_total_sell_notax' => function ($q) use ($id) {
+                $q->where('service_id', $id);
+            }
+        ], 'price_sell');
+        $customers = $customers->addSelect(DB::raw(
+            'IF (' . env('DB_PREFIX') . 'services.is_share = 1,
+
+                    (price_buy / (
+                    SELECT
+                      count(*)
+                    FROM
+                      `' . env('DB_PREFIX') . 'customers_services_details`
+                    WHERE
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
+                    ) * (
+                    SELECT
+                      count(*)
+                    FROM
+                      `' . env('DB_PREFIX') . 'customers_services_details`
+                    WHERE
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
+                        AND `' . env('DB_PREFIX') . 'customers`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`customer_id`
+                    ))
+                    ,
+
+                    SUM(' . env('DB_PREFIX') . 'services.price_buy)
+
+                ) AS customer_total_buy_notax'
+        ));
+        /*$customers = $customers->select([
+            'customers.id',
+            'customers.piva',
+            'customers.company',
+            'customers.name',
+            'customers.email',
+        ]);*/
+        $customers = $customers->groupBy('customers.id');
+        $customers = $customers->orderBy('customers.company');
+//        dd($customers->get());
+        $customers = $customers->get();
+
         return Inertia::render('Services/Form', [
-            'data' => $data
+            'data' => $data,
+            'customers' => $customers,
         ]);
     }
 
