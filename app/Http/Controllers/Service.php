@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomerServiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -211,7 +210,22 @@ class Service extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'                  => ['required'],
+            'price_sell'            => ['required'],
+            'price_buy'             => ['required'],
+            'fic_cod'               => ['required'],
+            'name_customer_view'    => ['required'],
+        ]);
+
+        $saveRedirect = $request['saveRedirect'];
+        unset($request['saveRedirect']);
+
+        $customer = new \App\Models\Service();
+        $customer->fill($request->all());
+        $customer->save();
+
+        return Redirect::to($saveRedirect);
     }
 
     /**
@@ -241,7 +255,24 @@ class Service extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name'                  => ['required'],
+            'price_sell'            => ['required'],
+            'price_buy'             => ['required'],
+            'fic_cod'               => ['required'],
+            'name_customer_view'    => ['required'],
+        ]);
+
+        $saveRedirect = $request['saveRedirect'];
+        unset($request['saveRedirect']);
+        unset($request['created_at']);
+        unset($request['updated_at']);
+
+        $customer = \App\Models\Service::find($id);
+        $customer->fill($request->all());
+        $customer->save();
+
+        return Redirect::to($saveRedirect);
     }
 
     /**

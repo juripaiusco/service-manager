@@ -4,6 +4,7 @@ import {Head, useForm} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import Checkbox from "@/Components/Checkbox.vue";
+import {__} from "../../ComponentsExt/Translations";
 
 const props = defineProps({
     data: Object,
@@ -48,6 +49,8 @@ const form = useForm(dataForm);
                                class="form-control"
                                placeholder="es. manutenzione annuale"
                                v-model="form.name" />
+                        <div class="text-red-500 text-center"
+                             v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
                     </div>
                     <div class="col-3">
@@ -60,6 +63,8 @@ const form = useForm(dataForm);
                                    placeholder="0.00"
                                    v-model="form.price_sell" />
                         </div>
+                        <div class="text-red-500 text-center"
+                             v-if="form.errors.price_sell">{{ __(form.errors.price_sell) }}</div>
 
                     </div>
                     <div class="col-3">
@@ -72,6 +77,8 @@ const form = useForm(dataForm);
                                    placeholder="0.00"
                                    v-model="form.price_buy" />
                         </div>
+                        <div class="text-red-500 text-center"
+                             v-if="form.errors.price_buy">{{ __(form.errors.price_buy) }}</div>
 
                     </div>
                 </div>
@@ -86,6 +93,8 @@ const form = useForm(dataForm);
                                class="form-control"
                                placeholder="F001"
                                v-model="form.fic_cod" />
+                        <div class="text-red-500 text-center"
+                             v-if="form.errors.fic_cod">{{ __(form.errors.fic_cod) }}</div>
 
                     </div>
                     <div class="col">
@@ -95,6 +104,8 @@ const form = useForm(dataForm);
                                class="form-control"
                                placeholder="es. manutenzione annuale"
                                v-model="form.name_customer_view" />
+                        <div class="text-red-500 text-center"
+                             v-if="form.errors.name_customer_view">{{ __(form.errors.name_customer_view) }}</div>
 
                     </div>
                 </div>

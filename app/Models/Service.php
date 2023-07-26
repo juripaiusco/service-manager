@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    protected $guarded = [];
+
     use HasFactory;
 
     public function customersServicesDetails()
