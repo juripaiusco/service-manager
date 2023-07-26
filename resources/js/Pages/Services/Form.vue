@@ -163,10 +163,13 @@ const form = useForm(dataForm);
                 </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="customer in customers">
+                    <tr v-for="(customer, index) in customers">
                         <td>
                             {{ customer.company }}
-<!--                            {{ customer.services_details }}-->
+                            <br>
+                            <span class="text-xs">
+                                {{ customer.name }} - {{ customer.email }}
+                            </span>
                         </td>
                         <td class="text-right !text-green-600">
                             {{ customer.customer_total_sell_notax === 0 ? '-' : __currency(customer.customer_total_sell_notax, 'EUR') }}
