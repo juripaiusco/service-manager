@@ -224,7 +224,7 @@ function collapse(indexSelected: any)
                             <td class="text-right">
 
                                 <Link class="btn w-[48px] min-h-[48px] !pt-[11px] !pl-[11px] btn-dark"
-                                      href="#">
+                                      :href="route('customer.edit', customer.id)">
 
                                     <svg class="w-6 h-6"
                                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
