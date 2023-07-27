@@ -186,12 +186,14 @@ class Customer extends Controller
      */
     public function edit(string $id)
     {
-        $data = \App\Models\Customer::find($id);
+        $data = \App\Models\Customer::with('customerService')
+            ->find($id);
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
 
         return Inertia::render('Customers/Form', [
             'data' => $data,
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
 
