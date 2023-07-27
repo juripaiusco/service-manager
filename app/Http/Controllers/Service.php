@@ -270,11 +270,11 @@ class Service extends Controller
         $customers = $customers->with(['customerService.detailsService' => function ($q) use ($id) {
             $q->where('service_id', $id);
         }]);
-        $customers = $customers->with(['servicesDetails.service' => function ($q) use ($id) {
+        $customers = $customers->with(['customerServiceDetail.service' => function ($q) use ($id) {
             $q->where('id', $id);
         }]);
         $customers = $customers->withSum([
-            'servicesDetails AS customer_total_sell_notax' => function ($q) use ($id) {
+            'customerServiceDetail AS customer_total_sell_notax' => function ($q) use ($id) {
                 $q->where('service_id', $id);
             }
         ], 'price_sell');
