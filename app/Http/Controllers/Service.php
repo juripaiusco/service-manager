@@ -188,19 +188,19 @@ class Service extends Controller
         // Creo un oggetto di dati vuoto
         $columns = Schema::getColumnListing('services');
 
-        $customers_array = array();
-        foreach ($columns as $customers_field) {
-            $customers_array[$customers_field] = '';
+        $data = array();
+        foreach ($columns as $field) {
+            $data[$field] = '';
         }
 
-        unset($customers_array['id']);
-        unset($customers_array['deleted_at']);
-        unset($customers_array['created_at']);
-        unset($customers_array['updated_at']);
+        unset($data['id']);
+        unset($data['deleted_at']);
+        unset($data['created_at']);
+        unset($data['updated_at']);
 
-        $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
+        $data['saveRedirect'] = Redirect::back()->getTargetUrl();
 
-        $data = json_decode(json_encode($customers_array), true);
+        $data = json_decode(json_encode($data), true);
 
         return Inertia::render('Services/Form', [
             'data' => $data
