@@ -56,7 +56,7 @@ class Customer extends Controller
             $data->where(function ($q) use ($request_search_array) {
 
                 foreach ($request_search_array as $field) {
-                    $q->orWhere($field, 'like', '%' . request('s') . '%');
+                    $q->orWhere('customers.' . $field, 'like', '%' . request('s') . '%');
                 }
 
             });
