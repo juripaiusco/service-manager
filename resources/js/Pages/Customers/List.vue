@@ -65,13 +65,13 @@ defineProps({
                             field: 'company',
                             fnc: function (d) {
 
-                                let html = '';
-                                html += d.company;
-                                html += '<br><span class=\'text-xs\'>Venduti ';
-                                html += '<span class=\'font-semibold\'>' + d.email + '</span>';
-                                html += '</span>';
+                                let html = ''
+                                html += d.company
+                                html += '<br><span class=\'text-xs\'>Venduti '
+                                html += '<span class=\'font-semibold\'>' + d.email + '</span>'
+                                html += '</span>'
 
-                                return html;
+                                return html
 
                             }
                         }, {
@@ -100,16 +100,16 @@ defineProps({
                             field: 'profit',
                             fnc: function (d) {
 
-                                let html = '';
+                                let html = ''
 
-                                html += d.profit > 0 ? __currency(d.profit, 'EUR') : '-';
-                                html += '<br>';
-                                html += '<span class=\'font-normal text-xs\'>';
-                                html += 'R. ';
-                                html += parseFloat((d.incoming - d.outcoming) / d.outcoming * 100).toFixed(2);
-                                html += '</span>';
+                                html += d.profit > 0 ? __currency(d.profit, 'EUR') : '-'
+                                html += '<br>'
+                                html += '<span class=\'font-normal text-xs\'>'
+                                html += 'R. '
+                                html += parseFloat((d.incoming - d.outcoming) / d.outcoming * 100).toFixed(2)
+                                html += '</span>'
 
-                                return html;
+                                return html
 
                             }
                         }, {
@@ -119,25 +119,25 @@ defineProps({
                             order: false,
                             fnc: function (d) {
 
-                                let html = '';
-                                let percentage = parseFloat(d.profit / d.services_total_profit * 100).toFixed(2);
+                                let html = ''
+                                let percentage = parseFloat(d.profit / d.services_total_profit * 100).toFixed(2)
 
                                 if (percentage < 0)
                                 {
-                                    html += '<div class=\'text-xs text-red-600\'>';
+                                    html += '<div class=\'text-xs text-red-600\'>'
                                 } else {
-                                    html += '<div class=\'text-xs\'>';
+                                    html += '<div class=\'text-xs\'>'
                                 }
-                                html += percentage;
-                                html += '%</div>';
+                                html += percentage
+                                html += '%</div>'
 
                                 if (percentage >= 0) {
-                                    html += '<div class=\'progress mt-2 m-auto w-[65%] !h-[6px] !bg-sky-100 border border-sky-900\'>';
-                                    html += '<div class=\'progress-bar !bg-sky-900\' style=\'width: ' + percentage + '%;\'></div>';
-                                    html += '</div>';
+                                    html += '<div class=\'progress mt-2 m-auto w-[65%] !h-[6px] !bg-sky-100 border border-sky-900\'>'
+                                    html += '<div class=\'progress-bar !bg-sky-900\' style=\'width: ' + percentage + '%\'></div>'
+                                    html += '</div>'
                                 }
 
-                                return html;
+                                return html
 
                             }
                         }, {
