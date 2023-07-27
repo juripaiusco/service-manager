@@ -41,6 +41,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/service/update/{id}', [\App\Http\Controllers\Service::class, 'update'])->name('service.update');
     Route::get('/service/destroy/{id}', [\App\Http\Controllers\Service::class, 'destroy'])->name('service.destroy');
 
+    Route::get('/customer', [\App\Http\Controllers\Customer::class, 'index'])->name('customer.index');
+    Route::get('/customer/create', [\App\Http\Controllers\Customer::class, 'create'])->name('customer.create');
+    Route::post('/customer/store', [\App\Http\Controllers\Customer::class, 'store'])->name('customer.store');
+    Route::get('/customer/edit/{id}', [\App\Http\Controllers\Customer::class, 'edit'])->name('customer.edit');
+    Route::post('/customer/update/{id}', [\App\Http\Controllers\Customer::class, 'update'])->name('customer.update');
+    Route::get('/customer/destroy/{id}', [\App\Http\Controllers\Customer::class, 'destroy'])->name('customer.destroy');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

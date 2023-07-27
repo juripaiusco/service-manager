@@ -42,11 +42,13 @@ const showingNavigationDropdown = ref(false);
                                     Servizi
                                 </NavLink>
 
-<!--                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                <NavLink class="w-[100px] text-center"
+                                         :href="route('customer.index')"
+                                         :active="route().current().search('customer') === 0 ? true : false">
                                     Clienti
                                 </NavLink>
 
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                <!-- <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Fatturato
                                 </NavLink>
 
