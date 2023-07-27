@@ -51,19 +51,6 @@ const submit = () => {
                     <InputLabel for="email" value="Email" />
                 </div>
 
-                <!-- <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full form-control"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                    placeholder="name@example.com"
-                /> -->
-
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
@@ -81,17 +68,6 @@ const submit = () => {
                     />
                     <InputLabel for="password" value="Password" />
                 </div>
-
-                <!-- <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full form-control"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                /> -->
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
