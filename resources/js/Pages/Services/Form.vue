@@ -171,33 +171,35 @@ function collapse(indexSelected: any)
 
             </form>
 
-            <hr class="m-10">
+            <div v-if="form.id">
 
-            <h2 class="text-3xl mb-2">Clienti che utilizzano questo servizio</h2>
+                <hr class="m-10">
+                
+                <h2 class="text-3xl mb-2">Clienti che utilizzano questo servizio</h2>
 
-            <br>
+                <br>
 
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th class="text-left">
-                        Cliente
-                    </th>
-                    <th class="text-right w-[120px]">
-                        Entrate
-                    </th>
-                    <th class="text-right w-[120px]">
-                        Uscite
-                    </th>
-                    <th class="text-right w-[120px]">
-                        Utile
-                    </th>
-                    <th class="text-right w-[80px]">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="text-left">
+                            Cliente
+                        </th>
+                        <th class="text-right w-[120px]">
+                            Entrate
+                        </th>
+                        <th class="text-right w-[120px]">
+                            Uscite
+                        </th>
+                        <th class="text-right w-[120px]">
+                            Utile
+                        </th>
+                        <th class="text-right w-[80px]">
 
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
                     <template v-for="(customer, index) in customers">
 
@@ -321,8 +323,10 @@ function collapse(indexSelected: any)
 
                     </template>
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+
+            </div>
 
         </ApplicationContainer>
 
