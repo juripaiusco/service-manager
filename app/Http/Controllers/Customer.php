@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
 class Customer extends Controller
@@ -127,7 +129,26 @@ class Customer extends Controller
      */
     public function create()
     {
-        //
+        // Creo un oggetto di dati vuoto
+        $columns = Schema::getColumnListing('customers');
+
+        $data = array();
+        foreach ($columns as $field) {
+            $data[$field] = '';
+        }
+
+        unset($data['id']);
+        unset($data['deleted_at']);
+        unset($data['created_at']);
+        unset($data['updated_at']);
+
+        $data['saveRedirect'] = Redirect::back()->getTargetUrl();
+
+        $data = json_decode(json_encode($data), true);
+
+        return Inertia::render('Customers/Form', [
+            'data' => $data
+        ]);
     }
 
     /**
@@ -151,7 +172,13 @@ class Customer extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = \App\Models\Customer::find($id);
+
+        $data->saveRedirect = Redirect::back()->getTargetUrl();
+
+        return Inertia::render('Customers/Form', [
+            'data' => $data,
+        ]);
     }
 
     /**
