@@ -46,12 +46,12 @@ const form = useForm(dataForm);
                 form.id ? form.id : ''
                 ))">
 
+                <h2 class="text-3xl mb-2">Dati cliente</h2>
+
+                <br>
+
                 <div class="row">
                     <div class="col">
-
-                        <h2 class="text-3xl mb-2">Dati cliente</h2>
-
-                        <br>
 
                         <label class="form-label">Azienda</label>
                         <input type="text"
@@ -61,34 +61,8 @@ const form = useForm(dataForm);
                         <div class="text-red-500 text-center"
                              v-if="form.errors.company">{{ __(form.errors.company) }}</div>
 
-                        <br>
-
-                        <div class="row">
-                            <div class="col">
-
-                                <label class="form-label">Referente</label>
-                                <input type="text"
-                                       class="form-control"
-                                       placeholder="Mario"
-                                       v-model="form.name" />
-                                <div class="text-red-500 text-center"
-                                     v-if="form.errors.name">{{ __(form.errors.name) }}</div>
-
-                            </div>
-                            <div class="col">
-
-                                <label class="form-label">Email</label>
-                                <input type="text"
-                                       class="form-control"
-                                       placeholder="info@pitturerossi.it"
-                                       v-model="form.email" />
-                                <div class="text-red-500 text-center"
-                                     v-if="form.errors.email">{{ __(form.errors.email) }}</div>
-
-                            </div>
-                        </div>
-
-                        <br>
+                    </div>
+                    <div class="col">
 
                         <label class="form-label">P.IVA</label>
                         <input type="text"
@@ -99,67 +73,106 @@ const form = useForm(dataForm);
                              v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
 
                     </div>
+                </div>
+
+                <br>
+
+                <div class="row">
                     <div class="col">
 
-                        <h2 class="text-3xl mb-5">Servizi in scadenza</h2>
+                        <label class="form-label">Referente</label>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Mario"
+                               v-model="form.name" />
+                        <div class="text-red-500 text-center"
+                             v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
-                        <Table class=""
-                               :data="{
-                                    filters: filters,
-                                    tblName: 'customer_service',
-                                    routeSearch: 'customer.index',
-                                    data: data!.customer_service,
-                                    structure: [{
-                                        class: 'text-left',
-                                        label: 'Nome',
-                                        field: 'name',
-                                        fnc: function (d) {
+                    </div>
+                    <div class="col">
 
-                                            let html = ''
-
-                                            html += d.name
-                                            html += '<br><span class=\'text-xs\'>'
-                                            html += d.reference
-                                            html += '</span>'
-
-                                            return html
-
-                                        }
-                                    }, {
-                                        class: 'text-center',
-                                        label: 'Scadenza',
-                                        field: 'expiration',
-                                        fnc: function (d) {
-
-                                            let html = ''
-
-                                            html += __date(d.expiration, 'day')
-
-                                            return html
-
-                                        }
-                                    }, {
-                                        class: 'w-[1%]',
-                                        classBtn: 'ml-[8px] btn-dark',
-                                        btnEdit: true,
-                                        route: 'customer.edit'
-                                    }, {
-                                        class: 'w-[1%]',
-                                        classBtn: 'mr-[8px] btn-dark',
-                                        btnDel: true,
-                                        route: 'customer.destroy'
-                                    }],
-                                }"
-                               @openModal="(data: any, route: any) => {
-                                   modalData = data;
-                                   modalData.confirmURL = route;
-                                   modalData.confirmBtnClass = 'btn-danger';
-                                   modalData.confirmBtnText = 'Sì';
-                                   modalShow = true;
-                               }" />
+                        <label class="form-label">Email</label>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="info@pitturerossi.it"
+                               v-model="form.email" />
+                        <div class="text-red-500 text-center"
+                             v-if="form.errors.email">{{ __(form.errors.email) }}</div>
 
                     </div>
                 </div>
+
+                <hr class="m-10">
+
+                <h2 class="text-3xl mb-5">Servizi in scadenza</h2>
+
+                <Table class=""
+                       :data="{
+                            filters: filters,
+                            tblName: 'customer_service',
+                            routeSearch: 'customer.index',
+                            data: data!.customer_service,
+                            structure: [{
+                                class: 'text-center w-[140px]',
+                                label: 'Scadenza',
+                                field: 'expiration',
+                                fnc: function (d) {
+
+                                    let html = ''
+
+                                    html += __date(d.expiration, 'day')
+
+                                    return html
+
+                                }
+                            }, {
+                                class: 'text-left',
+                                label: 'Nome',
+                                field: 'name',
+                                fnc: function (d) {
+
+                                    let html = ''
+
+                                    html += d.name
+                                    html += '<br><span class=\'text-xs\'>'
+                                    html += d.reference
+                                    html += '</span>'
+
+                                    return html
+
+                                }
+                            }, {
+                                class: 'text-right w-[140px]',
+                                label: 'Entrate',
+                                field: 'name',
+                                fnc: function (d) {
+
+                                    let html = ''
+
+                                    html += d.name
+
+                                    return html
+
+                                }
+                            }, {
+                                class: 'w-[1%]',
+                                classBtn: 'ml-[8px] btn-dark',
+                                btnEdit: true,
+                                route: 'customer.edit'
+                            }, {
+                                class: 'w-[1%]',
+                                classBtn: 'mr-[8px] btn-dark',
+                                btnDel: true,
+                                route: 'customer.destroy'
+                            }],
+                        }"
+                @openModal="(data: any, route: any) => {
+                   modalData = data;
+                   modalData.confirmURL = route;
+                   modalData.confirmBtnClass = 'btn-danger';
+                   modalData.confirmBtnText = 'Sì';
+                   modalShow = true;
+               }" />
 
                 <br>
 

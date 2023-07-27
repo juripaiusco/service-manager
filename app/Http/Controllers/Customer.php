@@ -187,9 +187,14 @@ class Customer extends Controller
     public function edit(string $id)
     {
         $data = \App\Models\Customer::with('customerService')
+            ->with('customerService.details')
+            ->with('customerService.details.service')
+            ->withSum('customerServiceDetail AS customer_total_sell_notax', 'price_sell')
             ->find($id);
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
+
+//        dd($data);
 
         return Inertia::render('Customers/Form', [
             'data' => $data,
