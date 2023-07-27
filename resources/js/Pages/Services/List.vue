@@ -149,12 +149,14 @@ defineProps({
                             }
                         }, {
                             class: 'w-[1%]',
-                            classBtn: 'w-[48px] min-h-[48px] !pt-[14px] !pl-[15px] ml-[8px] btn-dark',
+                            // classBtn: 'w-[48px] min-h-[48px] !pt-[14px] !pl-[15px] ml-[8px] btn-dark',
+                            classBtn: 'ml-[8px] btn-dark',
                             btnEdit: true,
                             route: 'service.edit'
                         }, {
                             class: 'w-[1%]',
-                            classBtn: 'w-[48px] min-h-[48px] !pt-[5px] !pl-[15px] mr-[8px] btn-dark',
+                            // classBtn: 'w-[48px] min-h-[48px] !pt-[5px] !pl-[15px] mr-[8px] btn-dark',
+                            classBtn: 'mr-[8px] btn-dark',
                             btnDel: true,
                             route: 'service.destroy'
                         }],
