@@ -7,6 +7,7 @@ import {__} from "../../ComponentsExt/Translations";
 import {__currency} from "@/ComponentsExt/Currency";
 import {__date} from "@/ComponentsExt/Date";
 import {Collapse} from "vue-collapsed";
+import {Link} from "@inertiajs/vue3";
 
 const props = defineProps({
     data: Object,
@@ -191,7 +192,7 @@ function collapse(indexSelected: any)
                     <th class="text-right w-[120px]">
                         Utile
                     </th>
-                    <th class="text-right w-[120px]">
+                    <th class="text-right w-[80px]">
 
                     </th>
                 </tr>
@@ -212,7 +213,7 @@ function collapse(indexSelected: any)
                                 {{ customer.customer_total_sell_notax === 0 ? '-' : __currency(customer.customer_total_sell_notax, 'EUR') }}
                             </td>
                             <td @click="collapse(index)" class="text-right !text-red-600">
-                                {{ __currency(customer.customer_total_buy_notax, 'EUR') }}
+                                {{ customer.customer_total_buy_notax === 0 ? '-' : __currency(customer.customer_total_buy_notax, 'EUR') }}
                             </td>
                             <td @click="collapse(index)" class="text-right font-semibold"
                                 :class="{
@@ -220,7 +221,19 @@ function collapse(indexSelected: any)
                             }">
                                 {{ __currency(customer.customer_total_sell_notax - customer.customer_total_buy_notax, 'EUR') }}
                             </td>
-                            <td class="text-right"></td>
+                            <td class="text-right">
+
+                                <Link class="btn w-[48px] min-h-[48px] !pt-[11px] !pl-[11px] btn-dark"
+                                      href="#">
+
+                                    <svg class="w-6 h-6"
+                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+
+                                </Link>
+
+                            </td>
                         </tr>
                         <tr class="!p-0 !m-0 no-hover customer-body"
                             :id="'customer-body-' + index">
@@ -233,36 +246,68 @@ function collapse(indexSelected: any)
 
                                         <template v-for="service in customer.customer_service">
 
-                                            <tr v-if="service.details.length > 0">
+                                            <tr v-for="service_detail in service.details">
                                                 <td class="text-center w-[140px]">
 
-                                                    <div class="text-sm !bg-transparent !border-0">
-                                                        scadenza
+                                                    <div class="text-sm font-semibold !bg-transparent !border-0">
+                                                        <span class="font-normal text-xs">
+                                                            scadenza
+                                                        </span>
                                                         <br>
-                                                        {{ __date(service.expiration, 'day') }}
+                                                        <span class="">
+                                                            {{ __date(service.expiration, 'day') }}
+                                                        </span>
                                                     </div>
 
                                                 </td>
                                                 <td>
-                                                    {{ service.name }} {{ service.reference }}
-                                                    <br>
-                                                    {{ service.details[0]['reference'] }}
-
-                                                    {{ service.details.length }}
-
-                                                </td>
-                                                <td class="text-right text-sm w-[120px] p-[8px]">
-
-                                                    {{ __currency(service.details[0]['price_sell'], 'EUR') }}
+                                                    <div class="text-sm font-semibold !bg-transparent !border-0">
+                                                        <span class="font-normal text-xs">
+                                                            {{ service.name }} {{ service.reference }}
+                                                        </span>
+                                                        <br>
+                                                        {{ service_detail.reference }}
+                                                    </div>
 
                                                 </td>
                                                 <td class="text-right text-sm w-[120px] p-[8px]">
 
-                                                    {{ __currency(service.details_service[0]['price_buy'], 'EUR') }}
+                                                    {{ service_detail.price_sell === 0 ? '-' : __currency(service_detail.price_sell, 'EUR') }}
 
                                                 </td>
-                                                <td class="text-right text-sm w-[120px] p-[8px]"></td>
-                                                <td class="text-right text-sm w-[120px] p-[8px]"></td>
+                                                <td class="text-right text-sm w-[120px] p-[8px]">
+
+                                                    <div v-if="service.details_service[0]['is_share'] === 1"
+                                                         class="!bg-transparent !border-0 !p-0 !m-0">
+                                                        {{ __currency(customer.customer_single_buy_share_notax, 'EUR') }}
+                                                    </div>
+
+                                                    <div v-if="!service.details_service[0]['is_share']"
+                                                         class="!bg-transparent !border-0 !p-0 !m-0">
+                                                        {{ __currency(service.details_service[0]['price_buy'], 'EUR') }}
+                                                    </div>
+
+                                                </td>
+                                                <td class="text-right text-sm w-[120px] p-[8px]">
+
+                                                    <div v-if="service.details_service[0]['is_share'] === 1"
+                                                         class="!bg-transparent !border-0 !p-0 !m-0"
+                                                         :class="{
+                                                            '!text-red-600': (service_detail.price_sell - customer.customer_single_buy_share_notax) < 0
+                                                         }">
+                                                        {{ __currency(service_detail.price_sell - customer.customer_single_buy_share_notax, 'EUR') }}
+                                                    </div>
+
+                                                    <div v-if="!service.details_service[0]['is_share']"
+                                                         class="!bg-transparent !border-0 !p-0 !m-0"
+                                                         :class="{
+                                                            '!text-red-600': (service_detail.price_sell - service.details_service[0]['price_buy']) < 0
+                                                         }">
+                                                        {{ __currency(service_detail.price_sell - service.details_service[0]['price_buy'], 'EUR') }}
+                                                    </div>
+
+                                                </td>
+                                                <td class="text-right text-sm w-[80px] p-[8px]"></td>
                                             </tr>
 
                                         </template>

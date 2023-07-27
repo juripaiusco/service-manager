@@ -303,6 +303,22 @@ class Service extends Controller
 
                 ) AS customer_total_buy_notax'
         ));
+        $customers = $customers->addSelect(DB::raw(
+            'IF (' . env('DB_PREFIX') . 'services.is_share = 1,
+
+                    (price_buy / (
+                    SELECT
+                      count(*)
+                    FROM
+                      `' . env('DB_PREFIX') . 'customers_services_details`
+                    WHERE
+                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
+                    )),
+
+                    ' . env('DB_PREFIX') . 'services.price_buy
+
+                ) AS customer_single_buy_share_notax'
+        ));
         /*$customers = $customers->select([
             'customers.id',
             'customers.piva',
