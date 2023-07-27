@@ -156,7 +156,21 @@ class Customer extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'company'   => ['required'],
+            'email'     => ['required'],
+            'name'      => ['required'],
+            'piva'      => ['required'],
+        ]);
+
+        $saveRedirect = $request['saveRedirect'];
+        unset($request['saveRedirect']);
+
+        $customer = new \App\Models\Customer();
+        $customer->fill($request->all());
+        $customer->save();
+
+        return Redirect::to($saveRedirect);
     }
 
     /**
@@ -186,7 +200,23 @@ class Customer extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'company'   => ['required'],
+            'email'     => ['required'],
+            'name'      => ['required'],
+            'piva'      => ['required'],
+        ]);
+
+        $saveRedirect = $request['saveRedirect'];
+        unset($request['saveRedirect']);
+        unset($request['created_at']);
+        unset($request['updated_at']);
+
+        $customer = \App\Models\Customer::find($id);
+        $customer->fill($request->all());
+        $customer->save();
+
+        return Redirect::to($saveRedirect);
     }
 
     /**
@@ -194,6 +224,8 @@ class Customer extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        \App\Models\Service::destroy($id);
+
+        return \redirect()->back();
     }
 }
