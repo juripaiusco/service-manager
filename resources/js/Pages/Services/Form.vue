@@ -174,7 +174,7 @@ function collapse(indexSelected: any)
             <div v-if="form.id">
 
                 <hr class="m-10">
-                
+
                 <h2 class="text-3xl mb-2">Clienti che utilizzano questo servizio</h2>
 
                 <br>

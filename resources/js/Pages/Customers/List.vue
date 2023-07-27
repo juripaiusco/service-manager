@@ -107,7 +107,7 @@ defineProps({
                                 html += '<span class=\'font-normal text-xs\'>'
                                 html += 'R. '
                                 html += parseFloat((d.incoming - d.outcoming) / d.outcoming * 100).toFixed(2)
-                                html += '</span>'
+                                html += '%</span>'
 
                                 return html
 
