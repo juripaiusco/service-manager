@@ -48,7 +48,7 @@ const submit = () => {
                         autocomplete="username"
                         placeholder="name@example.com"
                     />
-                    <InputLabel for="email" value="Email" />
+                    <InputLabel for="email" value="Email" class="!text-base !text-gray-600" />
                 </div>
 
                 <InputError class="mt-2" :message="form.errors.email" />
@@ -66,7 +66,7 @@ const submit = () => {
                         autocomplete="current-password"
                         placeholder="password"
                     />
-                    <InputLabel for="password" value="Password" />
+                    <InputLabel for="password" value="Password" class="!text-base !text-gray-600" />
                 </div>
 
                 <InputError class="mt-2" :message="form.errors.password" />
