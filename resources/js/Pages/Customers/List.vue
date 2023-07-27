@@ -78,20 +78,20 @@ defineProps({
                             class: 'text-right !align-top w-[10%]',
                             classData: '!text-green-600',
                             label: 'Entrate',
-                            field: 'price_sell',
+                            field: 'incoming',
                             fnc: function (d) {
 
-                                return d.price_sell > 0 ? __currency(d.price_sell, 'EUR') : '-'
+                                return d.incoming > 0 ? __currency(d.incoming, 'EUR') : '-'
 
                             }
                         }, {
                             class: 'text-right !align-top w-[10%]',
                             classData: '!text-red-600',
                             label: 'Uscite',
-                            field: 'price_buy',
+                            field: 'outcoming',
                             fnc: function (d) {
 
-                                return d.price_buy > 0 ? __currency(d.price_buy, 'EUR') : '-'
+                                return d.outcoming > 0 ? __currency(d.outcoming, 'EUR') : '-'
 
                             }
                         }, {
@@ -100,27 +100,41 @@ defineProps({
                             field: 'profit',
                             fnc: function (d) {
 
-                                return d.profit > 0 ? __currency(d.profit, 'EUR') : '-'
+                                let html = '';
+
+                                html += d.profit > 0 ? __currency(d.profit, 'EUR') : '-';
+                                html += '<br>';
+                                html += '<span class=\'font-normal text-xs\'>';
+                                html += 'R. ';
+                                html += parseFloat((d.incoming - d.outcoming) / d.outcoming * 100).toFixed(2);
+                                html += '</span>';
+
+                                return html;
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%]',
+                            class: 'text-center !align-middle w-[10%]',
                             label: '% Ut.Tot.',
                             field: 'total_customer_profit',
+                            order: false,
                             fnc: function (d) {
 
                                 let html = '';
-                                html += d.total_customer_profit > 0 ? __currency(d.total_customer_profit, 'EUR') : '-';
-                                html += '<br>';
+                                let percentage = parseFloat(d.profit / d.services_total_profit * 100).toFixed(2);
 
-                                if (d.total_customer_profit > 0) {
+                                if (percentage < 0)
+                                {
+                                    html += '<div class=\'text-xs text-red-600\'>';
+                                } else {
+                                    html += '<div class=\'text-xs\'>';
+                                }
+                                html += percentage;
+                                html += '%</div>';
 
-                                    html += '<span class=\'text-xs\'>';
-                                    html += parseFloat(
-                                        parseFloat(d.total_customer_profit) / parseFloat(d.customers_total_profit) * 100
-                                    ).toFixed(2);
-                                    html += '%</span>';
-
+                                if (percentage >= 0) {
+                                    html += '<div class=\'progress mt-2 m-auto w-[65%] !h-[6px] !bg-sky-100 border border-sky-900\'>';
+                                    html += '<div class=\'progress-bar !bg-sky-900\' style=\'width: ' + percentage + '%;\'></div>';
+                                    html += '</div>';
                                 }
 
                                 return html;
