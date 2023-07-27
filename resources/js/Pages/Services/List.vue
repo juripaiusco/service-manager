@@ -79,7 +79,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-center !align-top w-[5%]',
+                            class: 'text-center !align-middle w-[5%]',
                             label: 'Share',
                             field: 'is_share',
                             fnc: function (d) {
