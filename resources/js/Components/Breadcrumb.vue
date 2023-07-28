@@ -18,6 +18,7 @@ defineProps({
                 }">
 
                 {{ breadcrumb }}
+                <!-- {{ breadcrumb.length > 40 ? breadcrumb.substring(0, 40) + ' ...' : breadcrumb }} -->
 
             </li>
         </ol>
