@@ -48,6 +48,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/customer/update/{id}', [\App\Http\Controllers\Customer::class, 'update'])->name('customer.update');
     Route::get('/customer/destroy/{id}', [\App\Http\Controllers\Customer::class, 'destroy'])->name('customer.destroy');
 
+    Route::get('/customer/service_exp/create', [\App\Http\Controllers\CustomerServiceExpiration::class, 'create'])->name('customer.serviceExpiration.create');
+    Route::post('/customer/service_exp/store', [\App\Http\Controllers\CustomerServiceExpiration::class, 'store'])->name('customer.serviceExpiration.store');
+    Route::get('/customer/service_exp/edit/{id}', [\App\Http\Controllers\CustomerServiceExpiration::class, 'edit'])->name('customer.serviceExpiration.edit');
+    Route::post('/customer/service_exp/update/{id}', [\App\Http\Controllers\CustomerServiceExpiration::class, 'update'])->name('customer.serviceExpiration.update');
+    Route::get('/customer/service_exp/destroy/{id}', [\App\Http\Controllers\CustomerServiceExpiration::class, 'destroy'])->name('customer.serviceExpiration.destroy');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

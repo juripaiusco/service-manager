@@ -176,12 +176,12 @@ const form = useForm(dataForm);
                                 class: 'w-[1%]',
                                 classBtn: 'ml-[8px] btn-dark',
                                 btnEdit: true,
-                                route: 'customer.edit'
+                                route: 'customer.serviceExpiration.edit'
                             }, {
                                 class: 'w-[1%]',
                                 classBtn: 'mr-[8px] btn-dark',
                                 btnDel: true,
-                                route: 'customer.destroy'
+                                route: 'customer.serviceExpiration.destroy'
                             }],
                         }"
                            @openModal="(data: any, route: any) => {
