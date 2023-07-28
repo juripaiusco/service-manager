@@ -270,7 +270,7 @@ const form = useForm(dataForm);
 
                     </div>
 
-                    <div class="tab-pane fade show active pt-4"
+                    <div class="tab-pane fade show pt-4"
                          id="nav-customer"
                          role="tabpanel"
                          aria-labelledby="nav-customer-tab"
