@@ -4,7 +4,6 @@ import {Head, useForm, usePage} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {__} from "@/ComponentsExt/Translations";
-import {__date} from "@/ComponentsExt/Date";
 import {__currency} from "@/ComponentsExt/Currency";
 import TableSearch from "@/Components/Table/TableSearch.vue";
 import Table from "@/Components/Table/Table.vue";
@@ -49,251 +48,297 @@ const form = useForm(dataForm);
                 form.id ? form.id : ''
                 ))">
 
-                <h2 class="text-3xl mb-2">Anagrafica cliente scadenza servizio</h2>
-                <span class="text-sm">
-                    Qui puoi inserire dati alternativi ai dati cliente,
-                    per esempio una seconda azienda del cliente.
-                </span>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
 
-                <br><br>
+                        <button class="w-[180px] nav-link active"
+                                id="nav-expiration-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#nav-expiration"
+                                type="button"
+                                role="tab"
+                                aria-controls="nav-expiration"
+                                aria-selected="true">Scadenza servizio</button>
 
-                <div class="row">
-                    <div class="col">
-
-                        <label class="form-label">Azienda</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="es. Pitture Rossi Srl"
-                               v-model="form.company" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.company">{{ __(form.errors.company) }}</div>
-
+                        <button class="w-[180px] nav-link"
+                                id="nav-customer-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#nav-customer"
+                                type="button"
+                                role="tab"
+                                aria-controls="nav-customer"
+                                aria-selected="false">Anagrafica cliente</button>
                     </div>
-                    <div class="col">
+                </nav>
 
-                        <label class="form-label">P.IVA</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="123456789"
-                               v-model="form.piva" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
+                <div class="tab-content" id="nav-tabContent">
 
-                    </div>
-                </div>
+                    <div class="tab-pane fade show active pt-4"
+                         id="nav-expiration"
+                         role="tabpanel"
+                         aria-labelledby="nav-expiration-tab"
+                         tabindex="0">
 
-                <br>
+                        <h2 class="text-3xl mb-2 mt-2">Dettagli servizio in scadenza</h2>
+                        <span class="text-sm">
+                            In questa sezione puoi creare il tuo pacchetto scadenza,
+                            associando i servizi desiderati.
+                        </span>
 
-                <div class="row">
-                    <div class="col">
+                        <br><br>
 
-                        <label class="form-label">Referente</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Mario"
-                               v-model="form.customer_name" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.customer_name">{{ __(form.errors.customer_name) }}</div>
+                        <div class="row">
+                            <div class="col-5">
 
-                    </div>
-                    <div class="col">
+                                <label class="form-label">Nome servizio in scadenza</label>
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Mario"
+                                       v-model="form.name" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
-                        <label class="form-label">Email</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="info@pitturerossi.it"
-                               v-model="form.email" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.email">{{ __(form.errors.email) }}</div>
+                            </div>
+                            <div class="col">
 
-                    </div>
-                </div>
+                                <label class="form-label">Riferimento</label>
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="info@pitturerossi.it"
+                                       v-model="form.reference" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.reference">{{ __(form.errors.reference) }}</div>
 
-                <br>
+                            </div>
+                            <div class="col-3">
 
-                <h2 class="text-3xl mb-2 mt-3">Dati scadenza servizio</h2>
-
-                <br>
-
-                <div class="row">
-                    <div class="col-5">
-
-                        <label class="form-label">Nome servizio in scadenza</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Mario"
-                               v-model="form.name" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.name">{{ __(form.errors.name) }}</div>
-
-                    </div>
-                    <div class="col">
-
-                        <label class="form-label">Riferimento</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="info@pitturerossi.it"
-                               v-model="form.reference" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.reference">{{ __(form.errors.reference) }}</div>
-
-                    </div>
-                    <div class="col-3">
-
-                        <label class="form-label">Data scadenza</label>
-                        <input type="text"
-                               class="form-control text-center"
-                               placeholder="info@pitturerossi.it"
-                               v-model="form.expiration" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.expiration">{{ form.errors.expiration }}</div>
-
-                    </div>
-                </div>
-
-                <br>
-
-                <div class="row">
-                    <div class="col-5">
-
-                        <div class="card !border-gray-200">
-                            <div class="card-body">
-
-                                <h2 class="text-3xl mb-2">
-                                    Lista servizi
-                                </h2>
-
-                                <br>
-
-                                <TableSearch placeholder="Cerca..."
-                                             class="mb-4"
-                                             :route-search="form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create'"
-                                             :filters="filters" />
-
-                                <Table class="table table-sm"
-                                       :data="{
-                                            filters: filters,
-                                            routeSearch: form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create',
-                                            data: services.data,
-                                            structure: [{
-                                                class: 'text-left',
-                                                label: 'Nome',
-                                                field: 'name',
-                                            }, {
-                                                class: 'text-right w-[10%]',
-                                                // classData: 'text-sm',
-                                                label: 'Costo',
-                                                field: 'price_sell',
-                                                order: false,
-                                                fnc: function (d) {
-
-                                                    let html = ''
-
-                                                    html += __currency(d.price_sell, 'EUR')
-
-                                                    return html
-                                                }
-                                            }, {
-                                                class: 'w-[1%]',
-                                                btnCustom: true,
-                                                route: form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
-                                                emit: 'serviceAddTo',
-                                                fnc: function (d) {
-
-                                                    let html = '';
-
-                                                    html += '<div class=\'btn btn-primary\'>';
-                                                    html += '<svg class=\'w-3 h-3\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M12 4.5v15m7.5-7.5h-15\' /></svg>';
-                                                    html += '</div>';
-
-                                                    return html;
-                                                }
-                                            }],
-                                        }"
-                                       @serviceAddTo="(data, route) => {
-
-                                           serviceExpActionRoute(route, data, 'add');
-
-                                       }"/>
+                                <label class="form-label">Data scadenza</label>
+                                <input type="text"
+                                       class="form-control text-center"
+                                       placeholder="info@pitturerossi.it"
+                                       v-model="form.expiration" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.expiration">{{ form.errors.expiration }}</div>
 
                             </div>
                         </div>
 
-                    </div>
-                    <div class="col">
+                        <br>
 
-                        <div class="card !border-gray-200">
-                            <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
 
-                                <h2 class="text-3xl mb-2">
-                                    Servizi inseriti nella scadenza
-                                </h2>
+                                <div class="card !border-gray-200">
+                                    <div class="card-body">
 
-                                <br>
+                                        <h2 class="text-3xl mb-2">
+                                            Lista servizi
+                                        </h2>
 
-                                <div v-for="detail in usePage().props.serviceExp" :key="detail.serviceExp_index">
+                                        <br>
 
-                                    <div class="row mb-2">
-                                        <div class="col-5 text-sm pt-1">
+                                        <TableSearch placeholder="Cerca..."
+                                                     class="mb-4"
+                                                     :route-search="form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create'"
+                                                     :filters="filters" />
 
-                                            {{ detail.service === undefined ? detail.name : detail.service.name }}
+                                        <Table class="table table-sm"
+                                               :data="{
+                                                    filters: filters,
+                                                    routeSearch: form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create',
+                                                    data: services.data,
+                                                    structure: [{
+                                                        class: 'text-left',
+                                                        label: 'Nome',
+                                                        field: 'name',
+                                                    }, {
+                                                        class: 'text-right w-[10%]',
+                                                        // classData: 'text-sm',
+                                                        label: 'Costo',
+                                                        field: 'price_sell',
+                                                        order: false,
+                                                        fnc: function (d) {
 
-                                        </div>
-                                        <div class="col-4">
+                                                            let html = ''
 
-                                            <input type="text"
-                                                   class="form-control form-control-sm"
-                                                   placeholder="rif. servizio"
-                                                   :value="detail.reference" />
+                                                            html += __currency(d.price_sell, 'EUR')
 
-                                        </div>
-                                        <div class="col-2">
+                                                            return html
+                                                        }
+                                                    }, {
+                                                        class: 'w-[1%]',
+                                                        btnCustom: true,
+                                                        route: form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
+                                                        emit: 'serviceAddTo',
+                                                        fnc: function (d) {
 
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text">&euro;</span>
-                                                <input type="text"
-                                                       class="form-control form-control-sm text-right"
-                                                       placeholder="0.00"
-                                                       :value="detail.price_sell" />
-                                            </div>
+                                                            let html = '';
 
-                                        </div>
-                                        <div class="col-1">
+                                                            html += '<div class=\'btn btn-primary\'>';
+                                                            html += '<svg class=\'w-3 h-3\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M12 4.5v15m7.5-7.5h-15\' /></svg>';
+                                                            html += '</div>';
 
-                                            <button type="button"
-                                                    class="btn btn-sm w-full btn-secondary"
-                                                    @click="serviceExpActionRoute(
+                                                            return html;
+                                                        }
+                                                    }],
+                                                }"
+                                               @serviceAddTo="(data, route) => {
+
+                                                   serviceExpActionRoute(route, data, 'add');
+
+                                       }"/>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col">
+
+                                <div class="card !border-gray-200">
+                                    <div class="card-body">
+
+                                        <h2 class="text-3xl mb-2">
+                                            Servizi inseriti nella scadenza
+                                        </h2>
+
+                                        <br>
+
+                                        <div v-for="detail in usePage().props.serviceExp" :key="detail.serviceExp_index">
+
+                                            <div class="row mb-2">
+                                                <div class="col-5 text-sm pt-1">
+
+                                                    {{ detail.service === undefined ? detail.name : detail.service.name }}
+
+                                                </div>
+                                                <div class="col-4">
+
+                                                    <input type="text"
+                                                           class="form-control form-control-sm"
+                                                           placeholder="rif. servizio"
+                                                           :value="detail.reference" />
+
+                                                </div>
+                                                <div class="col-2">
+
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-text">&euro;</span>
+                                                        <input type="text"
+                                                               class="form-control form-control-sm text-right"
+                                                               placeholder="0.00"
+                                                               :value="detail.price_sell" />
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-1">
+
+                                                    <button type="button"
+                                                            class="btn btn-sm w-full btn-secondary"
+                                                            @click="serviceExpActionRoute(
                                                         form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
                                                         detail,
                                                         'remove'
                                                     )">
 
-                                                <svg class="w-4 h-4 m-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
-                                                </svg>
+                                                        <svg class="w-4 h-4 m-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                                        </svg>
 
-                                            </button>
+                                                    </button>
+
+                                                </div>
+                                            </div>
 
                                         </div>
+
                                     </div>
+                                </div>
+
+                                <div class="text-right mt-10">
+
+                                    <a href="#"
+                                       onclick="window.history.back(); return false;"
+                                       class="btn btn-secondary w-[100px]">Annulla</a>
+
+                                    <button type="submit"
+                                            class="btn btn-success ml-2 w-[100px]">Salva</button>
 
                                 </div>
 
                             </div>
                         </div>
 
-                        <div class="text-right mt-10">
+                    </div>
 
-                            <a href="#"
-                               onclick="window.history.back(); return false;"
-                               class="btn btn-secondary w-[100px]">Annulla</a>
+                    <div class="tab-pane fade show active pt-4"
+                         id="nav-customer"
+                         role="tabpanel"
+                         aria-labelledby="nav-customer-tab"
+                         tabindex="0">
 
-                            <button type="submit"
-                                    class="btn btn-success ml-2 w-[100px]">Salva</button>
+                        <h2 class="text-3xl mb-2 mt-2">Anagrafica cliente scadenza servizio</h2>
+                        <span class="text-sm">
+                            Qui puoi inserire dati alternativi ai dati cliente,
+                            per esempio una seconda azienda del cliente. In questo modo
+                            il servizio verrà fatturato a questo cliente.
+                        </span>
 
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col">
+
+                                <label class="form-label">Azienda</label>
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="es. Pitture Rossi Srl"
+                                       v-model="form.company" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.company">{{ __(form.errors.company) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <label class="form-label">P.IVA</label>
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="123456789"
+                                       v-model="form.piva" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
+
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col">
+
+                                <label class="form-label">Referente</label>
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Mario"
+                                       v-model="form.customer_name" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.customer_name">{{ __(form.errors.customer_name) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <label class="form-label">Email</label>
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="info@pitturerossi.it"
+                                       v-model="form.email" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.email">{{ __(form.errors.email) }}</div>
+
+                            </div>
                         </div>
 
                     </div>
+
                 </div>
 
             </form>
