@@ -173,7 +173,7 @@ const form = useForm(dataForm);
                                 <Table class="table table-sm"
                                        :data="{
                                             filters: filters,
-                                            // routeSearch: form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create',
+                                            routeSearch: form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create',
                                             data: services.data,
                                             structure: [{
                                                 class: 'text-left',
@@ -184,6 +184,7 @@ const form = useForm(dataForm);
                                                 // classData: 'text-sm',
                                                 label: 'Costo',
                                                 field: 'price_sell',
+                                                order: false,
                                                 fnc: function (d) {
 
                                                     let html = ''
