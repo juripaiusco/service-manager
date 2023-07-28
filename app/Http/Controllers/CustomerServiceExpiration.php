@@ -86,6 +86,10 @@ class CustomerServiceExpiration extends Controller
     {
         if (count($data) > 0 && $request->session()->get('serviceExp') == null) {
 
+            foreach ($data as $k => $d) {
+                $data[$k]->serviceExp_index = $k;
+            }
+
             $request->session()->put('serviceExp', $data);
 
         }
@@ -99,7 +103,7 @@ class CustomerServiceExpiration extends Controller
         if ($request->input('serviceExpAddTo') == true) {
 
             $service = \App\Models\Service::find($request->input('serviceExp_id'));
-            $service->index = $request->session()->get('serviceExp') ? array_key_last($request->session()->get('serviceExp')) + 1 : 0;
+            $service->serviceExp_index = $request->session()->get('serviceExp') ? array_key_last($request->session()->get('serviceExp')) + 1 : 0;
 
             $request->session()->push('serviceExp', $service);
 
@@ -124,7 +128,7 @@ class CustomerServiceExpiration extends Controller
             $serviceExp_array = array_values($serviceExp_array);
 
             foreach ($serviceExp_array as $k => $service) {
-                $serviceExp_array[$k]->index = $k;
+                $serviceExp_array[$k]->serviceExp_index = $k;
             }
 
             $request->session()->put('serviceExp', $serviceExp_array);

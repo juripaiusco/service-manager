@@ -243,7 +243,7 @@ const form = useForm(dataForm);
 
                                             <input type="text"
                                                    class="form-control form-control-sm"
-                                                   placeholder="info@pitturerossi.it"
+                                                   placeholder="rif. servizio"
                                                    :value="detail.reference" />
 
                                         </div>
@@ -262,10 +262,10 @@ const form = useForm(dataForm);
 
                                             <button class="btn btn-sm w-full btn-secondary"
                                                     @click="serviceExpActionRoute(
-                                                                form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
-                                                                detail,
-                                                                'remove'
-                                                            )">
+                                                        form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
+                                                        detail,
+                                                        'remove'
+                                                    )">
 
                                                 <svg class="w-4 h-4 m-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
@@ -317,13 +317,13 @@ export default {
 
             let form = useForm({
                 serviceExp_id: data.id,
-                serviceExp_index: action === 'remove' ? data.index : null,
+                serviceExp_index: action === 'remove' ? data.serviceExp_index : null,
                 serviceExpAddTo: action === 'add' ? true : null,
                 serviceExpRemove: action === 'remove' ? true : null,
                 currentUrl: window.location.href,
             });
 
-            form.get(window.location.href, {
+            form.post(window.location.href, {
                 preserveScroll: true,
                 preserveState: true,
             });
