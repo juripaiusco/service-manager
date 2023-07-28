@@ -12,6 +12,7 @@ import TablePagination from "@/Components/Table/TablePagination.vue";
 const props = defineProps({
     data: Object,
     services: Object,
+    customer: Object,
     filters: Object,
     create_url: String
 })
@@ -34,7 +35,7 @@ const form = useForm(dataForm);
 
             <ApplicationHeader :breadcrumb-array="[
                 'Clienti',
-                'Servizio',
+                customer.company,
                 data.id ?
                     form.name + ' - ' + form.reference :
                         form.name.length > 0 ? form.name + ' - ' + form.reference : 'Nuovo Cliente'

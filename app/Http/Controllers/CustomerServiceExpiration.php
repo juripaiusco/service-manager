@@ -51,11 +51,14 @@ class CustomerServiceExpiration extends Controller
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
 
+        $customer = \App\Models\Customer::find($data->customer_id);
+
         $this->serviceExpAction($request, json_decode($data->details));
 
         return Inertia::render('Customers/ServiceExp/Form', [
             'data' => $data,
             'services' => $this->servicesGet(),
+            'customer' => $customer,
             'filters' => request()->all(['s', 'orderby', 'ordertype']),
             'create_url' => $request->input('currentUrl') ? $request->input('currentUrl') : null
         ]);
@@ -72,7 +75,7 @@ class CustomerServiceExpiration extends Controller
         unset($request['updated_at']);
         unset($request['details']);
 
-//        dd($request->session()->get('serviceExp'));
+        dd($request->session()->get('serviceExp'));
         dd($request->all());
 
         return to_route('customer.edit', $request->input('customer_id'));
