@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, useForm} from '@inertiajs/vue3';
+import {Head, Link, useForm} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import Form from "@/Pages/Services/Form.vue";
@@ -109,10 +109,10 @@ const form = useForm(dataForm);
 
                     <a href="#"
                        onclick="window.history.back(); return false;"
-                       class="btn btn-secondary w-[100px]">Annulla</a>
+                       class="btn btn-secondary w-[120px]">Annulla</a>
 
                     <button type="submit"
-                            class="btn btn-success ml-2 w-[100px]">Salva</button>
+                            class="btn btn-success ml-2 w-[120px]">Salva</button>
 
                 </div>
 
@@ -120,7 +120,23 @@ const form = useForm(dataForm);
 
                     <hr class="m-10">
 
-                    <h2 class="text-3xl mb-5">Servizi in scadenza</h2>
+                    <div class="inline-flex w-full">
+                        <div class="w-1/2">
+
+                            <h2 class="text-3xl mb-5">
+                                Servizi in scadenza
+                            </h2>
+
+                        </div>
+                        <div class="w-1/2 text-right">
+
+                            <Link class="btn btn-dark w-[120px]"
+                                  :href="route('customer.create')">
+                                Aggiungi
+                            </Link>
+
+                        </div>
+                    </div>
 
                     <Table class=""
                            :data="{

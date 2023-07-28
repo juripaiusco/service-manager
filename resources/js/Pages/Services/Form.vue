@@ -160,10 +160,10 @@ function collapse(indexSelected: any)
 
                     <a href="#"
                        onclick="window.history.back(); return false;"
-                       class="btn btn-secondary w-[100px]">Annulla</a>
+                       class="btn btn-secondary w-[120px]">Annulla</a>
 
                     <button type="submit"
-                            class="btn btn-success ml-2 w-[100px]">Salva</button>
+                            class="btn btn-success ml-2 w-[120px]">Salva</button>
 
                 </div>
 
