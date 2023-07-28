@@ -258,17 +258,6 @@ const form = useForm(dataForm);
                                     </div>
                                 </div>
 
-                                <div class="text-right mt-10">
-
-                                    <a href="#"
-                                       onclick="window.history.back(); return false;"
-                                       class="btn btn-secondary w-[100px]">Annulla</a>
-
-                                    <button type="submit"
-                                            class="btn btn-success ml-2 w-[100px]">Salva</button>
-
-                                </div>
-
                             </div>
                         </div>
 
@@ -342,6 +331,17 @@ const form = useForm(dataForm);
                         </div>
 
                     </div>
+
+                </div>
+
+                <div class="text-right mt-10">
+
+                    <a href="#"
+                       onclick="window.history.back(); return false;"
+                       class="btn btn-secondary w-[100px]">Annulla</a>
+
+                    <button type="submit"
+                            class="btn btn-success ml-2 w-[100px]">Salva</button>
 
                 </div>
 
