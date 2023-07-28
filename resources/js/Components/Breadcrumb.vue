@@ -13,8 +13,8 @@ defineProps({
             <li v-for="(breadcrumb, i) in breadcrumbArray"
                 class="breadcrumb-item text-xl text-gray-800 dark:text-gray-200"
                 :class="{
-                'active': (i === breadcrumbArray.length - 1),
-                'font-semibold': (i === 0)
+                'active font-semibold': (i === breadcrumbArray.length - 1),
+                '': (i === 0)
                 }">
 
                 {{ breadcrumb }}
