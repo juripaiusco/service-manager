@@ -66,6 +66,15 @@ class CustomerServiceExpiration extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $saveRedirect = $request['saveRedirect'];
+        unset($request['saveRedirect']);
+        unset($request['created_at']);
+        unset($request['updated_at']);
+        unset($request['details']);
+
+//        dd($request->session()->get('serviceExp'));
+        dd($request->all());
+
         return to_route('customer.edit', $request->input('customer_id'));
     }
 
