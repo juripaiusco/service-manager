@@ -230,8 +230,7 @@ const form = useForm(dataForm);
 
                                 <br>
 
-                                {{ usePage().props.serviceExp }}
-                                <div v-for="(detail, index) in usePage().props.serviceExp">
+                                <div v-for="detail in usePage().props.serviceExp" :key="detail.serviceExp_index">
 
                                     <div class="row mb-2">
                                         <div class="col-5 text-sm pt-1">
@@ -260,7 +259,8 @@ const form = useForm(dataForm);
                                         </div>
                                         <div class="col-1">
 
-                                            <button class="btn btn-sm w-full btn-secondary"
+                                            <button type="button"
+                                                    class="btn btn-sm w-full btn-secondary"
                                                     @click="serviceExpActionRoute(
                                                         form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
                                                         detail,
@@ -314,7 +314,7 @@ export default {
     },
     methods: {
         serviceExpActionRoute (route, data, action) {
-
+            
             let form = useForm({
                 serviceExp_id: data.id,
                 serviceExp_index: action === 'remove' ? data.serviceExp_index : null,
