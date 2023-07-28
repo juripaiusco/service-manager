@@ -73,9 +73,9 @@ class CustomerServiceExpiration extends Controller
         unset($request['saveRedirect']);
         unset($request['created_at']);
         unset($request['updated_at']);
-        unset($request['details']);
+//        unset($request['details']);
 
-        dd($request->session()->get('serviceExp'));
+//        dd($request->session()->get('serviceExp')[0]);
         dd($request->all());
 
         return to_route('customer.edit', $request->input('customer_id'));
@@ -115,9 +115,21 @@ class CustomerServiceExpiration extends Controller
         if ($request->input('serviceExpAddTo') == true) {
 
             $service = \App\Models\Service::find($request->input('serviceExp_id'));
-            $service->serviceExp_index = $request->session()->get('serviceExp') ? array_key_last($request->session()->get('serviceExp')) + 1 : 0;
 
-            $request->session()->push('serviceExp', $service);
+            $customers_services_details = array(
+                'id' => null,
+                'customer_id' => null,
+                'service_id' => $service->id,
+                'customer_service_id' => null,
+                'reference' => '',
+                'price_sell' => $service->price_sell,
+                'service' => $service,
+                'serviceExp_index' => $request->session()->get('serviceExp') ? array_key_last($request->session()->get('serviceExp')) + 1 : 0
+            );
+
+//            $service->serviceExp_index = $request->session()->get('serviceExp') ? array_key_last($request->session()->get('serviceExp')) + 1 : 0;
+
+            $request->session()->push('serviceExp', $customers_services_details);
 
             Inertia::share('serviceExp', $request->session()->get('serviceExp'));
 
