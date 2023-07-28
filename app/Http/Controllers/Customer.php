@@ -34,13 +34,13 @@ class Customer extends Controller
         $data = $data->with('customerServiceDetail');
         $data = $data->with('customerServiceDetail.service');
 
-        $data = $data->join(
+        $data = $data->leftJoin(
             'customers_services_details',
             'customers_services_details.customer_id',
             '=',
             'customers.id'
         );
-        $data = $data->join(
+        $data = $data->leftJoin(
             'services',
             'services.id',
             '=',
