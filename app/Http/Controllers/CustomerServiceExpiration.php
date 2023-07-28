@@ -66,7 +66,7 @@ class CustomerServiceExpiration extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        return to_route('customer.edit', $request->input('customer_id'));
     }
 
     /**
