@@ -172,6 +172,6 @@ class CustomerServiceExpiration extends Controller
 
         $services = $services->select();
 
-        return $services->paginate(env('VIEWS_PAGINATE'))->withQueryString();
+        return $services->paginate(5)->withQueryString();
     }
 }

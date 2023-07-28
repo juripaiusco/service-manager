@@ -7,6 +7,7 @@ import {__} from "@/ComponentsExt/Translations";
 import {__currency} from "@/ComponentsExt/Currency";
 import TableSearch from "@/Components/Table/TableSearch.vue";
 import Table from "@/Components/Table/Table.vue";
+import TablePagination from "@/Components/Table/TablePagination.vue";
 
 const props = defineProps({
     data: Object,
@@ -186,7 +187,10 @@ const form = useForm(dataForm);
 
                                                    serviceExpActionRoute(route, data, 'add');
 
-                                       }"/>
+                                        }"/>
+
+                                        <TablePagination class="mt-6"
+                                                         :links="services.links"></TablePagination>
 
                                     </div>
                                 </div>
