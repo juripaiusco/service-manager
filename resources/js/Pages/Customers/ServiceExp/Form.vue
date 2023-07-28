@@ -23,6 +23,28 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
+form.details = usePage().props.serviceExp;
+
+function serviceExpActionRoute (route, data, action) {
+
+    let formSession = useForm({
+        serviceExp_id: data.id,
+        serviceExp_index: action === 'remove' ? data.serviceExp_index : null,
+        serviceExpAddTo: action === 'add' ? true : null,
+        serviceExpRemove: action === 'remove' ? true : null,
+        currentUrl: window.location.href,
+    });
+
+    formSession.post(window.location.href, {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            form.details = usePage().props.serviceExp;
+        }
+    });
+
+}
+
 </script>
 
 <template>
@@ -208,12 +230,12 @@ const form = useForm(dataForm);
 
                                         <br>
 
-                                        <div v-for="detail in usePage().props.serviceExp" :key="detail.serviceExp_index">
+                                        <div v-for="(detail, index) in form.details" :key="index">
 
                                             <div class="row mb-2">
                                                 <div class="col-5 text-sm pt-1">
 
-                                                    {{ detail.service === undefined ? detail.name : detail.service.name }}
+                                                    {{ detail.service.name }}
 
                                                 </div>
                                                 <div class="col-4">
@@ -221,7 +243,7 @@ const form = useForm(dataForm);
                                                     <input type="text"
                                                            class="form-control form-control-sm"
                                                            placeholder="rif. servizio"
-                                                           :value="detail.reference" />
+                                                           v-model="detail.reference" />
 
                                                 </div>
                                                 <div class="col-2">
@@ -231,7 +253,7 @@ const form = useForm(dataForm);
                                                         <input type="text"
                                                                class="form-control form-control-sm text-right"
                                                                placeholder="0.00"
-                                                               :value="detail.price_sell" />
+                                                               v-model="detail.price_sell" />
                                                     </div>
 
                                                 </div>
@@ -240,10 +262,10 @@ const form = useForm(dataForm);
                                                     <button type="button"
                                                             class="btn btn-sm w-full btn-secondary"
                                                             @click="serviceExpActionRoute(
-                                                        form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
-                                                        detail,
-                                                        'remove'
-                                                    )">
+                                                                form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
+                                                                detail,
+                                                                'remove'
+                                                            )">
 
                                                         <svg class="w-4 h-4 m-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
@@ -355,29 +377,11 @@ const form = useForm(dataForm);
 </template>
 
 <script lang="ts">
-import {router, useForm} from "@inertiajs/vue3";
+import {router} from "@inertiajs/vue3";
 
 export default {
     data () {
         return {}
-    },
-    methods: {
-        serviceExpActionRoute (route, data, action) {
-
-            let form = useForm({
-                serviceExp_id: data.id,
-                serviceExp_index: action === 'remove' ? data.serviceExp_index : null,
-                serviceExpAddTo: action === 'add' ? true : null,
-                serviceExpRemove: action === 'remove' ? true : null,
-                currentUrl: window.location.href,
-            });
-
-            form.post(window.location.href, {
-                preserveScroll: true,
-                preserveState: true,
-            });
-
-        }
     },
     mounted () {
 
