@@ -185,8 +185,11 @@ class Customer extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
+        $customerServiceExpiration = new CustomerServiceExpiration();
+        $customerServiceExpiration->serviceExpActionInit($request);
+
         $data = \App\Models\Customer::with('customerService')
             ->with('customerService.details')
             ->with('customerService.details.service')
