@@ -45,9 +45,6 @@ class CustomerServiceExpiration extends Controller
      */
     public function edit(Request $request, string $id)
     {
-        $services = \App\Models\Service::query();
-        $services = $services->paginate(env('VIEWS_PAGINATE'))->withQueryString();
-
         $data = \App\Models\CustomerService::with('details')
             ->with('details.service')
             ->find($id);
@@ -58,7 +55,7 @@ class CustomerServiceExpiration extends Controller
 
         return Inertia::render('Customers/ServiceExp/Form', [
             'data' => $data,
-            'services' => $services,
+            'services' => $this->servicesGet(),
             'filters' => request()->all(['s', 'orderby', 'ordertype']),
             'create_url' => $request->input('currentUrl') ? $request->input('currentUrl') : null
         ]);
@@ -135,5 +132,42 @@ class CustomerServiceExpiration extends Controller
             Inertia::share('serviceExp', $request->session()->get('serviceExp'));
 
         }
+    }
+
+    public function servicesGet()
+    {
+        $request_validate_array = [
+            'fic_cod',
+            'name',
+            'name_customer_view',
+        ];
+
+        $services = \App\Models\Service::query();
+
+        // Request validate
+        request()->validate([
+            'orderby' => ['in:' . implode(',', $request_validate_array)],
+            'ordertype' => ['in:asc,desc']
+        ]);
+
+        // Filtro RICERCA
+        if (request('s')) {
+            $services->where(function ($q) use ($request_validate_array) {
+
+                foreach ($request_validate_array as $field) {
+                    $q->orWhere($field, 'like', '%' . request('s') . '%');
+                }
+
+            });
+        }
+
+        // Filtro ORDINAMENTO
+        if (request('orderby') && request('ordertype')) {
+            $services->orderby(request('orderby'), strtoupper(request('ordertype')));
+        }
+
+        $services = $services->select();
+
+        return $services->paginate(env('VIEWS_PAGINATE'))->withQueryString();
     }
 }

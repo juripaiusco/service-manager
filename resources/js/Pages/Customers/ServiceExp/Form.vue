@@ -6,6 +6,7 @@ import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {__} from "@/ComponentsExt/Translations";
 import {__date} from "@/ComponentsExt/Date";
 import {__currency} from "@/ComponentsExt/Currency";
+import TableSearch from "@/Components/Table/TableSearch.vue";
 import Table from "@/Components/Table/Table.vue";
 
 const props = defineProps({
@@ -49,8 +50,12 @@ const form = useForm(dataForm);
                 ))">
 
                 <h2 class="text-3xl mb-2">Anagrafica cliente scadenza servizio</h2>
+                <span class="text-sm">
+                    Qui puoi inserire dati alternativi ai dati cliente,
+                    per esempio una seconda azienda del cliente.
+                </span>
 
-                <br>
+                <br><br>
 
                 <div class="row">
                     <div class="col">
@@ -111,7 +116,7 @@ const form = useForm(dataForm);
                 <br>
 
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-5">
 
                         <label class="form-label">Nome servizio in scadenza</label>
                         <input type="text"
@@ -151,7 +156,7 @@ const form = useForm(dataForm);
                 <div class="row">
                     <div class="col-5">
 
-                        <div class="card">
+                        <div class="card !border-gray-200">
                             <div class="card-body">
 
                                 <h2 class="text-3xl mb-2">
@@ -160,10 +165,15 @@ const form = useForm(dataForm);
 
                                 <br>
 
+                                <TableSearch placeholder="Cerca..."
+                                             class="mb-4"
+                                             :route-search="form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create'"
+                                             :filters="filters" />
+
                                 <Table class="table table-sm"
                                        :data="{
                                             filters: filters,
-                                            // routeSearch: form.id ? route('products.service.edit', form.id) : 'products.service.create',
+                                            // routeSearch: form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create',
                                             data: services.data,
                                             structure: [{
                                                 class: 'text-left',
@@ -203,7 +213,7 @@ const form = useForm(dataForm);
 
                                            serviceExpActionRoute(route, data, 'add');
 
-                                        }"/>
+                                       }"/>
 
                             </div>
                         </div>
@@ -211,7 +221,7 @@ const form = useForm(dataForm);
                     </div>
                     <div class="col">
 
-                        <div class="card">
+                        <div class="card !border-gray-200">
                             <div class="card-body">
 
                                 <h2 class="text-3xl mb-2">
