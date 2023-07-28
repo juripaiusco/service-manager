@@ -119,7 +119,7 @@ function serviceExpActionRoute (route, data, action) {
                                 <label class="form-label">Nome servizio in scadenza</label>
                                 <input type="text"
                                        class="form-control"
-                                       placeholder="Mario"
+                                       placeholder="Manutenzione"
                                        v-model="form.name" />
                                 <div class="text-red-500 text-center"
                                      v-if="form.errors.name">{{ __(form.errors.name) }}</div>
@@ -165,13 +165,13 @@ function serviceExpActionRoute (route, data, action) {
 
                                         <TableSearch placeholder="Cerca..."
                                                      class="mb-4"
-                                                     :route-search="form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create'"
+                                                     :route-search="form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create', customer.id)"
                                                      :filters="filters" />
 
                                         <Table class="table table-sm"
                                                :data="{
                                                     filters: filters,
-                                                    routeSearch: form.id ? route('customer.serviceExpiration.edit', form.id) : 'customer.serviceExpiration.create',
+                                                    routeSearch: form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create', customer.id),
                                                     data: services.data,
                                                     structure: [{
                                                         class: 'text-left',
@@ -194,7 +194,7 @@ function serviceExpActionRoute (route, data, action) {
                                                     }, {
                                                         class: 'w-[1%]',
                                                         btnCustom: true,
-                                                        route: form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
+                                                        route: form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create', customer.id),
                                                         emit: 'serviceAddTo',
                                                         fnc: function (d) {
 
@@ -264,7 +264,7 @@ function serviceExpActionRoute (route, data, action) {
                                                     <button type="button"
                                                             class="btn btn-sm w-full btn-secondary"
                                                             @click="serviceExpActionRoute(
-                                                                form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create'),
+                                                                form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create', customer.id),
                                                                 detail,
                                                                 'remove'
                                                             )">

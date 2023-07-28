@@ -131,9 +131,7 @@ const form = useForm(dataForm);
                         <div class="w-1/2 text-right">
 
                             <Link class="btn btn-dark w-[120px]"
-                                  :href="route('customer.serviceExpiration.create', {
-                                      'customer_id': data!.id,
-                                  })">
+                                  :href="route('customer.serviceExpiration.create', data!.id)">
                                 Aggiungi
                             </Link>
 

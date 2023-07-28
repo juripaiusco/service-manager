@@ -21,7 +21,7 @@ class CustomerServiceExpiration extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Request $request, string $customer_id)
     {
         // Creo un oggetto di dati vuoto
         $columns = Schema::getColumnListing('customers_services');
@@ -41,7 +41,7 @@ class CustomerServiceExpiration extends Controller
 
         $data = json_decode(json_encode($data), true);
 
-        $customer = \App\Models\Customer::find($request['customer_id']);
+        $customer = \App\Models\Customer::find($customer_id);
 
         $this->serviceExpAction($request);
 
@@ -59,7 +59,7 @@ class CustomerServiceExpiration extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
