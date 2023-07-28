@@ -18,7 +18,8 @@ class CustomerService extends Model
 
     public function details()
     {
-        return $this->hasMany(CustomerServiceDetail::class, 'customer_service_id', 'id');
+        return $this->hasMany(CustomerServiceDetail::class, 'customer_service_id', 'id')
+            ->withSum('service', 'price_buy');
     }
 
     public function detailsService()

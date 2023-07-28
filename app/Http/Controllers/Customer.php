@@ -147,7 +147,8 @@ class Customer extends Controller
         $data = json_decode(json_encode($data), true);
 
         return Inertia::render('Customers/Form', [
-            'data' => $data
+            'data' => $data,
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
 
@@ -189,7 +190,6 @@ class Customer extends Controller
         $data = \App\Models\Customer::with('customerService')
             ->with('customerService.details')
             ->with('customerService.details.service')
-            ->withSum('customerServiceDetail AS customer_total_sell_notax', 'price_sell')
             ->find($id);
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();

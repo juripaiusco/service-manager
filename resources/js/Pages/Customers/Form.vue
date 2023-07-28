@@ -102,20 +102,36 @@ const form = useForm(dataForm);
                     </div>
                 </div>
 
-                <hr class="m-10">
+                <br>
 
-                <h2 class="text-3xl mb-5">Servizi in scadenza</h2>
+                <div class="text-right mt-8">
 
-                <Table class=""
-                       :data="{
+                    <a href="#"
+                       onclick="window.history.back(); return false;"
+                       class="btn btn-secondary w-[100px]">Annulla</a>
+
+                    <button type="submit"
+                            class="btn btn-success ml-2 w-[100px]">Salva</button>
+
+                </div>
+
+                <div v-if="form.id">
+
+                    <hr class="m-10">
+
+                    <h2 class="text-3xl mb-5">Servizi in scadenza</h2>
+
+                    <Table class=""
+                           :data="{
                             filters: filters,
                             tblName: 'customer_service',
-                            routeSearch: 'customer.index',
+                            routeSearch: 'customer.edit',
                             data: data!.customer_service,
                             structure: [{
                                 class: 'text-center w-[140px]',
                                 label: 'Scadenza',
                                 field: 'expiration',
+                                order: false,
                                 fnc: function (d) {
 
                                     let html = ''
@@ -129,6 +145,7 @@ const form = useForm(dataForm);
                                 class: 'text-left',
                                 label: 'Nome',
                                 field: 'name',
+                                order: false,
                                 fnc: function (d) {
 
                                     let html = ''
@@ -143,13 +160,14 @@ const form = useForm(dataForm);
                                 }
                             }, {
                                 class: 'text-right w-[140px]',
-                                label: 'Entrate',
-                                field: 'name',
+                                label: 'Spesa',
+                                field: 'details_sum_price_sell',
+                                order: false,
                                 fnc: function (d) {
 
                                     let html = ''
 
-                                    html += d.name
+                                    html += __currency(d.details_sum_price_sell, 'EUR')
 
                                     return html
 
@@ -166,24 +184,13 @@ const form = useForm(dataForm);
                                 route: 'customer.destroy'
                             }],
                         }"
-                @openModal="(data: any, route: any) => {
-                   modalData = data;
-                   modalData.confirmURL = route;
-                   modalData.confirmBtnClass = 'btn-danger';
-                   modalData.confirmBtnText = 'Sì';
-                   modalShow = true;
-               }" />
-
-                <br>
-
-                <div class="text-right mt-8">
-
-                    <a href="#"
-                       onclick="window.history.back(); return false;"
-                       class="btn btn-secondary w-[100px]">Annulla</a>
-
-                    <button type="submit"
-                            class="btn btn-success ml-2 w-[100px]">Salva</button>
+                           @openModal="(data: any, route: any) => {
+                               modalData = data;
+                               modalData.confirmURL = route;
+                               modalData.confirmBtnClass = 'btn-danger';
+                               modalData.confirmBtnText = 'Sì';
+                               modalShow = true;
+                           }" />
 
                 </div>
 
