@@ -281,20 +281,18 @@ const form = useForm(dataForm);
                             </div>
                         </div>
 
+                        <div class="text-right mt-10">
+
+                            <a href="#"
+                               onclick="window.history.back(); return false;"
+                               class="btn btn-secondary w-[100px]">Annulla</a>
+
+                            <button type="submit"
+                                    class="btn btn-success ml-2 w-[100px]">Salva</button>
+
+                        </div>
+
                     </div>
-                </div>
-
-                <br>
-
-                <div class="text-right mt-8">
-
-                    <a href="#"
-                       onclick="window.history.back(); return false;"
-                       class="btn btn-secondary w-[100px]">Annulla</a>
-
-                    <button type="submit"
-                            class="btn btn-success ml-2 w-[100px]">Salva</button>
-
                 </div>
 
             </form>
@@ -314,7 +312,7 @@ export default {
     },
     methods: {
         serviceExpActionRoute (route, data, action) {
-            
+
             let form = useForm({
                 serviceExp_id: data.id,
                 serviceExp_index: action === 'remove' ? data.serviceExp_index : null,

@@ -156,9 +156,7 @@ function collapse(indexSelected: any)
 
                 </div>
 
-                <br>
-
-                <div class="text-right mt-8">
+                <div class="text-right mt-10">
 
                     <a href="#"
                        onclick="window.history.back(); return false;"
