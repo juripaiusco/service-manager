@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CustomerServiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
 class CustomerServiceExpiration extends Controller
@@ -20,9 +21,37 @@ class CustomerServiceExpiration extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        // Creo un oggetto di dati vuoto
+        $columns = Schema::getColumnListing('customers_services');
+
+        $data = array();
+        foreach ($columns as $field) {
+            $data[$field] = '';
+        }
+
+        unset($data['id']);
+        unset($data['deleted_at']);
+        unset($data['created_at']);
+        unset($data['updated_at']);
+
+        $data['expiration'] = date('Y-m-d H:i:s');
+        $data['saveRedirect'] = Redirect::back()->getTargetUrl();
+
+        $data = json_decode(json_encode($data), true);
+
+        $customer = \App\Models\Customer::find($request['customer_id']);
+
+        $this->serviceExpAction($request);
+
+        return Inertia::render('Customers/ServiceExp/Form', [
+            'data' => $data,
+            'services' => $this->servicesGet(),
+            'customer' => $customer,
+            'filters' => request()->all(['s', 'orderby', 'ordertype']),
+            'create_url' => $request->input('currentUrl') ? $request->input('currentUrl') : null
+        ]);
     }
 
     /**

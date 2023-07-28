@@ -108,7 +108,7 @@ const form = useForm(dataForm);
                 <div class="text-right mt-10">
 
                     <a href="#"
-                       onclick="window.history.back(); return false;"
+                       onclick="window.history.backcustomer.serviceExpiration); return false;"
                        class="btn btn-secondary w-[120px]">Annulla</a>
 
                     <button type="submit"
@@ -131,7 +131,9 @@ const form = useForm(dataForm);
                         <div class="w-1/2 text-right">
 
                             <Link class="btn btn-dark w-[120px]"
-                                  :href="route('customer.create')">
+                                  :href="route('customer.serviceExpiration.create', {
+                                      'customer_id': data!.id,
+                                  })">
                                 Aggiungi
                             </Link>
 

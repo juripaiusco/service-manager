@@ -62,7 +62,7 @@ function serviceExpActionRoute (route, data, action) {
                 customer.company,
                 data.id ?
                     form.name + ' - ' + form.reference :
-                        form.name.length > 0 ? form.name + ' - ' + form.reference : 'Nuovo Cliente'
+                        form.name.length > 0 ? form.name + ' - ' + form.reference : 'Nuova Scadenza'
             ]" />
 
         </template>
@@ -141,7 +141,7 @@ function serviceExpActionRoute (route, data, action) {
                                 <label class="form-label">Data scadenza</label>
                                 <input type="text"
                                        class="form-control text-center"
-                                       placeholder="info@pitturerossi.it"
+                                       placeholder="dd/mm/yyyy"
                                        v-model="form.expiration" />
                                 <div class="text-red-500 text-center"
                                      v-if="form.errors.expiration">{{ form.errors.expiration }}</div>
