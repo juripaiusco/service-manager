@@ -8,10 +8,13 @@ import {__} from "@/ComponentsExt/Translations";
 import {__currency} from "@/ComponentsExt/Currency";
 import {__date} from "@/ComponentsExt/Date";
 import Table from "@/Components/Table/Table.vue";
+import ModalReady from "@/Components/ModalReady.vue";
 
 const props = defineProps({
     data: Object,
     filters: Object,
+    modalShow: false,
+    modalData: Object,
 })
 
 const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
@@ -189,6 +192,23 @@ const form = useForm(dataForm);
                                modalData.confirmBtnText = 'Sì';
                                modalShow = true;
                            }" />
+
+                    <ModalReady :show="modalShow"
+                                :data="modalData"
+                                @close="modalShow = false">
+
+                        <template #title>Elimina servizio in scadenza</template>
+                        <template #body>
+                            Vuoi eliminare
+                            <br>
+                            <span class="font-semibold">
+                                {{ modalData.name }}
+                                {{ modalData.reference }}
+                            </span>
+                            ?
+                        </template>
+
+                    </ModalReady>
 
                 </div>
 

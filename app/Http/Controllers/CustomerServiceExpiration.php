@@ -89,7 +89,7 @@ class CustomerServiceExpiration extends Controller
         );
 
         $request['expiration'] = $expiration;
-        
+
         // Salvo il servizio
         $data = \App\Models\CustomerService::find($id);
         $data->fill($request->all());

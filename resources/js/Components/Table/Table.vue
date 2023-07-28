@@ -110,6 +110,7 @@ defineProps({
                     <template v-if="struct.btnDel === true">
 
                         <button class="btn btn-danger"
+                                type="button"
                                 :class="struct.classBtn"
                                 @click="$emit('openModal', d, route(struct.route, d.id))">
 
