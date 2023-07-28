@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerServiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -70,13 +71,70 @@ class CustomerServiceExpiration extends Controller
     public function update(Request $request, string $id)
     {
         $saveRedirect = $request['saveRedirect'];
+        $details = $request['details'];
         unset($request['saveRedirect']);
         unset($request['created_at']);
         unset($request['updated_at']);
-//        unset($request['details']);
+        unset($request['details']);
 
-//        dd($request->session()->get('serviceExp')[0]);
-        dd($request->all());
+        $expiration = date(
+            'Y-m-d H:i:s',
+            strtotime(
+                str_replace(
+                    '/',
+                    '-',
+                    $request['expiration']
+                )
+            )
+        );
+
+        $request['expiration'] = $expiration;
+        
+        // Salvo il servizio
+        $data = \App\Models\CustomerService::find($id);
+        $data->fill($request->all());
+        $data->save();
+
+        // Elimino i dettagli tolti dal servizio
+        $data = CustomerServiceDetail::where('customer_service_id', $id)
+            ->get();
+
+        foreach ($data as $d) {
+
+            $del = 1;
+
+            foreach ($details as $detail) {
+                if ($d->id == $detail['id']) {
+                    $del = 0;
+                    break;
+                }
+            }
+
+            if ($del == 1) {
+                $data_destroy = CustomerServiceDetail::find($d->id);
+                $data_destroy->delete();
+            }
+
+        }
+
+        // Salvo i dettagli del servizio
+        foreach ($details as $detail) {
+
+            if ($detail['id']) {
+                $data = CustomerServiceDetail::find($detail['id']);
+            } else {
+                $data = new CustomerServiceDetail();
+            }
+
+            $data->customer_id = $request->input('customer_id');
+            $data->service_id = $detail['service_id'];
+            $data->customer_service_id = $id;
+            $data->reference = $detail['reference'];
+            $data->price_sell = $detail['price_sell'];
+
+            $data->save();
+
+        }
 
         return to_route('customer.edit', $request->input('customer_id'));
     }

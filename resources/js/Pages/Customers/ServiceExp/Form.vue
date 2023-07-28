@@ -4,6 +4,7 @@ import {Head, useForm, usePage} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {__} from "@/ComponentsExt/Translations";
+import {__date} from "@/ComponentsExt/Date";
 import {__currency} from "@/ComponentsExt/Currency";
 import TableSearch from "@/Components/Table/TableSearch.vue";
 import Table from "@/Components/Table/Table.vue";
@@ -23,6 +24,7 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
+form.expiration = __date(props.data.expiration, 'day');
 form.details = usePage().props.serviceExp;
 
 function serviceExpActionRoute (route, data, action) {
