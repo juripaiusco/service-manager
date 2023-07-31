@@ -253,7 +253,7 @@ function collapse(indexSelected)
                                     </span>
 
                                 </td>
-                                <td class="pr-3 align-bottom text-right">
+                                <td class="pr-3 align-middle text-right">
                                     {{ __currency(serviceDetail.price_sell, 'EUR') }}
                                 </td>
 
