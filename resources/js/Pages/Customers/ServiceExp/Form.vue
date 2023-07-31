@@ -132,7 +132,7 @@ function serviceExpActionRoute (route: any, data: any, action: any) {
                                 <label class="form-label">Riferimento</label>
                                 <input type="text"
                                        class="form-control"
-                                       placeholder="info@pitturerossi.it"
+                                       placeholder="riferimento del servizio"
                                        v-model="form.reference" />
                                 <div class="text-red-500 text-center"
                                      v-if="form.errors.reference">{{ __(form.errors.reference) }}</div>
