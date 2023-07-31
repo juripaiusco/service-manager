@@ -243,6 +243,10 @@ class CustomerServiceExpiration extends Controller
 
         }
 
+        if ($request['serviceExp_data']) {
+            $request->session()->put('serviceExp', $request['serviceExp_data']);
+        }
+
         $this->serviceExpActionDel($request);
         $this->serviceExpActionAdd($request);
     }
@@ -289,7 +293,7 @@ class CustomerServiceExpiration extends Controller
             $serviceExp_array = array_values($serviceExp_array);
 
             foreach ($serviceExp_array as $k => $service) {
-                $serviceExp_array[$k]->serviceExp_index = $k;
+                $serviceExp_array[$k]['serviceExp_index'] = $k;
             }
 
             $request->session()->put('serviceExp', $serviceExp_array);

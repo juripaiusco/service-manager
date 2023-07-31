@@ -31,6 +31,7 @@ const form = useForm(dataForm);
 function serviceExpActionRoute (route, data, action) {
 
     let formSession = useForm({
+        serviceExp_data: form.details,
         serviceExp_id: data.id,
         serviceExp_index: action === 'remove' ? data.serviceExp_index : null,
         serviceExpAddTo: action === 'add' ? true : null,
