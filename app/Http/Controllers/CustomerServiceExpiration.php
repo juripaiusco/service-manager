@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerService;
 use App\Models\CustomerServiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -203,7 +204,7 @@ class CustomerServiceExpiration extends Controller
 
             $service = \App\Models\Service::find($request->input('serviceExp_id'));
 
-            $customers_services_details = array(
+            $customers_services_details = (object) array(
                 'id' => null,
                 'customer_id' => null,
                 'service_id' => $service->id,
