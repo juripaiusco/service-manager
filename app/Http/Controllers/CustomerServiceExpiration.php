@@ -60,7 +60,49 @@ class CustomerServiceExpiration extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $saveRedirect = $request['saveRedirect'];
+        $details = $request['details'];
+        unset($request['saveRedirect']);
+        unset($request['details']);
+
+        /*dd($request->session()->get('serviceExp'));
+        dd($request->all());*/
+
+        $expiration = date(
+            'Y-m-d H:i:s',
+            strtotime(
+                str_replace(
+                    '/',
+                    '-',
+                    $request['expiration']
+                )
+            )
+        );
+
+        $request['expiration'] = $expiration;
+
+        // Salvo il servizio
+        $customerService = new CustomerService();
+        $customerService->fill($request->all());
+        $customerService->save();
+
+        // Salvo i dettagli del servizio
+        $details = $request->session()->get('serviceExp');
+        foreach ($details as $detail) {
+
+            $data = new CustomerServiceDetail();
+
+            $data->customer_id = $request->input('customer_id');
+            $data->service_id = $detail->service_id;
+            $data->customer_service_id = $customerService->id;
+            $data->reference = $detail->reference;
+            $data->price_sell = $detail->price_sell;
+
+            $data->save();
+
+        }
+
+        return to_route('customer.edit', $request->input('customer_id'));
     }
 
     /**

@@ -22,6 +22,8 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
     return props.data ? v : '';
 }));
 
+dataForm.customer_id = props.customer!.id;
+
 const form = useForm(dataForm);
 
 form.expiration = __date(props.data.expiration, 'day');
