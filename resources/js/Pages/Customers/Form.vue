@@ -108,7 +108,7 @@ const form = useForm(dataForm);
                 <div class="text-right mt-10">
 
                     <a href="#"
-                       onclick="window.history.backcustomer.serviceExpiration); return false;"
+                       onclick="window.history.back(); return false;"
                        class="btn btn-secondary w-[120px]">Annulla</a>
 
                     <button type="submit"
