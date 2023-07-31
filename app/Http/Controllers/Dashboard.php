@@ -115,9 +115,31 @@ class Dashboard extends Controller
             'customers_services.customer_id'
         );
 
+        $services_exp = $services_exp->leftJoin('payments', function($join) {
+            $join->on('payments.customer_service_id', '=', 'customers_services.id');
+            $join->on('payments.customer_service_expiration', '=', 'customers_services.expiration');
+        });
+
         $services_exp = $services_exp->with('customer');
         $services_exp = $services_exp->with('details');
         $services_exp = $services_exp->with('details.service');
+        $services_exp = $services_exp->with('detailsService');
+
+        $services_exp = $services_exp->select([
+            'customers_services.id AS id',
+            'customers_services.customer_id AS customer_id',
+            'customers_services.piva AS piva',
+            'customers_services.company AS company',
+            'customers_services.email AS email',
+            'customers_services.customer_name AS customer_name',
+            'customers_services.name AS name',
+            'customers_services.reference AS reference',
+            'customers_services.expiration AS expiration',
+            'customers_services.expiration_monthly AS expiration_monthly',
+            'customers_services.autorenew AS autorenew',
+            'customers_services.no_email_alert AS no_email_alert',
+            'payments.type AS payment_type',
+        ]);
         $services_exp = $services_exp->withSum('details AS total_sell_notax', 'price_sell');
         $services_exp = $services_exp->addSelect(DB::raw(
             '(
@@ -129,8 +151,8 @@ class Dashboard extends Controller
                   `sm_customers_services`.`id` = `sm_customers_services_details`.`customer_service_id`
             ) AS `total_sell_tax`'
         ));
-        $services_exp = $services_exp->with('detailsService');
         $services_exp->addSelect(DB::raw('false AS isExpanded'));
+
         $services_exp = $services_exp->orderBy('expiration');
         $services_exp = $services_exp->get();
 

@@ -35,4 +35,9 @@ class CustomerService extends Model
             'service_id'
         );
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'customer_service_id', 'id');
+    }
 }

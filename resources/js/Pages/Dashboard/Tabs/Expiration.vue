@@ -149,11 +149,12 @@ function collapse(indexSelected)
 
                         <div class="flex-initial">
 
-                            <button class="btn btn-primary btn-sm"
+                            <button class="btn btn-sm"
                                     :class="{
-                                        'btn-danger': getDate(props.data.today) > getDate(service.expiration),
-                                        'btn-warning': getDate(props.data.today, 60) > getDate(service.expiration),
+                                        'btn-danger': getDate(props.data.today) > getDate(service.expiration) && !service.payment_type,
+                                        'btn-warning': getDate(props.data.today, 60) > getDate(service.expiration) && !service.payment_type,
                                         'btn-info': service.autorenew === '1',
+                                        'btn-success': service.payment_type
                                     }"
                                     @click="() => {
                                         modalInvoiceShow = true,
