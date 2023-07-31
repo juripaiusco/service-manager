@@ -34,6 +34,7 @@
         }
         .table tbody .text-right {
             white-space: nowrap;
+            text-align: right;
         }
         .date-exp-container {
             border: 4px dashed #f00;
