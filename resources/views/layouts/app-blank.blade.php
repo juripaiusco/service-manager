@@ -7,6 +7,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('../node_modules/bootstrap/dist/css/bootstrap.min.css') }}" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('../node_modules/@fortawesome/fontawesome-free/css/all.min.css') }}" crossorigin="anonymous" />
+{{--    <link rel="stylesheet" href="{{ asset('../node_modules/@tailwindcss/forms/dist/tailwind.css') }}" />--}}
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">

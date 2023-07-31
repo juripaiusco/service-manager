@@ -14,6 +14,9 @@
         .order-fields > div:first-child {
             border-left: 0;
         }
+        .text-right {
+            text-align: right;
+        }
 
     </style>
 
@@ -87,7 +90,7 @@
             <br>
 
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-5">
 
                     <table class="table table-sm table-borderless">
                         <thead class="text-small">
@@ -152,6 +155,7 @@
                     </table>
 
                 </div>
+                <div class="col"></div>
                 <div class="col-lg-6">
 
                     @if($payment->type == 'bonifico')
