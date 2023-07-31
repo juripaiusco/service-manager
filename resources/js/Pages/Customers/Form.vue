@@ -107,9 +107,10 @@ const form = useForm(dataForm);
 
                 <div class="text-right mt-10">
 
-                    <a href="#"
-                       onclick="window.history.back(); return false;"
-                       class="btn btn-secondary w-[120px]">Annulla</a>
+                    <Link class="btn btn-secondary w-[120px]"
+                          :href="data.saveRedirect">
+                        Annulla
+                    </Link>
 
                     <button type="submit"
                             class="btn btn-success ml-2 w-[120px]">Salva</button>

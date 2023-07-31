@@ -118,6 +118,8 @@ class Customer extends Controller
 
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
+        session()->forget('saveRedirectCustomer');
+
         return Inertia::render('Customers/List', [
             'data' => $data,
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
@@ -196,7 +198,11 @@ class Customer extends Controller
             ->with('customerService.details.service')
             ->find($id);
 
-        $data->saveRedirect = Redirect::back()->getTargetUrl();
+        if (!$request->session()->get('saveRedirectCustomer')) {
+            $request->session()->put('saveRedirectCustomer', Redirect::back()->getTargetUrl());
+        }
+
+        $data->saveRedirect = $request->session()->get('saveRedirectCustomer');
 
 //        dd($data);
 
