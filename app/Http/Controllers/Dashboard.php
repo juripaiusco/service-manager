@@ -344,4 +344,12 @@ class Dashboard extends Controller
 
         ]);
     }
+
+    public function service_exp_renew(Request $request, $id)
+    {
+        $customer = new Customer();
+        $customer->service_exp_renew($id);
+
+        return to_route('dashboard');
+    }
 }

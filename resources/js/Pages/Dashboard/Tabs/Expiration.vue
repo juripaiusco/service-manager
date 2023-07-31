@@ -105,7 +105,7 @@ function collapse(indexSelected)
                                             service: service.name + ' ' + service.reference,
                                             confirmBtnClass: 'btn-success',
                                             confirmBtnText: 'Sì, rinnova',
-                                            confirmURL: route('dashboard')
+                                            confirmURL: route('dashboard.service_exp.renew', service.id)
                                         }
                                     }">
 

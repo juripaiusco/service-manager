@@ -248,4 +248,20 @@ class Customer extends Controller
 
         return \redirect()->back();
     }
+
+    public function service_exp_renew(string $id)
+    {
+        $service_exp = \App\Models\CustomerService::find($id);
+
+        $expirationTime = strtotime($service_exp->expiration . ' +1 year');
+
+        if ($service_exp->expiration_monthly == 1) {
+            $expirationTime = strtotime($service_exp->expiration . ' +1 month');
+        }
+
+        $expirationTimestamp = date('YmdHis', $expirationTime);
+
+        $service_exp->expiration = $expirationTimestamp;
+        $service_exp->save();
+    }
 }
