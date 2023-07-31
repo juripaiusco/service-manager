@@ -242,7 +242,9 @@ class Customer extends Controller
      */
     public function destroy(string $id)
     {
-        \App\Models\Service::destroy($id);
+        \App\Models\Customer::destroy($id);
+        \App\Models\CustomerService::where('customer_id', $id)->delete();
+        \App\Models\CustomerServiceDetail::where('customer_id', $id)->delete();
 
         return \redirect()->back();
     }
