@@ -332,6 +332,8 @@ class Service extends Controller
 //        dd($customers->get()[0]);
         $customers = $customers->get();
 
+        session()->forget('saveRedirectCustomer');
+
         return Inertia::render('Services/Form', [
             'data' => $data,
             'customers' => $customers,
