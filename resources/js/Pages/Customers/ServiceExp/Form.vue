@@ -28,7 +28,7 @@ dataForm.details = usePage().props.serviceExp;
 
 const form = useForm(dataForm);
 
-function serviceExpActionRoute (route, data, action) {
+function serviceExpActionRoute (route: any, data: any, action: any) {
 
     let formSession = useForm({
         serviceExp_data: form.details,
