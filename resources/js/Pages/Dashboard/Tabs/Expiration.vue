@@ -134,7 +134,7 @@ function collapse(indexSelected)
                                             service: service.name + ' ' + service.reference,
                                             confirmBtnClass: 'btn-success',
                                             confirmBtnText: 'Invia avviso',
-                                            confirmURL: route('dashboard')
+                                            confirmURL: route('dashboard.service_exp.alert', service.id)
                                         }
                                     }">
 

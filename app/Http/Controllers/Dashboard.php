@@ -352,4 +352,12 @@ class Dashboard extends Controller
 
         return to_route('dashboard');
     }
+
+    public function service_exp_alert(Request $request, $id)
+    {
+        $email = new Email();
+        $email->sendExpiration($id);
+
+        return to_route('dashboard');
+    }
 }

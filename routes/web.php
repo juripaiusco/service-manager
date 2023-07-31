@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Dashboard::class, 'index'])->name('dashboard');
     Route::get('/dashboard/service_exp/renew/{id}', [\App\Http\Controllers\Dashboard::class, 'service_exp_renew'])
         ->name('dashboard.service_exp.renew');
+    Route::get('/dashboard/service_exp/alert/{id}', [\App\Http\Controllers\Dashboard::class, 'service_exp_alert'])
+        ->name('dashboard.service_exp.alert');
 
     Route::get('/service', [\App\Http\Controllers\Service::class, 'index'])->name('service.index');
     Route::get('/service/create', [\App\Http\Controllers\Service::class, 'create'])->name('service.create');
@@ -55,6 +57,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/customer/service_exp/update/{id}', [\App\Http\Controllers\CustomerServiceExpiration::class, 'update'])->name('customer.serviceExpiration.update');
     Route::get('/customer/service_exp/destroy/{id}', [\App\Http\Controllers\CustomerServiceExpiration::class, 'destroy'])->name('customer.serviceExpiration.destroy');
 
+    // ----------------------------------------
+    Route::get('/payment/checkout/{sid}', [\App\Http\Controllers\Payment::class, 'show'])->name('payment.checkout');
+    Route::post('/payment/checkout/update/{sid}', [\App\Http\Controllers\Payment::class, 'update'])->name('payment.update');
+    Route::get('/payment/confirm/{sid}', [\App\Http\Controllers\Payment::class, 'confirm'])->name('payment.confirm');
+
+    Route::get('/mail/service-expiration/all', [\App\Http\Controllers\Email::class, 'sendExpirationList'])->name('email.exp.all');
+    Route::get('/mail/service-expiration/{id}', [\App\Http\Controllers\Email::class, 'sendExpirationService'])->name('email.exp');
+    Route::get('/mail/show/{view}/{sid}', [\App\Http\Controllers\Email::class, 'show'])->name('email.show');
+    // ----------------------------------------
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
