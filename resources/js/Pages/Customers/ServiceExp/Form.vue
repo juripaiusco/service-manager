@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, useForm, usePage} from '@inertiajs/vue3';
+import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {__} from "@/ComponentsExt/Translations";
@@ -363,9 +363,10 @@ function serviceExpActionRoute (route: any, data: any, action: any) {
 
                 <div class="text-right mt-10">
 
-                    <a href="#"
-                       onclick="window.history.back(); return false;"
-                       class="btn btn-secondary w-[120px]">Annulla</a>
+                    <Link class="btn btn-secondary w-[120px]"
+                          :href="route('customer.edit', customer.id)">
+                        Annulla
+                    </Link>
 
                     <button type="submit"
                             class="btn btn-success ml-2 w-[120px]">Salva</button>
