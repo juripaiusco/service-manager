@@ -166,6 +166,7 @@ class Customer extends Controller
 
         $saveRedirect = $request['saveRedirect'];
         unset($request['saveRedirect']);
+        unset($request['customer_service']);
 
         $customer = new \App\Models\Customer();
         $customer->fill($request->all());
@@ -218,6 +219,7 @@ class Customer extends Controller
         ]);
 
         $saveRedirect = $request['saveRedirect'];
+        unset($request['customer_service']);
         unset($request['saveRedirect']);
         unset($request['created_at']);
         unset($request['updated_at']);
