@@ -60,13 +60,18 @@ class CustomerServiceExpiration extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->session()->get('serviceExp'));
+//        dd($request->all());
+
+        $request->validate([
+            'name'          => ['required'],
+            'expiration'    => ['required'],
+        ]);
+
         $saveRedirect = $request['saveRedirect'];
         $details = $request['details'];
         unset($request['saveRedirect']);
         unset($request['details']);
-
-        /*dd($request->session()->get('serviceExp'));
-        dd($request->all());*/
 
         $expiration = date(
             'Y-m-d H:i:s',
@@ -87,16 +92,15 @@ class CustomerServiceExpiration extends Controller
         $customerService->save();
 
         // Salvo i dettagli del servizio
-        $details = $request->session()->get('serviceExp');
         foreach ($details as $detail) {
 
             $data = new CustomerServiceDetail();
 
             $data->customer_id = $request->input('customer_id');
-            $data->service_id = $detail->service_id;
+            $data->service_id = $detail['service_id'];
             $data->customer_service_id = $customerService->id;
-            $data->reference = $detail->reference;
-            $data->price_sell = $detail->price_sell;
+            $data->reference = $detail['reference'];
+            $data->price_sell = $detail['price_sell'];
 
             $data->save();
 
@@ -216,7 +220,10 @@ class CustomerServiceExpiration extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        \App\Models\CustomerService::destroy($id);
+        \App\Models\CustomerServiceDetail::where('customer_service_id', $id)->delete();
+
+        return \redirect()->back();
     }
 
     public function serviceExpActionInit(Request $request)

@@ -18,16 +18,15 @@ const props = defineProps({
     create_url: String
 })
 
-const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
+const dataForm = Object.fromEntries(Object.entries(props.data!).map((v) => {
     return props.data ? v : '';
 }));
 
 dataForm.customer_id = props.customer!.id;
+dataForm.expiration = __date(props.data!.expiration, 'day');
+dataForm.details = usePage().props.serviceExp;
 
 const form = useForm(dataForm);
-
-form.expiration = __date(props.data.expiration, 'day');
-form.details = usePage().props.serviceExp;
 
 function serviceExpActionRoute (route, data, action) {
 
