@@ -60,8 +60,7 @@ class Email extends Controller
 
         $email_array = explode(';', $data_array['to']);
 
-//        $mail = Mail::to($email_array[0]);
-        $mail = Mail::to('supporto@mr-j.it');
+        $mail = Mail::to($email_array[0]);
 
         if (count($email_array) > 0) {
 
@@ -276,5 +275,33 @@ class Email extends Controller
 
             return $out;
         }
+    }
+
+    /**
+     * Dopo aver confermato il rinnovo, viene inviata questa email di conferma.
+     * @param $sid
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function sendConfirmService($sid)
+    {
+        $payment = \App\Models\Payment::firstWhere('sid', $sid);
+
+        $html = Storage::disk('public')->get('mail_template/confirm-' . $payment->type . '.html');
+        $content = $this->get_template($sid, 'confirm-' . $payment->type, $html);
+        $data_array = $this->get_data($payment->customer_service_id);
+
+        $email_array = explode(';', $data_array['to']);
+
+        $mail = Mail::to($email_array[0]);
+
+        if (env('MAIL_BCC_ADDRESS')) {
+            $mail->bcc(env('MAIL_BCC_ADDRESS'));
+        }
+
+        $mail->send(new \App\Mail\Service(
+            $data_array['subject_confirm_' . $payment->type],
+            $content
+        ));
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerService;
 use App\Models\CustomerServiceDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -116,7 +117,7 @@ class Payment extends Controller
 
         if (!$payment) {
 
-            $payment = new \App\Model\Payment();
+            $payment = new \App\Models\Payment();
             $payment->sid = md5(uniqid(mt_rand(), true));
             $payment->customer_service_id = $customer_service_id;
             $payment->customer_service_expiration = $service->expiration;
@@ -165,5 +166,66 @@ class Payment extends Controller
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $sid)
+    {
+        $type = $request->input('payment');
 
+        $payment = \App\Models\Payment::firstWhere('sid', $sid);
+
+        $customer_service = CustomerService::with('customer')
+            ->with('details')
+            ->with('details.service')
+            ->find($payment->customer_service_id);
+
+        $amount = 0;
+        foreach ($customer_service->details as $detail) {
+            $amount += $detail->price_sell;
+        }
+
+        $payment->type = $type;
+        $payment->payment_date = Carbon::now();
+        $payment->amount = $amount;
+        $payment->services = json_encode($customer_service);
+        $payment->save();
+
+        $email = new Email();
+        $email->sendConfirmService($sid);
+
+        return redirect()->route('payment.confirm', $sid);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm($sid)
+    {
+        $customerServiceInfo = $this->customerServiceInfo($sid);
+
+        $email = new Email();
+        $str_replace_array = $email->get_data_template_replace($sid, '');
+        $payment_info = Storage::disk('public')->get('payment/' . $customerServiceInfo['payment']->type . '.html');
+
+        foreach ($str_replace_array as $k => $v) {
+
+            $payment_info = str_replace($k, $v, $payment_info);
+
+        }
+
+        return view('payment.confirm', [
+            'payment' => $customerServiceInfo['payment'],
+            'service' => $customerServiceInfo['service_json'],
+            'array_services_rows' => $customerServiceInfo['array_services_rows'],
+            'payment_info' => $payment_info
+        ]);
+    }
 }

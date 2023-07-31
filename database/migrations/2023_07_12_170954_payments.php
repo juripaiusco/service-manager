@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('sid');
             $table->integer('customer_service_id')->index();
             $table->timestamp('customer_service_expiration')->nullable();
-            $table->string('type');
+            $table->string('type')->nullable();
             $table->timestamp('payment_date')->nullable();
-            $table->float('amount');
-            $table->longText('services');
+            $table->float('amount')->nullable();
+            $table->longText('services')->nullable();
 
             $table->timestamps();
         });
