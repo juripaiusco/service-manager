@@ -67,7 +67,7 @@ const form = useForm(dataForm);
                     </div>
                     <div class="col">
 
-                        <label class="form-label">P.IVA</label>
+                        <label class="form-label">P.IVA o C.F.</label>
                         <input type="text"
                                class="form-control"
                                placeholder="123456789"

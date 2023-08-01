@@ -319,7 +319,7 @@ function serviceExpActionRoute (route: any, data: any, action: any) {
                             </div>
                             <div class="col">
 
-                                <label class="form-label">P.IVA</label>
+                                <label class="form-label">P.IVA o C.F.</label>
                                 <input type="text"
                                        class="form-control"
                                        placeholder="123456789"
