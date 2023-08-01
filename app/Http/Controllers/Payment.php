@@ -91,7 +91,7 @@ class Payment extends Controller
 
             $privacy_msg = Storage::disk('public')->get('privacy_template/privacy.html');
 
-            dd($cliente->getData());
+//            dd($cliente->getData());
             return view('payment.checkout', [
                 'payment' => $payment,
                 'customer_service' => $customer_service,
