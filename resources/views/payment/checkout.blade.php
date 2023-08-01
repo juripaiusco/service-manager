@@ -149,26 +149,26 @@
         <div class="row">
             <div class="col-lg-7">
 
-                <div class="card @if(!isset($cliente['mail'])) border-danger @endif">
+                <div class="card @if(!$cliente) border-danger @endif">
 
-                    <div class="card-header @if(!isset($cliente['mail'])) border-danger text-white bg-danger @endif">
-                        @if(isset($cliente['mail']))
+                    <div class="card-header @if(!$cliente) border-danger text-white bg-danger @endif">
+                        @if($cliente)
                             I tuoi dati
                         @else
                             Dati non trovati
                         @endif
                     </div>
-                    <div class="card-body @if(!isset($cliente['mail'])) text-danger @endif">
+                    <div class="card-body @if(!$cliente) text-danger @endif">
 
-                        @if(isset($cliente['mail']))
+                        @if($cliente)
 
                             <div class="form-group">
                                 <label for="nome">Azienda</label>
                                 <input type="text"
                                        class="form-control"
                                        id="nome"
-                                       @if($cliente['nome'])
-                                       value="{{ $cliente['nome'] }}"
+                                       @if($cliente->getName())
+                                       value="{{ $cliente->getName() }}"
                                        @endif
                                        readonly>
                             </div>
@@ -178,8 +178,8 @@
                                 <input type="text"
                                        class="form-control"
                                        id="indirizzo_via"
-                                       @if($cliente['indirizzo_via'])
-                                       value="{{ $cliente['indirizzo_via'] }}"
+                                       @if($cliente->getAddressStreet())
+                                       value="{{ $cliente->getAddressStreet() }}"
                                        @endif
                                        readonly>
                             </div>
@@ -192,8 +192,8 @@
                                         <input type="text"
                                                class="form-control"
                                                id="indirizzo_cap"
-                                               @if($cliente['indirizzo_cap'])
-                                               value="{{ $cliente['indirizzo_cap'] }}"
+                                               @if($cliente->getAddressPostalCode())
+                                               value="{{ $cliente->getAddressPostalCode() }}"
                                                @endif
                                                readonly>
                                     </div>
@@ -206,8 +206,8 @@
                                         <input type="text"
                                                class="form-control"
                                                id="indirizzo_citta"
-                                               @if($cliente['indirizzo_citta'])
-                                               value="{{ $cliente['indirizzo_citta'] }}"
+                                               @if($cliente->getAddressCity())
+                                               value="{{ $cliente->getAddressCity() }}"
                                                @endif
                                                readonly>
                                     </div>
@@ -220,8 +220,8 @@
                                         <input type="text"
                                                class="form-control"
                                                id="indirizzo_provincia"
-                                               @if($cliente['indirizzo_provincia'])
-                                               value="{{ $cliente['indirizzo_provincia'] }}"
+                                               @if($cliente->getAddressProvince())
+                                               value="{{ $cliente->getAddressProvince() }}"
                                                @endif
                                                readonly>
                                     </div>
@@ -234,8 +234,8 @@
                                 <input type="text"
                                        class="form-control"
                                        id="paese"
-                                       @if($cliente['paese'])
-                                       value="{{ $cliente['paese'] }}"
+                                       @if($cliente->getCountry())
+                                       value="{{ $cliente->getCountry() }}"
                                        @endif
                                        readonly>
                             </div>
@@ -248,8 +248,8 @@
                                         <input type="text"
                                                class="form-control"
                                                id="piva"
-                                               @if($cliente['piva'])
-                                               value="{{ $cliente['piva'] }}"
+                                               @if($cliente->getVatNumber())
+                                               value="{{ $cliente->getVatNumber() }}"
                                                @endif
                                                readonly>
                                     </div>
@@ -262,8 +262,8 @@
                                         <input type="text"
                                                class="form-control"
                                                id="cf"
-                                               @if($cliente['cf'])
-                                               value="{{ $cliente['cf'] }}"
+                                               @if($cliente->getTaxCode())
+                                               value="{{ $cliente->getTaxCode() }}"
                                                @endif
                                                readonly>
                                     </div>
@@ -278,8 +278,8 @@
                                 <input type="text"
                                        class="form-control"
                                        id="mail"
-                                       @if($cliente['mail'])
-                                       value="{{ $cliente['mail'] }}"
+                                       @if($cliente->getEmail())
+                                       value="{{ $cliente->getEmail() }}"
                                        @endif
                                        readonly>
                             </div>

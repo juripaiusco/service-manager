@@ -70,33 +70,34 @@ class Payment extends Controller
                 $array_services_rows[$index]['reference'][] = $customer_service_detail->reference;
             }
 
-            /*$fattureincloud = new FattureInCloudAPI();
+            $fattureincloud = new FattureInCloudAPI();
             $cliente = $fattureincloud->api(
-                'clienti/lista',
+                'clients',
                 array(
-                    'piva' => $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva
+                    'vat_number' => $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva
                 )
             );
 
-            if (count($cliente['lista_clienti']) < 1) {
+            if (!$cliente->getData()) {
 
                 $cliente = $fattureincloud->api(
-                    'clienti/lista',
+                    'clients',
                     array(
-                        'cf' => $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva
+                        'tax_code' => $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva
                     )
                 );
 
-            }*/
+            }
 
             $privacy_msg = Storage::disk('public')->get('privacy_template/privacy.html');
 
+            dd($cliente->getData());
             return view('payment.checkout', [
                 'payment' => $payment,
                 'customer_service' => $customer_service,
                 'customers_services_details' => $customers_services_details,
                 'array_services_rows' => $array_services_rows,
-                'cliente' => isset($cliente['lista_clienti'][0]) ? $cliente['lista_clienti'][0] : '',
+                'cliente' => $cliente->getData() ? $cliente->getData()[0] : '',
                 'privacy_msg' => $privacy_msg,
             ]);
         }
