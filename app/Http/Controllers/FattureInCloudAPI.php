@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use FattureInCloud\Api;
 use FattureInCloud\Configuration;
 use GuzzleHttp;
@@ -25,7 +24,7 @@ class FattureInCloudAPI extends Controller
                 $clients = $apiIstance->listClients(
                     env('FIC_API_UID'),
                     null,
-                    null,
+                    'detailed',
                     null,
                     null,
                     null,

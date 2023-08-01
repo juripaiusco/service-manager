@@ -53,6 +53,16 @@
             white-space: nowrap;
             margin-bottom: 10px;
         }
+        .form-group label {
+            display: block;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            margin-left: 10px;
+            color: gray;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
 
     </style>
 
