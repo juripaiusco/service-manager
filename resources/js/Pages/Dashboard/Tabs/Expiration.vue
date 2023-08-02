@@ -321,17 +321,17 @@ function collapse(indexSelected)
 
                 <div class="inline-flex w-full">
 
-                    <div class="w-1/2 mr-2">
+                    <div class="w-1/2 mr-4">
 
                         <label for="invoice-date">Data fattura</label>
                         <input id="invoice-date"
-                               class="form-control"
-                               type="text"
-                               :value="__date(props.data.today, 'day')" />
+                               class="form-control text-center"
+                               type="date"
+                               :value="__date(props.data.today, 'date')" />
 
                     </div>
 
-                    <div class="w-1/2 ml-2">
+                    <div class="w-1/2 ml-4">
 
                         <div class="form-check">
                             <label class="form-check-label"
@@ -368,7 +368,7 @@ function collapse(indexSelected)
 
                 <div class="text-xl text-center mb-10">
 
-                    Vuoi inviare la fattura a <span class="font-semibold">{{ modalData.customer }}</span>?
+                    Vuoi inviare la fattura via email a <span class="font-semibold">{{ modalData.customer }}</span>?
                     <br>
                     <span class="text-sm">
                         {{ modalData.service }}
@@ -393,7 +393,7 @@ function collapse(indexSelected)
                 <div class="w-1/4 mr-2 ml-2">
 
                     <button class="btn btn-danger w-full">
-                        No
+                        No Email
                     </button>
 
                 </div>
@@ -401,7 +401,7 @@ function collapse(indexSelected)
                 <div class="w-1/4 ml-2">
 
                     <button class="btn btn-success w-full">
-                        Sì
+                        Sì Email
                     </button>
 
                 </div>
