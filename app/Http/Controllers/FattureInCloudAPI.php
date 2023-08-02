@@ -8,30 +8,13 @@ use GuzzleHttp;
 
 class FattureInCloudAPI extends Controller
 {
-    public function api(string $call, array $filter)
+    public function api(string $resource, array $filter)
     {
-        $config = Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'));
-
         try {
 
-            if ($call == 'clients')
+            if ($resource == 'clients')
             {
-                $apiIstance = new Api\ClientsApi(
-                    new GuzzleHttp\Client(),
-                    $config
-                );
-
-                $clients = $apiIstance->listClients(
-                    env('FIC_API_UID'),
-                    null,
-                    'detailed',
-                    null,
-                    null,
-                    null,
-                    array_key_first($filter) . ' = \'' . $filter[array_key_first($filter)] . '\''
-                );
-
-                return $clients;
+                return $this->clients($filter);
             }
 
         } catch (Exception $e) {
@@ -39,5 +22,25 @@ class FattureInCloudAPI extends Controller
             echo 'Exception when calling the API: ', $e->getMessage(), PHP_EOL;
 
         }
+    }
+
+    public function clients($filter)
+    {
+        $apiIstance = new Api\ClientsApi(
+            new GuzzleHttp\Client(),
+            Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'))
+        );
+
+        $clients = $apiIstance->listClients(
+            env('FIC_API_UID'),
+            null,
+            'detailed',
+            null,
+            null,
+            null,
+            array_key_first($filter) . ' = \'' . $filter[array_key_first($filter)] . '\''
+        );
+
+        return $clients;
     }
 }
