@@ -382,4 +382,11 @@ class Dashboard extends Controller
 
         return to_route('dashboard');
     }
+
+    public function service_exp_invoice(Request $request, $id)
+    {
+//        dd($request->all());
+
+        return to_route('dashboard');
+    }
 }

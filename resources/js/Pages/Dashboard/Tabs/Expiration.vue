@@ -6,6 +6,7 @@ import {__date} from "@/ComponentsExt/Date.js";
 import {ref} from "vue";
 import ModalReady from "@/Components/ModalReady.vue";
 import Modal from "@/Components/Modal.vue";
+import {useForm} from "@inertiajs/vue3";
 
 const props = defineProps({
     data: Object,
@@ -15,6 +16,13 @@ const props = defineProps({
 const modalShow = ref(false);
 const modalData = ref();
 const modalInvoiceShow = ref(false);
+const modalInvoiceData = ref();
+const modalInvoiceForm = useForm({
+    id: Number,
+    date: Date,
+    payment_received: Number,
+    email_send: Number
+});
 
 function getDate(dateValute, addDays = 0)
 {
@@ -43,6 +51,18 @@ function collapse(indexSelected)
         document.getElementById('service-body-' + indexSelected).classList.add('service-body-selected');
 
     }
+}
+
+function modalInvoiceInit(id)
+{
+    modalInvoiceForm.id = id;
+    modalInvoiceForm.date = __date(props.data.today, 'date');
+    modalInvoiceForm.payment_received = 1;
+}
+function invoiceCreate(email_send)
+{
+    modalInvoiceForm.email_send = email_send;
+    modalInvoiceForm.get(route('dashboard.service_exp.invoice', modalInvoiceForm.id));
 }
 
 </script>
@@ -158,14 +178,13 @@ function collapse(indexSelected)
                                     }"
                                     @click="() => {
                                         modalInvoiceShow = true,
-                                        modalData = {
+                                        modalInvoiceData = {
                                             customer: service.customer_name ? service.customer_name : service.customer.name,
-                                            service: service.name + ' ' + service.reference,
-                                            price: __currency(service.total_sell_notax, 'EUR'),
-                                            confirmBtnClass: 'btn-success',
-                                            confirmBtnText: 'Invia avviso',
-                                            confirmURL: route('dashboard')
+                                            service: service,
+                                            price: __currency(service.total_sell_notax, 'EUR')
                                         }
+
+                                        modalInvoiceInit(service.id);
                                     }">
 
                                 <svg class="w-4 h-4"
@@ -327,13 +346,22 @@ function collapse(indexSelected)
                         <input id="invoice-date"
                                class="form-control text-center"
                                type="date"
-                               :value="__date(props.data.today, 'date')" />
+                               v-model="modalInvoiceForm.date" />
 
                     </div>
 
                     <div class="w-1/2 ml-4">
 
-                        <div class="form-check">
+                        <div class="form-check form-switch">
+
+                            <input class="form-check-input !mt-[30px]"
+                                   type="checkbox"
+                                   id="invoice-payment"
+                                   true-value="1"
+                                   false-value="0"
+                                   v-model="modalInvoiceForm.payment_received"
+                                   checked />
+
                             <label class="form-check-label"
                                    for="invoice-payment">
                                 Pagamento ricevuto.
@@ -342,10 +370,6 @@ function collapse(indexSelected)
                                     (se lo switch è attivo, la fattura risulterà saldata)
                                 </span>
                             </label>
-                            <input class="form-check-input"
-                                   type="checkbox"
-                                   value=""
-                                   id="invoice-payment" checked>
 
                         </div>
 
@@ -368,12 +392,12 @@ function collapse(indexSelected)
 
                 <div class="text-xl text-center mb-10">
 
-                    Vuoi inviare la fattura via email a <span class="font-semibold">{{ modalData.customer }}</span>?
+                    Vuoi inviare la fattura via email a <span class="font-semibold">{{ modalInvoiceData.customer }}</span>?
                     <br>
                     <span class="text-sm">
-                        {{ modalData.service }}
+                        {{ modalInvoiceData.service.name }} {{ modalInvoiceData.service.reference }}
                         <span class="font-semibold">
-                            {{ modalData.price }} + IVA
+                            {{ modalInvoiceData.price }} + IVA
                         </span>
                     </span>
 
@@ -392,7 +416,9 @@ function collapse(indexSelected)
 
                 <div class="w-1/4 mr-2 ml-2">
 
-                    <button class="btn btn-danger w-full">
+                    <button type="button"
+                            class="btn btn-danger w-full"
+                            @click="invoiceCreate(0)">
                         No Email
                     </button>
 
@@ -400,7 +426,9 @@ function collapse(indexSelected)
 
                 <div class="w-1/4 ml-2">
 
-                    <button class="btn btn-success w-full">
+                    <button type="button"
+                            class="btn btn-success w-full"
+                            @click="invoiceCreate(1)">
                         Sì Email
                     </button>
 

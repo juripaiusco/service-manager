@@ -36,6 +36,8 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard.service_exp.renew');
     Route::get('/dashboard/service_exp/alert/{id}', [\App\Http\Controllers\Dashboard::class, 'service_exp_alert'])
         ->name('dashboard.service_exp.alert');
+    Route::get('/dashboard/service_exp/invoice/{id}', [\App\Http\Controllers\Dashboard::class, 'service_exp_invoice'])
+        ->name('dashboard.service_exp.invoice');
 
     Route::get('/service', [\App\Http\Controllers\Service::class, 'index'])->name('service.index');
     Route::get('/service/create', [\App\Http\Controllers\Service::class, 'create'])->name('service.create');
