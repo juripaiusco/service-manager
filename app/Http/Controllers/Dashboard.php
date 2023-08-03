@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -385,7 +386,99 @@ class Dashboard extends Controller
 
     public function service_exp_invoice(Request $request, $id)
     {
-//        dd($request->all());
+        $service_exp = CustomerService::query();
+        $service_exp = $service_exp->with('customer');
+        $service_exp = $service_exp->with('details');
+        $service_exp = $service_exp->with('details.service');
+        $service_exp = $service_exp->where('id', $id);
+        $service_exp = $service_exp->first();
+
+        // -----------------------------
+
+        $fic = new FattureInCloudAPI();
+
+        $fic_clients = $fic->api('clients', array(
+            'vat_number' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
+        ));
+
+        if (!$fic_clients->getData()) {
+            $fic_clients = $fic->api('clients', array(
+                'tax_code' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
+            ));
+        }
+
+        if (!$fic_clients->getData()) {
+            dd('Cliente non trovato in Fatture in Cloud');
+        }
+
+        // -----------------------------
+
+        $fic_products = $fic->api('products');
+        $items_list = array();
+        $items_price_total = 0;
+
+        foreach ($service_exp->details as $details) {
+
+            foreach ($fic_products->getData() as $product) {
+
+                if ($details->service->fic_cod == $product->getCode()) {
+
+                    $items_list[] = array(
+                        'id' => $product->getId(),
+                        'code' => $product->getCode(),
+                        'qty' => 1,
+                        'net_price' => $details->price_sell,
+                        'name' => $details->service->name_customer_view
+                    );
+
+                    $items_price_total += $details->price_sell;
+
+                    break;
+
+                }
+            }
+
+        }
+
+        // -----------------------------
+
+        $invoice_args = array(
+            'entity' => array(
+                'id' => $fic_clients->getData()[0]->getId(),
+                'name' => $fic_clients->getData()[0]->getName(),
+                'vat_number' => $fic_clients->getData()[0]->getVatNumber(),
+                'tax_code' => $fic_clients->getData()[0]->getTaxCode(),
+                'address_street' => $fic_clients->getData()[0]->getAddressStreet(),
+                'address_postal_code' => $fic_clients->getData()[0]->getAddressPostalCode(),
+                'address_city' => $fic_clients->getData()[0]->getAddressCity(),
+                'address_province' => $fic_clients->getData()[0]->getAddressProvince(),
+                'address_extra' => $fic_clients->getData()[0]->getAddressExtra(),
+                'country' => $fic_clients->getData()[0]->getCountry(),
+                'certified_email' => $fic_clients->getData()[0]->getCertifiedEmail(),
+                'ei_code' => $fic_clients->getData()[0]->getEiCode()
+            ),
+            'date' => $request['date'],
+            'items_list' => $items_list,
+            'payments_list' => array(
+                array(
+                    'amount' => ($items_price_total * 1.22),
+                    'due_date' => $request['date'],
+                    'payment_terms' => array(
+                        'days' => 0,
+                        'type' => 'standard'
+                    ),
+                    'status' => $request['payment_received'] == 1 ? 'paid' : 'not_paid'
+                )
+            ),
+            'payment_method' => array(
+                'id' => env('FIC_metodo_id')
+            )
+        );
+
+//        dd($invoice_args);
+
+        $invoice = $fic->api('invoice', $invoice_args);
+        dd($invoice);
 
         return to_route('dashboard');
     }
