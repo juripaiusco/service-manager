@@ -397,12 +397,14 @@ class Dashboard extends Controller
 
         $fic = new FattureInCloudAPI();
 
-        $fic_clients = $fic->api('clients', array(
+//        dd($fic->api('get.invoice')->getData()[0]);
+
+        $fic_clients = $fic->api('get.clients', array(
             'vat_number' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
         ));
 
         if (!$fic_clients->getData()) {
-            $fic_clients = $fic->api('clients', array(
+            $fic_clients = $fic->api('get.clients', array(
                 'tax_code' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
             ));
         }
@@ -413,7 +415,7 @@ class Dashboard extends Controller
 
         // -----------------------------
 
-        $fic_products = $fic->api('products');
+        $fic_products = $fic->api('get.products');
         $items_list = array();
         $invoice_items_rows = array();
         $items_net_price_total = 0;
@@ -491,7 +493,7 @@ class Dashboard extends Controller
             'items_list' => $items_list,
             'payments_list' => array(
                 array(
-                    'id' => env('FIC_metodo_id'),
+                    'id' => env('FIC_method_id'),
                     'due_date' => $request['date'],
                     'amount' => $items_gross_price_total,
                     'status' => $request['payment_received'] == 1 ? 'paid' : 'not_paid',
@@ -500,20 +502,25 @@ class Dashboard extends Controller
                         'type' => 'standard'
                     ),
                     'payment_account' => array(
-                        'id' => env('FIC_metodo_id'),
-                        'name' => env('FIC_metodo_nome'),
+                        'id' => env('FIC_method_id'),
+                        'name' => env('FIC_method_name'),
                     )
                 )
             ),
             'payment_method' => array(
-                'id' => env('FIC_metodo_id'),
-                'name' => env('FIC_metodo_nome'),
+                'id' => env('FIC_method_id'),
+                'name' => env('FIC_method_name'),
             ),
             'show_payment_method' => true,
-            'notes' => "<br>Documento privo di valenza fiscale ai sensi dell'art. 21 Dpr 633/72. L'originale è disponibile all'indirizzo telematico da Lei fornito oppure nella Sua area riservata dell'Agenzia delle Entrate.",
+            'e_invoice' => true,
+            'ei_data' => array(
+                'payment_method' => env('FIC_EI_method'),
+                'bank_iban' => env('FIC_EI_bank_iban'),
+                'bank_beneficiary' => env('FIC_EI_bank_beneficiary'),
+            )
         );
 
-        $invoice = $fic->api('invoice', $invoice_args);
+        $invoice = $fic->api('create.invoice', $invoice_args);
         dd($invoice);
 
         return to_route('dashboard');
