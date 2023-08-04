@@ -160,26 +160,17 @@ class Dashboard extends Controller
         // Data TAB Services Incoming
         // ====================================================
 
-        $months_array = array(
-            'gennaio',
-            'febbraio',
-            'marzo',
-            'aprile',
-            'maggio',
-            'giugno',
-            'luglio',
-            'agosto',
-            'settembre',
-            'ottobre',
-            'novembre',
-            'dicembre'
-        );
+        $months_array = array();
+
+        for ($m = 1; $m <= 12; $m++) {
+            $months_array[$m] = date('F', mktime(0, 0, 0, $m));
+        }
 
         $months_incoming = array();
 
         foreach ($months_array as $m => $month) {
 
-            $months_incoming[$m + 1] = array(
+            $months_incoming[$m] = array(
                 'incoming' => 0,
                 'outcoming' => 0,
                 'profit' => 0,

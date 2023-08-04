@@ -1,5 +1,6 @@
 <script setup>
 
+import {__} from "@/ComponentsExt/Translations.js";
 import {__date} from "@/ComponentsExt/Date.js";
 import {__currency} from "@/ComponentsExt/Currency.js";
 
@@ -30,7 +31,7 @@ const props = defineProps({
                 'table-warning': index == __date(props.data.today, 'n'),
             }">
             <td class="capitalize w-1/2">
-                {{ props.data.months_array[index - 1] }}
+                {{ __(props.data.months_array[index]) }}
             </td>
             <td class="text-right"
                 :class="{
