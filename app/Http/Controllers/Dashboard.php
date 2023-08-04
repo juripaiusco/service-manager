@@ -397,7 +397,9 @@ class Dashboard extends Controller
 
         $fic = new FattureInCloudAPI();
 
-//        dd($fic->api('get.invoice')->getData()[0]);
+        /*dd($fic->api('get.invoice', array(
+            'number' => 35
+        ))->getData()[6]);*/
 
         $fic_clients = $fic->api('get.clients', array(
             'vat_number' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
@@ -493,23 +495,23 @@ class Dashboard extends Controller
             'items_list' => $items_list,
             'payments_list' => array(
                 array(
-                    'id' => env('FIC_method_id'),
                     'due_date' => $request['date'],
                     'amount' => $items_gross_price_total,
                     'status' => $request['payment_received'] == 1 ? 'paid' : 'not_paid',
+                    'paid_date' => $request['payment_received'] == 1 ? $request['date'] : null,
                     'payment_terms' => array(
                         'days' => 0,
                         'type' => 'standard'
                     ),
                     'payment_account' => array(
-                        'id' => env('FIC_method_id'),
-                        'name' => env('FIC_method_name'),
+                        'id' => env('FIC_pay_account_id'),
+                        'name' => env('FIC_pay_account_name'),
                     )
                 )
             ),
             'payment_method' => array(
-                'id' => env('FIC_method_id'),
-                'name' => env('FIC_method_name'),
+                'id' => env('FIC_pay_method_id'),
+                'name' => env('FIC_pay_method_name'),
             ),
             'show_payment_method' => true,
             'e_invoice' => true,
@@ -520,6 +522,7 @@ class Dashboard extends Controller
             )
         );
 
+//        dd($invoice_args);
         $invoice = $fic->api('create.invoice', $invoice_args);
         dd($invoice);
 
