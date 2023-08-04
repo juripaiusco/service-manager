@@ -93,6 +93,32 @@ class Finance extends Controller
         ]);
     }
 
+    public function documentsGet()
+    {
+        $invoices = new FattureInCloudAPI();
+        $invoices = $invoices->api('get.documents');
+
+        foreach ($invoices->getData() as $invoice) {
+
+//            dd($invoice);
+            $finance = new \App\Models\Finance();
+
+            $finance->fic_id = $invoice->getId();
+            $finance->tipo_doc = 'fatture';
+            $finance->tipo = 'attiva';
+            $finance->numero = $invoice->getNumber();
+            $finance->nome = $invoice->getEntity()->getName();
+            $finance->anno = $invoice->getYear();
+            $finance->data = $invoice->getDate();
+            $finance->importo_netto = $invoice->getAmountNet();
+            $finance->importo_iva = $invoice->getAmountVat();
+            $finance->importo_totale = $invoice->getAmountGross();
+
+            $finance->save();
+
+        }
+    }
+
     public function outcoming()
     {
         return Inertia::render('Finance/Outcoming');

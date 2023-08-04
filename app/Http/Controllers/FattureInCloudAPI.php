@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use FattureInCloud\Api;
 use FattureInCloud\Configuration;
+use FattureInCloud\Filter\Condition;
+use FattureInCloud\Filter\Operator;
 use GuzzleHttp;
 
 class FattureInCloudAPI extends Controller
@@ -34,6 +36,9 @@ class FattureInCloudAPI extends Controller
                     break;
                 case 'get.email':
                     return $this->emailGet($args);
+                    break;
+                case 'get.documents':
+                    return $this->documentsGet($args);
                     break;
             }
 
@@ -164,6 +169,30 @@ class FattureInCloudAPI extends Controller
 
         $results = $apiIstance->listEmails(
             env('FIC_API_UID'),
+        );
+
+        return $results;
+    }
+
+    private function documentsGet(array $filter = array())
+    {
+        $apiIstance = new Api\IssuedDocumentsApi(
+            new GuzzleHttp\Client(),
+            Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'))
+        );
+
+        $condition = new Condition('date', Operator::GTE, '2023-01-01');
+        $q = $condition->buildQuery();
+
+        $results = $apiIstance->listIssuedDocuments(
+            env('FIC_API_UID'),
+            'invoice',
+            null,
+            'detailed',
+            '-date',
+            null,
+            null,
+            $q
         );
 
         return $results;
