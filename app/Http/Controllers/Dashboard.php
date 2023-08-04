@@ -397,10 +397,6 @@ class Dashboard extends Controller
 
         $fic = new FattureInCloudAPI();
 
-        /*dd($fic->api('get.invoice', array(
-            'number' => 35
-        ))->getData()[6]);*/
-
         $fic_clients = $fic->api('get.clients', array(
             'vat_number' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
         ));
@@ -522,8 +518,10 @@ class Dashboard extends Controller
             )
         );
 
-//        dd($invoice_args);
         $invoice = $fic->api('create.invoice', $invoice_args);
+
+        
+
         dd($invoice);
 
         return to_route('dashboard');
