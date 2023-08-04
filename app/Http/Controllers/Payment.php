@@ -72,7 +72,7 @@ class Payment extends Controller
 
             $fattureincloud = new FattureInCloudAPI();
             $cliente = $fattureincloud->api(
-                'clients',
+                'get.clients',
                 array(
                     'vat_number' => $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva
                 )
@@ -81,7 +81,7 @@ class Payment extends Controller
             if (!$cliente->getData()) {
 
                 $cliente = $fattureincloud->api(
-                    'clients',
+                    'get.clients',
                     array(
                         'tax_code' => $customer_service->piva ? $customer_service->piva : $customer_service->customer->piva
                     )

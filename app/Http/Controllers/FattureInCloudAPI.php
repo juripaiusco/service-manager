@@ -14,14 +14,17 @@ class FattureInCloudAPI extends Controller
 
             switch ($resource)
             {
-                case 'clients':
-                    return $this->clients($args);
+                case 'get.clients':
+                    return $this->clientsGet($args);
                     break;
-                case 'products':
-                    return $this->products($args);
+                case 'get.products':
+                    return $this->productsGet($args);
                     break;
-                case 'invoice':
-                    return $this->invoice($args);
+                case 'get.invoice':
+                    return $this->invoiceGet($args);
+                    break;
+                case 'create.invoice':
+                    return $this->invoiceCreate($args);
                     break;
             }
 
@@ -32,7 +35,7 @@ class FattureInCloudAPI extends Controller
         }
     }
 
-    private function clients(array $filter = array())
+    private function clientsGet(array $filter = array())
     {
         $apiIstance = new Api\ClientsApi(
             new GuzzleHttp\Client(),
@@ -52,7 +55,7 @@ class FattureInCloudAPI extends Controller
         return $results;
     }
 
-    private function products(array $filter = array())
+    private function productsGet(array $filter = array())
     {
         $apiIstance = new Api\ProductsApi(
             new GuzzleHttp\Client(),
@@ -72,7 +75,28 @@ class FattureInCloudAPI extends Controller
         return $results;
     }
 
-    private function invoice(array $args = array())
+    private function invoiceGet(array $filter = array())
+    {
+        $apiIstance = new Api\IssuedDocumentsApi(
+            new GuzzleHttp\Client(),
+            Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'))
+        );
+
+        $results = $apiIstance->listIssuedDocuments(
+            env('FIC_API_UID'),
+            'invoice',
+            null,
+            'detailed',
+            null,
+            null,
+            null,
+            $filter ? array_key_first($filter) . ' = \'' . $filter[array_key_first($filter)] . '\'' : ''
+        );
+
+        return $results;
+    }
+
+    private function invoiceCreate(array $args = array())
     {
         $apiIstance = new Api\IssuedDocumentsApi(
             new GuzzleHttp\Client(),
