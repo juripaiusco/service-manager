@@ -415,30 +415,60 @@ class Dashboard extends Controller
 
         $fic_products = $fic->api('products');
         $items_list = array();
-        $items_price_total = 0;
+        $invoice_items_rows = array();
+        $items_net_price_total = 0;
+        $items_gross_price_total = 0;
 
         foreach ($service_exp->details as $details) {
 
-            foreach ($fic_products->getData() as $product) {
+            $index = $details->service_id . $details->price_sell;
 
-                if ($details->service->fic_cod == $product->getCode()) {
+            if (!isset($invoice_items_rows[$index])) {
 
-                    $items_list[] = array(
-                        'id' => $product->getId(),
-                        'code' => $product->getCode(),
-                        'qty' => 1,
-                        'net_price' => $details->price_sell,
-                        'name' => $details->service->name_customer_view
-                    );
+                foreach ($fic_products->getData() as $product) {
 
-                    $items_price_total += $details->price_sell;
+                    if ($details->service->fic_cod == $product->getCode()) {
 
-                    break;
+                        $invoice_items_rows[$index] = array(
+                            'id' => $product->getId(),
+                            'code' => $product->getCode(),
+                            'name' => $details->service->name_customer_view,
+                            'category' => $product->getCategory(),
+                            /*'description' => $details->reference,
+                            'qty' => 1,*/
+                            'net_price' => $details->price_sell,
+                            'gross_price' => $details->price_sell * 1.22,
+                        );
 
+                        break;
+
+                    }
                 }
             }
 
+            $invoice_items_rows[$index]['reference'][] = $details->reference;
+
         }
+
+        foreach ($invoice_items_rows as $k => $item_row) {
+
+            $item_row_unique = array_unique($item_row['reference']);
+            sort($item_row_unique);
+            $description = implode("\n", $item_row_unique);
+
+            $item_row['qty'] = count($item_row['reference']);
+            $item_row['description'] = $description;
+
+            $items_net_price_total += $item_row['net_price'] * $item_row['qty'];
+            $items_gross_price_total += $item_row['gross_price'] * $item_row['qty'];
+
+            $items_list[$k] = $item_row;
+
+            unset($items_list[$k]['reference']);
+
+        }
+
+        sort($items_list);
 
         // -----------------------------
 
@@ -455,27 +485,33 @@ class Dashboard extends Controller
                 'address_extra' => $fic_clients->getData()[0]->getAddressExtra(),
                 'country' => $fic_clients->getData()[0]->getCountry(),
                 'certified_email' => $fic_clients->getData()[0]->getCertifiedEmail(),
-                'ei_code' => $fic_clients->getData()[0]->getEiCode()
+                'ei_code' => $fic_clients->getData()[0]->getEiCode(),
             ),
             'date' => $request['date'],
             'items_list' => $items_list,
             'payments_list' => array(
                 array(
-                    'amount' => ($items_price_total * 1.22),
+                    'id' => env('FIC_metodo_id'),
                     'due_date' => $request['date'],
+                    'amount' => $items_gross_price_total,
+                    'status' => $request['payment_received'] == 1 ? 'paid' : 'not_paid',
                     'payment_terms' => array(
                         'days' => 0,
                         'type' => 'standard'
                     ),
-                    'status' => $request['payment_received'] == 1 ? 'paid' : 'not_paid'
+                    'payment_account' => array(
+                        'id' => env('FIC_metodo_id'),
+                        'name' => env('FIC_metodo_nome'),
+                    )
                 )
             ),
             'payment_method' => array(
-                'id' => env('FIC_metodo_id')
-            )
+                'id' => env('FIC_metodo_id'),
+                'name' => env('FIC_metodo_nome'),
+            ),
+            'show_payment_method' => true,
+            'notes' => "<br>Documento privo di valenza fiscale ai sensi dell'art. 21 Dpr 633/72. L'originale è disponibile all'indirizzo telematico da Lei fornito oppure nella Sua area riservata dell'Agenzia delle Entrate.",
         );
-
-//        dd($invoice_args);
 
         $invoice = $fic->api('invoice', $invoice_args);
         dd($invoice);
