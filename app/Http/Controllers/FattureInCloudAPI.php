@@ -30,7 +30,7 @@ class FattureInCloudAPI extends Controller
                     return $this->invoiceGetEmail($args);
                     break;
                 case 'send.invoice.email':
-                    return $this->invoiceSendEmail($args);
+                    $this->invoiceSendEmail($args);
                     break;
                 case 'get.email':
                     return $this->emailGet($args);
@@ -146,13 +146,13 @@ class FattureInCloudAPI extends Controller
             Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'))
         );
 
-        $results = $apiIstance->scheduleEmail(
+        $apiIstance->scheduleEmail(
             env('FIC_API_UID'),
             $args['document_id'],
-            array($args['data'])
+            array(
+                'data' => $args['data']
+            )
         );
-
-        return $results;
     }
 
     private function emailGet(array $filter = array())

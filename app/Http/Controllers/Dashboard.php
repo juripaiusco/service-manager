@@ -397,11 +397,6 @@ class Dashboard extends Controller
 
         $fic = new FattureInCloudAPI();
 
-        /*if ($request['email_send'] == 1) {
-            $email = $fic->api('get.email');
-            dd($email);
-        }*/
-
         $fic_clients = $fic->api('get.clients', array(
             'vat_number' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
         ));
@@ -528,27 +523,25 @@ class Dashboard extends Controller
         if ($request['email_send'] == 1) {
 
             $emailData = $fic->api('get.invoice.email', array('document_id' => $invoice->getData()->getId()));
-//            dd($emailData->getData());
-
 
             $emailSend_args = array(
                 'document_id' => $invoice->getData()->getId(),
                 'data' => array(
-                    'sender_id' => 0,
-                    'sender_email' => 'no-reply@fattureincloud.it',
+                    'sender_email' => $emailData->getData()->getDefaultSenderEmail()->getEmail(),
                     'recipient_email' => $emailData->getData()->getRecipientEmail(),
                     'subject' => $emailData->getData()->getSubject(),
                     'body' => $emailData->getData()->getBody(),
                     'include' => array(
-                        'document' => true
-                    )
+                        'document' => $emailData->getData()->getDocumentExists(),
+                        'delivery_note' => $emailData->getData()->getDeliveryNoteExists(),
+                        'attachment' => $emailData->getData()->getAttachmentExists(),
+                        'accompanying_invoice' => $emailData->getData()->getAccompanyingInvoiceExists(),
+                    ),
+                    'attach_pdf' => false,
+                    'send_copy' => false,
                 )
             );
-//            dd($emailSend_args);
-
-            $emailSend = $fic->api('send.invoice.email', $emailSend_args);
-
-            dd($emailSend);
+            $fic->api('send.invoice.email', $emailSend_args);
 
         }
 
