@@ -26,6 +26,15 @@ class FattureInCloudAPI extends Controller
                 case 'create.invoice':
                     return $this->invoiceCreate($args);
                     break;
+                case 'get.invoice.email':
+                    return $this->invoiceGetEmail($args);
+                    break;
+                case 'send.invoice.email':
+                    return $this->invoiceSendEmail($args);
+                    break;
+                case 'get.email':
+                    return $this->emailGet($args);
+                    break;
             }
 
         } catch (Exception $e) {
@@ -110,6 +119,51 @@ class FattureInCloudAPI extends Controller
             array(
                 'data' => $args
             )
+        );
+
+        return $results;
+    }
+
+    private function invoiceGetEmail(array $args = array())
+    {
+        $apiIstance = new Api\IssuedDocumentsApi(
+            new GuzzleHttp\Client(),
+            Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'))
+        );
+
+        $results = $apiIstance->getEmailData(
+            env('FIC_API_UID'),
+            $args['document_id'],
+        );
+
+        return $results;
+    }
+
+    private function invoiceSendEmail(array $args = array())
+    {
+        $apiIstance = new Api\IssuedDocumentsApi(
+            new GuzzleHttp\Client(),
+            Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'))
+        );
+
+        $results = $apiIstance->scheduleEmail(
+            env('FIC_API_UID'),
+            $args['document_id'],
+            array($args['data'])
+        );
+
+        return $results;
+    }
+
+    private function emailGet(array $filter = array())
+    {
+        $apiIstance = new Api\EmailsApi(
+            new GuzzleHttp\Client(),
+            Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'))
+        );
+
+        $results = $apiIstance->listEmails(
+            env('FIC_API_UID'),
         );
 
         return $results;

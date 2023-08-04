@@ -397,6 +397,11 @@ class Dashboard extends Controller
 
         $fic = new FattureInCloudAPI();
 
+        /*if ($request['email_send'] == 1) {
+            $email = $fic->api('get.email');
+            dd($email);
+        }*/
+
         $fic_clients = $fic->api('get.clients', array(
             'vat_number' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
         ));
@@ -520,9 +525,32 @@ class Dashboard extends Controller
 
         $invoice = $fic->api('create.invoice', $invoice_args);
 
-        
+        if ($request['email_send'] == 1) {
 
-        dd($invoice);
+            $emailData = $fic->api('get.invoice.email', array('document_id' => $invoice->getData()->getId()));
+//            dd($emailData->getData());
+
+
+            $emailSend_args = array(
+                'document_id' => $invoice->getData()->getId(),
+                'data' => array(
+                    'sender_id' => 0,
+                    'sender_email' => 'no-reply@fattureincloud.it',
+                    'recipient_email' => $emailData->getData()->getRecipientEmail(),
+                    'subject' => $emailData->getData()->getSubject(),
+                    'body' => $emailData->getData()->getBody(),
+                    'include' => array(
+                        'document' => true
+                    )
+                )
+            );
+//            dd($emailSend_args);
+
+            $emailSend = $fic->api('send.invoice.email', $emailSend_args);
+
+            dd($emailSend);
+
+        }
 
         return to_route('dashboard');
     }
