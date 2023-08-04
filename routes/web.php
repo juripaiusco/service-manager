@@ -59,6 +59,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/customer/service_exp/update/{id}', [\App\Http\Controllers\CustomerServiceExpiration::class, 'update'])->name('customer.serviceExpiration.update');
     Route::get('/customer/service_exp/destroy/{id}', [\App\Http\Controllers\CustomerServiceExpiration::class, 'destroy'])->name('customer.serviceExpiration.destroy');
 
+    Route::get('/finance/incoming', [\App\Http\Controllers\Finance::class, 'incoming'])->name('finance.incoming');
+    Route::get('/finance/outcoming', [\App\Http\Controllers\Finance::class, 'outcoming'])->name('finance.outcoming');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

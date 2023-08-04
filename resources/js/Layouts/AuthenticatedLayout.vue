@@ -48,6 +48,30 @@ const showingNavigationDropdown = ref(false);
                                     Clienti
                                 </NavLink>
 
+                                <NavLink class="w-[100px] text-center dropdown-toggle"
+                                         data-bs-toggle="dropdown"
+                                         href="#"
+                                         :active="route().current().search('finance') === 0 ? true : false">
+                                    Finanze
+                                </NavLink>
+
+                                <div class="dropdown">
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <Link class="dropdown-item"
+                                                  :href="route('finance.incoming')">
+                                                Entrate
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link class="dropdown-item"
+                                                  :href="route('finance.outcoming')">
+                                                Uscite
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
+
                                 <!-- <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Fatturato
                                 </NavLink>
