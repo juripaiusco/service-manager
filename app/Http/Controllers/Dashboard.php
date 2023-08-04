@@ -545,6 +545,10 @@ class Dashboard extends Controller
 
         }
 
+        // Rinnovo servizio
+        $customer = new Customer();
+        $customer->service_exp_renew($id);
+
         return to_route('dashboard');
     }
 }
