@@ -20,17 +20,20 @@ class Finance extends Controller
 
     public function outcoming()
     {
-        $finances_last_year = $this->category_calc(date('Y') - 1);
-        $finances_this_year = $this->category_calc(date('Y'));
+        $finances_last_year = $this->category_calc((date('Y') - 1) . '-01-01', (date('Y') - 1) . date('-m-d'));
+        $finances_this_year = $this->category_calc(date('Y') . '-01-01', date('Y-m-d'));
+        $finances_all_category = $this->category_calc((date('Y') - 1) . '-01-01', date('Y-m-d'));
 
         $category_array = array();
+        foreach ($finances_all_category as $finance_category) {
+            $category_array[$finance_category->categoria] = array(
+                'categoria' => $finance_category->categoria,
+                'diff' => 0,
+                'profit' => true
+            );
+        }
 
         foreach ($finances_last_year as $finance_last_year) {
-
-            $category_array[$finance_last_year->categoria] = array(
-                'categoria' => $finance_last_year->categoria,
-                'diff' => 0
-            );
 
             foreach ($finances_this_year as $finance_this_year) {
 
@@ -54,6 +57,11 @@ class Finance extends Controller
 
         }
 
+        usort($category_array, function ($a, $b) {
+            return $a['diff'] <=> $b['diff'];
+        });
+
+//        dd($category_array);
         $categories_profit = array('categories_profit' => $category_array);
 
 //        dd($categories_profit);
@@ -66,11 +74,11 @@ class Finance extends Controller
         ]);
     }
 
-    private function category_calc(int $year)
+    private function category_calc(string $date_from, string $date_to)
     {
         $finances = \App\Models\Finance::query();
-        $finances = $finances->where('data', '<=', $year . date('-m-d'));
-        $finances = $finances->where('data', '>=', $year . '-01-01');
+        $finances = $finances->where('data', '>=', $date_from);
+        $finances = $finances->where('data', '<=', $date_to);
         $finances = $finances->where('tipo', '=', 'passiva');
         $finances = $finances->groupBy('categoria');
 

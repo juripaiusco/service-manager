@@ -84,7 +84,7 @@ defineProps({
                         <table class="table table-sm">
 
                             <tbody>
-                            <template v-for="category_profit in data.categories_profit">
+                            <template v-for="category_profit in data.categories_profit.slice().reverse()">
 
                                 <tr v-if="category_profit.profit === true">
                                     <td>
@@ -94,7 +94,7 @@ defineProps({
                                     </td>
                                     <td class="text-right">
 
-                                        {{ __currency(category_profit.diff, 'EUR') }}
+                                        {{ category_profit.diff ? __currency(category_profit.diff, 'EUR') : '-' }}
 
                                     </td>
                                 </tr>
