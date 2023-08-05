@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/finance/incoming', [\App\Http\Controllers\Finance::class, 'incoming'])->name('finance.incoming');
     Route::get('/finance/outcoming', [\App\Http\Controllers\Finance::class, 'outcoming'])->name('finance.outcoming');
+    Route::get('/finance/outcoming/{category}', [\App\Http\Controllers\Finance::class, 'outcoming_category'])->name('finance.outcoming.category');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

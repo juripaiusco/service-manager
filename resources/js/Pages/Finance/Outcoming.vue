@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {__date} from "@/ComponentsExt/Date";
@@ -93,7 +93,9 @@ defineProps({
                                 <tr v-if="category_profit.profit === true">
                                     <td>
 
-                                        {{ category_profit.categoria }}
+                                        <Link :href="route('finance.outcoming.category', category_profit.categoria)">
+                                            {{ category_profit.categoria }}
+                                        </Link>
 
                                     </td>
                                     <td class="text-right">
@@ -122,7 +124,9 @@ defineProps({
                                 <tr v-if="category_profit.profit === false">
                                     <td>
 
-                                        {{ category_profit.categoria }}
+                                        <Link :href="route('finance.outcoming.category', category_profit.categoria)">
+                                            {{ category_profit.categoria }}
+                                        </Link>
 
                                     </td>
                                     <td class="text-right">
