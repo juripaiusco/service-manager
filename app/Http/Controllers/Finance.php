@@ -6,6 +6,7 @@ use FattureInCloud\Filter\Condition;
 use FattureInCloud\Filter\Filter;
 use FattureInCloud\Filter\Operator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class Finance extends Controller
@@ -19,9 +20,69 @@ class Finance extends Controller
 
     public function outcoming()
     {
+        $finances_last_year = $this->category_calc(date('Y') - 1);
+        $finances_this_year = $this->category_calc(date('Y'));
+
+        $category_array = array();
+
+        foreach ($finances_last_year as $finance_last_year) {
+
+            $category_array[$finance_last_year->categoria] = array(
+                'categoria' => $finance_last_year->categoria,
+                'diff' => 0
+            );
+
+            foreach ($finances_this_year as $finance_this_year) {
+
+                if ($finance_last_year->categoria == $finance_this_year->categoria) {
+
+                    $diff = $finance_this_year->importo_netto - $finance_last_year->importo_netto;
+
+                    if ($diff <= 0) {
+                        $category_array[$finance_last_year->categoria]['profit'] = true;
+                    } else if ($diff > 0) {
+                        $category_array[$finance_last_year->categoria]['profit'] = false;
+                    }
+
+                    $category_array[$finance_last_year->categoria]['diff'] = $diff;
+
+                    break;
+
+                }
+
+            }
+
+        }
+
+        $categories_profit = array('categories_profit' => $category_array);
+
+//        dd($categories_profit);
+
         return Inertia::render('Finance/Outcoming', [
-            'data' => $this->months_calc('passiva')
+            'data' => array_merge(
+                $this->months_calc('passiva'),
+                $categories_profit,
+            )
         ]);
+    }
+
+    private function category_calc(int $year)
+    {
+        $finances = \App\Models\Finance::query();
+        $finances = $finances->where('data', '<=', $year . date('-m-d'));
+        $finances = $finances->where('data', '>=', $year . '-01-01');
+        $finances = $finances->where('tipo', '=', 'passiva');
+        $finances = $finances->groupBy('categoria');
+
+        $finances = $finances->select(DB::raw('
+            anno,
+            categoria,
+            SUM(importo_netto) as importo_netto
+        '));
+
+        $finances = $finances->orderBy('importo_netto', 'DESC');
+
+        return $finances->get();
     }
 
     private function months_calc(string $tipo = 'attiva')
@@ -43,8 +104,8 @@ class Finance extends Controller
                 // Calcolo differenza tra anno precedente -------------------------
                 if (!isset($years_diff[$y])) {
                     $finances_invoice = \App\Models\Finance::query()
-                        ->where('data', '<=', $y . '-' . date('m'). '-' . date('d'))
-                        ->where('data', '>', $y . '-01-01')
+                        ->where('data', '<=', $y . '-' . date('m-d'))
+                        ->where('data', '>=', $y . '-01-01')
                         ->where('tipo_doc', '=', $tipo == 'attiva' ? 'fatture' : 'spesa')
                         ->where('tipo', '=', $tipo)
                         ->sum('importo_netto');

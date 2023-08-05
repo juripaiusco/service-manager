@@ -76,20 +76,73 @@ defineProps({
                 </tbody>
             </table>
 
-            <br>
+            <div class="card-group mt-8">
+                <div class="card !border-green-600 !border-r-gray-200">
+                    <div class="card-header text-center !border-green-600 !text-green-600">Spese nella norma</div>
+                    <div class="card-body">
 
-            <div class="row">
-                <div class="col">
-                    <div class="card !border-green-600">
-                        <div class="card-header !border-green-600 !text-green-600">Spese nella norma</div>
-                        <div class="card-body"></div>
+                        <table class="table table-sm">
+
+                            <tbody>
+                            <template v-for="category_profit in data.categories_profit">
+
+                                <tr v-if="category_profit.profit === true">
+                                    <td>
+
+                                        {{ category_profit.categoria }}
+
+                                    </td>
+                                    <td class="text-right">
+
+                                        {{ __currency(category_profit.diff, 'EUR') }}
+
+                                    </td>
+                                </tr>
+
+                            </template>
+                            </tbody>
+
+                        </table>
+
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card !border-red-600">
-                        <div class="card-header !border-red-600 !text-red-600">Spese fuori controllo</div>
-                        <div class="card-body"></div>
+                <div class="card !border-red-600">
+                    <div class="card-header text-center !border-red-600 !text-red-600">Spese fuori controllo</div>
+                    <div class="card-body !pb-0">
+
+                        <table class="table table-sm">
+
+                            <tbody>
+                            <template v-for="category_profit in data.categories_profit">
+
+                                <tr v-if="category_profit.profit === false">
+                                    <td>
+
+                                        {{ category_profit.categoria }}
+
+                                    </td>
+                                    <td class="text-right">
+
+                                        {{ __currency(category_profit.diff, 'EUR') }}
+
+                                    </td>
+                                </tr>
+
+                            </template>
+                            </tbody>
+
+                        </table>
+
                     </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col ">
+
+                </div>
+                <div class="col">
+
                 </div>
             </div>
 
