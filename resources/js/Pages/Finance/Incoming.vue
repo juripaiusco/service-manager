@@ -38,34 +38,35 @@ defineProps({
                 {{ __currency(data.years_diff, 'EUR') }}
             </h2>
 
-            <table class="table">
+            <table class="table table-sm">
                 <thead>
                 <tr>
                     <th></th>
                     <th v-for="(month, index) in data.months_list"
+                        class="w-[120px] text-sm"
                         :class="{'table-primary': index == data.today_month}">
                         {{ __(month) }}
                     </th>
-                    <th></th>
+                    <th class="w-[140px]"></th>
                 </tr>
                 </thead>
                 <tbody>
 
-                <tr v-for="months in data.months_incoming">
+                <tr v-for="months in data.months_calc">
 
                     <th>
                         {{ months.y }}
                     </th>
 
                     <td v-for="(month, index) in months.m"
-                        class="text-right"
+                        class="text-right align-middle !text-sm"
                         :class="{'table-primary': index == data.today_month}">
 
                         {{ __currency(month, 'EUR') }}
 
                     </td>
 
-                    <th>
+                    <th class="text-right">
                         {{ __currency(months.total, 'EUR') }}
                     </th>
 
