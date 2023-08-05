@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use FattureInCloud\Filter\Condition;
+use FattureInCloud\Filter\Operator;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -95,8 +97,14 @@ class Finance extends Controller
 
     public function documentsGet()
     {
-        $invoices = new FattureInCloudAPI();
-        $invoices = $invoices->api('get.documents');
+        $condition = new Condition('date', Operator::GTE, '2023-01-01');
+        $q = $condition->buildQuery();
+
+        $fic = new FattureInCloudAPI();
+
+        // ---------------------------------------
+
+        $invoices = $fic->api('get.invoice', array('q' => $q));
 
         foreach ($invoices->getData() as $invoice) {
 
@@ -120,10 +128,40 @@ class Finance extends Controller
             $finance->save();
 
         }
+
+        // ---------------------------------------
+
+        $invoices_received = $fic->api('get.invoice.received', array('q' => $q));
+
+        foreach ($invoices_received->getData() as $invoice) {
+
+            $finance = \App\Models\Finance::query();
+            $finance = $finance->where('fic_id', $invoice->getId())->first();
+
+            if (!$finance)
+                $finance = new \App\Models\Finance();
+
+            $finance->fic_id = $invoice->getId();
+            $finance->tipo_doc = 'spesa';
+            $finance->tipo = 'passive';
+            $finance->numero = $invoice->getInvoiceNumber();
+            $finance->nome = $invoice->getEntity()->getName();
+            $finance->anno = date('Y', $invoice->getDate()->getTimestamp());
+            $finance->data = $invoice->getDate();
+            $finance->categoria = $invoice->getCategory();
+            $finance->importo_netto = $invoice->getAmountNet();
+            $finance->importo_iva = $invoice->getAmountVat();
+            $finance->importo_totale = $invoice->getAmountGross();
+
+            $finance->save();
+
+        }
     }
 
     public function outcoming()
     {
+        
+
         return Inertia::render('Finance/Outcoming');
     }
 }

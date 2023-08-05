@@ -37,8 +37,8 @@ class FattureInCloudAPI extends Controller
                 case 'get.email':
                     return $this->emailGet($args);
                     break;
-                case 'get.documents':
-                    return $this->documentsGet($args);
+                case 'get.invoice.received':
+                    return $this->invoiceReceivedGet($args);
                     break;
             }
 
@@ -104,7 +104,7 @@ class FattureInCloudAPI extends Controller
             null,
             null,
             null,
-            $filter ? array_key_first($filter) . ' = \'' . $filter[array_key_first($filter)] . '\'' : ''
+            $filter['q']
         );
 
         return $results;
@@ -174,25 +174,22 @@ class FattureInCloudAPI extends Controller
         return $results;
     }
 
-    private function documentsGet(array $filter = array())
+    private function invoiceReceivedGet(array $filter = array())
     {
-        $apiIstance = new Api\IssuedDocumentsApi(
+        $apiIstance = new Api\ReceivedDocumentsApi(
             new GuzzleHttp\Client(),
             Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'))
         );
 
-        $condition = new Condition('date', Operator::GTE, '2023-01-01');
-        $q = $condition->buildQuery();
-
-        $results = $apiIstance->listIssuedDocuments(
+        $results = $apiIstance->listReceivedDocuments(
             env('FIC_API_UID'),
-            'invoice',
+            'expense',
             null,
             'detailed',
             '-date',
             null,
             null,
-            $q
+            $filter['q']
         );
 
         return $results;
