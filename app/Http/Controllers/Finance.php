@@ -20,6 +20,16 @@ class Finance extends Controller
 
     public function outcoming()
     {
+        return Inertia::render('Finance/Outcoming', [
+            'data' => array_merge(
+                $this->months_calc('passiva'),
+                $this->category_calca_array(),
+            )
+        ]);
+    }
+
+    private function category_calca_array()
+    {
         $finances_last_year = $this->category_calc((date('Y') - 1) . '-01-01', (date('Y') - 1) . date('-m-d'));
         $finances_this_year = $this->category_calc(date('Y') . '-01-01', date('Y-m-d'));
         $finances_all_category = $this->category_calc((date('Y') - 1) . '-01-01', date('Y-m-d'));
@@ -61,17 +71,7 @@ class Finance extends Controller
             return $a['diff'] <=> $b['diff'];
         });
 
-//        dd($category_array);
-        $categories_profit = array('categories_profit' => $category_array);
-
-//        dd($categories_profit);
-
-        return Inertia::render('Finance/Outcoming', [
-            'data' => array_merge(
-                $this->months_calc('passiva'),
-                $categories_profit,
-            )
-        ]);
+        return array('categories_profit' => $category_array);
     }
 
     private function category_calc(string $date_from, string $date_to)

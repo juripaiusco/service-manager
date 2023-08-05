@@ -35,7 +35,7 @@ defineProps({
                 }">
                     {{ __currency(data.years_diff, 'EUR') }}
                 </h2>
-                <div class="text-center text-sm">( rispetto lo scorso anno )</div>
+                <div class="text-center text-sm">( rispetto lo scorso anno ad oggi )</div>
 
             </div>
 
@@ -137,14 +137,9 @@ defineProps({
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col ">
+            <hr class="m-10">
 
-                </div>
-                <div class="col">
 
-                </div>
-            </div>
 
         </ApplicationContainer>
 
