@@ -20,20 +20,20 @@ class Finance extends Controller
 
     public function outcoming()
     {
-
-
-        $invoice_last_year = $this->invoice_get()->where('anno', '=', date('Y') - 1);
-        $invoice_last_year = $invoice_last_year->get();
-
-        $invoice_this_year = $this->invoice_get()->where('anno', '=', date('Y'));
-        $invoice_this_year = $invoice_this_year->get();
-
         return Inertia::render('Finance/Outcoming', [
             'data' => array_merge(
                 $this->months_calc('passiva'),
                 $this->category_calca_array(),
-                array('invoice_last_year' => $invoice_last_year),
-                array('invoice_this_year' => $invoice_this_year)
+                array(
+                    'invoice_last_year' => $this->invoice_get()
+                        ->where('anno', '=', date('Y') - 1)
+                        ->get()
+                ),
+                array(
+                    'invoice_this_year' => $this->invoice_get()
+                        ->where('anno', '=', date('Y'))
+                        ->get()
+                )
             ),
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
