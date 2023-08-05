@@ -62,9 +62,7 @@ class Finance extends Controller
                     break;
 
                 }
-
             }
-
         }
 
         usort($category_array, function ($a, $b) {
