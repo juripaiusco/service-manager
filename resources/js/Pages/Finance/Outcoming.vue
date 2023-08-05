@@ -143,6 +143,8 @@ defineProps({
 
             <hr class="m-10">
 
+            <h2  class="text-4xl text-center mb-6">Fatture</h2>
+
             <div class="inline-flex w-full mb-6">
 
                 <div class="w-3/4"></div>
@@ -163,7 +165,7 @@ defineProps({
                 </div>
                 <div class="card-body">
 
-                    <Table class="table-sm table-striped"
+                    <Table class="table-sm table-striped text-sm"
                            :data="{
                                 filters: filters,
                                 tblName: 'invoice',
@@ -229,7 +231,7 @@ defineProps({
                 </div>
                 <div class="card-body">
 
-                    <Table class="table-sm table-striped"
+                    <Table class="table-sm table-striped text-sm"
                            :data="{
                                 filters: filters,
                                 tblName: 'invoice',
