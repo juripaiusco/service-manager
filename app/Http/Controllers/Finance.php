@@ -100,8 +100,11 @@ class Finance extends Controller
 
         foreach ($invoices->getData() as $invoice) {
 
-//            dd($invoice);
-            $finance = new \App\Models\Finance();
+            $finance = \App\Models\Finance::query();
+            $finance = $finance->where('fic_id', $invoice->getId())->first();
+
+            if (!$finance)
+                $finance = new \App\Models\Finance();
 
             $finance->fic_id = $invoice->getId();
             $finance->tipo_doc = 'fatture';
