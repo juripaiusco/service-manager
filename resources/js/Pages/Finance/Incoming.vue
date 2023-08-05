@@ -26,11 +26,11 @@ defineProps({
 
         <ApplicationContainer>
 
-            <h2 class="text-2xl text-center mb-6">
+            <h2 class="text-2xl text-center mt-2 mb-8">
                 Entrate rispetto lo scorso anno
             </h2>
 
-            <h2 class="text-4xl font-semibold text-center mb-8"
+            <h2 class="text-4xl font-semibold text-center mb-10"
                 :class="{
                 'text-red-600': data.years_diff < 0,
                 'text-green-600': data.years_diff > 0,
