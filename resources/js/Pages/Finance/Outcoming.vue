@@ -3,11 +3,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
+import {__date} from "@/ComponentsExt/Date";
 import {__currency} from "@/ComponentsExt/Currency";
 import {__} from "@/ComponentsExt/Translations";
+import Table from "@/Components/Table/Table.vue";
+import TableSearch from "@/Components/Table/TableSearch.vue";
 
 defineProps({
     data: Object,
+    filters: Object
 });
 
 </script>
@@ -139,7 +143,149 @@ defineProps({
 
             <hr class="m-10">
 
+            <div class="inline-flex w-full mb-6">
 
+                <div class="w-3/4"></div>
+
+                <div class="w-1/4">
+
+                    <TableSearch placeholder="Cerca fattura passiva"
+                                 route-search="finance.outcoming"
+                                 :filters="filters"></TableSearch>
+
+                </div>
+
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    {{ __date(data!.invoice_this_year[0].data, 'y') }}
+                </div>
+                <div class="card-body">
+
+                    <Table class="table-sm table-striped"
+                           :data="{
+                                filters: filters,
+                                tblName: 'invoice',
+                                routeSearch: 'finance.outcoming',
+                                data: data!.invoice_this_year,
+                                structure: [{
+                                    class: 'text-left',
+                                    label: 'Numero',
+                                    field: 'numero',
+                                }, {
+                                    class: 'text-left',
+                                    label: 'Nome',
+                                    field: 'nome',
+                                }, {
+                                    class: 'text-left',
+                                    label: 'Tipo',
+                                    field: 'tipo_doc',
+                                }, {
+                                    class: 'text-center',
+                                    label: 'Data',
+                                    field: 'data',
+                                    fnc: function (d) {
+                                        return __date(d.data, 'day');
+                                    }
+                                }, {
+                                    class: 'text-right !align-top w-[10%]',
+                                    label: 'Importo',
+                                    field: 'importo_netto',
+                                    fnc: function (d) {
+
+                                        return d.importo_netto > 0 ? __currency(d.importo_netto, 'EUR') : '-'
+
+                                    }
+                                }, {
+                                    class: 'text-right !align-top w-[10%]',
+                                    label: 'IVA',
+                                    field: 'importo_iva',
+                                    fnc: function (d) {
+
+                                        return d.importo_iva > 0 ? __currency(d.importo_iva, 'EUR') : '-'
+
+                                    }
+                                }, {
+                                    class: 'text-right !align-top w-[10%]',
+                                    label: 'Totale',
+                                    field: 'importo_totale',
+                                    fnc: function (d) {
+
+                                        return d.importo_totale > 0 ? __currency(d.importo_totale, 'EUR') : '-'
+
+                                    }
+                                }]
+                    }" />
+
+                </div>
+            </div>
+
+            <br>
+
+            <div class="card">
+                <div class="card-header">
+                    {{ __date(data!.invoice_last_year[0].data, 'y') }}
+                </div>
+                <div class="card-body">
+
+                    <Table class="table-sm table-striped"
+                           :data="{
+                                filters: filters,
+                                tblName: 'invoice',
+                                routeSearch: 'finance.outcoming',
+                                data: data!.invoice_last_year,
+                                structure: [{
+                                    class: 'text-left',
+                                    label: 'Numero',
+                                    field: 'numero',
+                                }, {
+                                    class: 'text-left',
+                                    label: 'Nome',
+                                    field: 'nome',
+                                }, {
+                                    class: 'text-left',
+                                    label: 'Tipo',
+                                    field: 'tipo_doc',
+                                }, {
+                                    class: 'text-center',
+                                    label: 'Data',
+                                    field: 'data',
+                                    fnc: function (d) {
+                                        return __date(d.data, 'day');
+                                    }
+                                }, {
+                                    class: 'text-right !align-top w-[10%]',
+                                    label: 'Importo',
+                                    field: 'importo_netto',
+                                    fnc: function (d) {
+
+                                        return d.importo_netto > 0 ? __currency(d.importo_netto, 'EUR') : '-'
+
+                                    }
+                                }, {
+                                    class: 'text-right !align-top w-[10%]',
+                                    label: 'IVA',
+                                    field: 'importo_iva',
+                                    fnc: function (d) {
+
+                                        return d.importo_iva > 0 ? __currency(d.importo_iva, 'EUR') : '-'
+
+                                    }
+                                }, {
+                                    class: 'text-right !align-top w-[10%]',
+                                    label: 'Totale',
+                                    field: 'importo_totale',
+                                    fnc: function (d) {
+
+                                        return d.importo_totale > 0 ? __currency(d.importo_totale, 'EUR') : '-'
+
+                                    }
+                                }]
+                    }" />
+
+                </div>
+            </div>
 
         </ApplicationContainer>
 

@@ -20,12 +20,65 @@ class Finance extends Controller
 
     public function outcoming()
     {
+
+
+        $invoice_last_year = $this->invoice_get()->where('anno', '=', date('Y') - 1);
+        $invoice_last_year = $invoice_last_year->get();
+
+        $invoice_this_year = $this->invoice_get()->where('anno', '=', date('Y'));
+        $invoice_this_year = $invoice_this_year->get();
+
         return Inertia::render('Finance/Outcoming', [
             'data' => array_merge(
                 $this->months_calc('passiva'),
                 $this->category_calca_array(),
-            )
+                array('invoice_last_year' => $invoice_last_year),
+                array('invoice_this_year' => $invoice_this_year)
+            ),
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
+    }
+
+    private function invoice_get()
+    {
+        $request_search_array = [
+            'numero',
+            'nome',
+            'tipo_doc',
+            'data',
+            'importo_netto',
+            'importo_iva',
+            'importo_totale',
+        ];
+
+        $data = \App\Models\Finance::query();
+
+        // Request validate
+        request()->validate([
+            'orderby' => ['in:' . implode(',', $request_search_array)],
+            'ordertype' => ['in:asc,desc']
+        ]);
+
+        // Filtro RICERCA
+        if (request('s')) {
+            $data->where(function ($q) use ($request_search_array) {
+
+                foreach ($request_search_array as $field) {
+                    $q->orWhere($field, 'like', '%' . request('s') . '%');
+                }
+
+            });
+        }
+
+        // Filtro ORDINAMENTO
+        if (request('orderby') && request('ordertype')) {
+            $data->orderby(request('orderby'), strtoupper(request('ordertype')));
+        }
+
+        $data = $data->where('tipo', '=', 'passiva');
+        $data = $data->orderBy('data', 'DESC');
+
+        return $data;
     }
 
     private function category_calca_array()

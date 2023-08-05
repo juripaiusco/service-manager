@@ -24,6 +24,9 @@ export function __date(dateString, format = '') {
         case 'date':
             return y + '-' + m + '-' + d;
             break;
+        case 'y':
+            return y;
+            break;
         case 'm':
             return m;
             break;
