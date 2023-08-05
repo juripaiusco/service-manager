@@ -26,17 +26,18 @@ defineProps({
 
         <ApplicationContainer>
 
-            <h2 class="text-2xl text-center mt-2 mb-8">
-                Entrate rispetto lo scorso anno
-            </h2>
+            <div class="mt-5 mb-12">
 
-            <h2 class="text-4xl font-semibold text-center mb-10"
-                :class="{
+                <h2 class="text-[50px] font-semibold text-center"
+                    :class="{
                 'text-red-600': data.years_diff < 0,
                 'text-green-600': data.years_diff > 0,
                 }">
-                {{ __currency(data.years_diff, 'EUR') }}
-            </h2>
+                    {{ __currency(data.years_diff, 'EUR') }}
+                </h2>
+                <div class="text-center text-sm">( rispetto lo scorso anno )</div>
+
+            </div>
 
             <table class="table table-sm">
                 <thead>
