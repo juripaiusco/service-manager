@@ -20,6 +20,40 @@ class Finance extends Controller
 
     public function outcoming(Request $request)
     {
+        return Inertia::render('Finance/Outcoming', [
+            'data' => array_merge(
+                $this->months_calc('passiva'),
+                $this->category_calca_array(),
+                array(
+                    'invoice_last_year' => $this->invoice_get()
+                        ->where('anno', '=', date('Y') - 1)
+                        ->get()
+                ),
+                array(
+                    'invoice_this_year' => $this->invoice_get()
+                        ->where('anno', '=', date('Y'))
+                        ->get()
+                ),
+                array( 'month_details' => $this->month_details($request['month_details']) ),
+                array( 'this_year' => date('Y') ),
+                array( 'last_year' => date('Y') - 1 ),
+            ),
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+        ]);
+    }
+
+    public function outcoming_category($category)
+    {
+
+        $data['category'] = $category;
+
+        return Inertia::render('Finance/Outcoming/Category', [
+            'data' => $data
+        ]);
+    }
+
+    private function month_details($month_details_request)
+    {
         $month_details = array(
             'month_details' => null,
             'month_details_by_name' => null,
@@ -27,10 +61,10 @@ class Finance extends Controller
             'month_selected' => null,
         );
 
-        if ($request['month_details']) {
+        if ($month_details_request) {
 
             $month_details = \App\Models\Finance::query();
-            $month_details = $month_details->whereMonth('data', '=', $request['month_details']);
+            $month_details = $month_details->whereMonth('data', '=', $month_details_request);
             $month_details = $month_details->where(function ($q) {
                 $q->where('anno', '=', date('Y'));
                 $q->orWhere('anno', '=', date('Y') - 1);
@@ -82,41 +116,12 @@ class Finance extends Controller
                 'month_details' => $month_details,
                 'month_details_by_name' => $month_details_by_name,
                 'month_details_diff' => $month_details_diff,
-                'month_selected' => $request['month_details'],
+                'month_selected' => $month_details_request,
             );
 
         }
 
-        return Inertia::render('Finance/Outcoming', [
-            'data' => array_merge(
-                $this->months_calc('passiva'),
-                $this->category_calca_array(),
-                array(
-                    'invoice_last_year' => $this->invoice_get()
-                        ->where('anno', '=', date('Y') - 1)
-                        ->get()
-                ),
-                array(
-                    'invoice_this_year' => $this->invoice_get()
-                        ->where('anno', '=', date('Y'))
-                        ->get()
-                ),
-                array( 'month_details' => $month_details ),
-                array( 'this_year' => date('Y') ),
-                array( 'last_year' => date('Y') - 1 ),
-            ),
-            'filters' => request()->all(['s', 'orderby', 'ordertype'])
-        ]);
-    }
-
-    public function outcoming_category($category)
-    {
-
-        $data['category'] = $category;
-
-        return Inertia::render('Finance/Outcoming/Category', [
-            'data' => $data
-        ]);
+        return $month_details;
     }
 
     private function invoice_get()
