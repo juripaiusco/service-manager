@@ -103,7 +103,7 @@ const month_details = ref(props.data!.month_details.month_selected);
 
                 <div class="text-right mt-8">
 
-                    <button class="btn btn-light"
+                    <!-- <button class="btn btn-light"
                             type="button"
                             @click="month_details = null">
 
@@ -112,7 +112,20 @@ const month_details = ref(props.data!.month_details.month_selected);
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
 
-                    </button>
+                    </button> -->
+
+                    <Link class="btn btn-light"
+                          @click="month_details = null"
+                          :href="route('finance.outcoming')"
+                          preserve-state
+                          preserve-scroll >
+
+                        <svg class="w-6 h-6"
+                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+
+                    </Link>
 
                 </div>
 

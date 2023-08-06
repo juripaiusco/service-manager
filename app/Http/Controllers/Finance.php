@@ -23,6 +23,7 @@ class Finance extends Controller
         $month_details = array(
             'month_details' => null,
             'month_details_by_name' => null,
+            'month_details_diff' => null,
             'month_selected' => null,
         );
 
@@ -73,6 +74,7 @@ class Finance extends Controller
             $month_details = array(
                 'month_details' => $month_details,
                 'month_details_by_name' => $month_details_by_name,
+                'month_details_diff' => null,
                 'month_selected' => $request['month_details'],
             );
 
