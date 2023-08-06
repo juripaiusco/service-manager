@@ -23,7 +23,7 @@ class Finance extends Controller
         return Inertia::render('Finance/Outcoming', [
             'data' => array_merge(
                 $this->months_calc('passiva'),
-                $this->category_calca_array(),
+                $this->category_calc_array(),
                 array(
                     'invoice_last_year' => $this->invoice_get()
                         ->where('anno', '=', date('Y') - 1)
@@ -44,11 +44,48 @@ class Finance extends Controller
 
     public function outcoming_category($category)
     {
+        $finances = \App\Models\Finance::query();
+        $finances = $finances->where('categoria', $category);
+        $finances = $finances->orderBy('data', 'DESC');
+        $finances = $finances->get();
 
-        $data['category'] = $category;
+        $category_count = array();
+
+        foreach ($finances as $finance) {
+
+            for ($y = date('Y'); $y >= $finances[count($finances) - 1]->anno; $y--) {
+
+                if (!isset($category_count[$y . ' ']['total']))
+                    $category_count[$y . ' ']['total'] = 0;
+
+                for ($m = 1; $m <= 12; $m++) {
+
+                    if (!isset($months_list[$m]))
+                        $months_list[$m] = date('F', mktime(0,0,0, $m));
+
+                    if (!isset($category_count[$y . ' ']['m'][$m]))
+                        $category_count[$y . ' ']['m'][$m] = 0;
+
+                    if (substr($finance->data, 0, 7) ==
+                        date('Y-m', mktime(0, 0, 0, $m, 1, $y))) {
+
+                        $category_count[$y . ' ']['m'][$m] += $finance->importo_netto;
+                        $category_count[$y . ' ']['total'] += $finance->importo_netto;
+
+                    }
+
+                }
+            }
+        }
 
         return Inertia::render('Finance/Outcoming/Category', [
-            'data' => $data
+            'data' => array(
+                'today_month' => date('n'),
+                'months_list' => $months_list,
+                'category' => $category,
+                'category_count' => $category_count,
+                'invoices' => $finances,
+            )
         ]);
     }
 
@@ -166,7 +203,7 @@ class Finance extends Controller
         return $data;
     }
 
-    private function category_calca_array()
+    private function category_calc_array()
     {
         $finances_last_year = $this->category_calc((date('Y') - 1) . '-01-01', (date('Y') - 1) . date('-m-d'));
         $finances_this_year = $this->category_calc(date('Y') . '-01-01', date('Y-m-d'));
