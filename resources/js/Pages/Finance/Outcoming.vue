@@ -28,7 +28,9 @@ const month_details = ref(props.data!.month_details.month_selected);
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Finanze', 'Uscite']" />
+            <ApplicationHeader :breadcrumb-array="
+                month_details ? ['Finanze', 'Uscite', __(data!.months_list[month_details])] : ['Finanze', 'Uscite']
+            " />
 
         </template>
 
