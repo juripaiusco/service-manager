@@ -116,7 +116,7 @@ const month_details = ref(0);
                     <div class="card">
                         <div class="card-header font-bold">
 
-                            {{ data!.this_year }}
+                            {{ data!.this_year }} {{ __(data!.months_list[month_details]) }}
 
                         </div>
                         <div class="card-body">
@@ -129,7 +129,7 @@ const month_details = ref(0);
                     <div class="card !text-gray-400">
                         <div class="card-header">
 
-                            {{ data!.last_year }}
+                            {{ data!.last_year }} {{ __(data!.months_list[month_details]) }}
 
                         </div>
                         <div class="card-body">
