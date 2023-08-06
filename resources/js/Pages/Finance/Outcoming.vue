@@ -11,12 +11,12 @@ import TableSearch from "@/Components/Table/TableSearch.vue";
 import Month_details from "@/Pages/Finance/Components/Month_details.vue";
 import {ref} from "vue";
 
-defineProps({
+const props = defineProps({
     data: Object,
     filters: Object
 });
 
-const month_details = ref(0);
+const month_details = ref(props.data!.month_details.month_selected);
 
 </script>
 
@@ -38,10 +38,10 @@ const month_details = ref(0);
 
                 <h2 class="text-[50px] font-semibold text-center"
                     :class="{
-                'text-red-600': data.years_diff > 0,
-                'text-green-600': data.years_diff < 0,
+                'text-red-600': data!.years_diff > 0,
+                'text-green-600': data!.years_diff < 0,
                 }">
-                    {{ __currency(data.years_diff, 'EUR') }}
+                    {{ __currency(data!.years_diff, 'EUR') }}
                 </h2>
                 <div class="text-center text-sm">( rispetto lo scorso anno ad oggi )</div>
 
@@ -54,8 +54,8 @@ const month_details = ref(0);
                     <th v-for="(month, index) in data!.months_list"
                         class="w-[120px] text-sm"
                         :class="{
-                            'table-primary': index == data!.today_month && month_details === 0,
-                            'table-info': index == month_details && month_details !== 0,
+                            'table-primary': index == data!.today_month && month_details === null,
+                            'table-info': index == month_details && month_details !== null,
                         }">
 
                         <Link :href="route('finance.outcoming', {
@@ -82,8 +82,8 @@ const month_details = ref(0);
                     <td v-for="(month, index) in months.m"
                         class="text-right align-middle !text-sm"
                         :class="{
-                            'table-primary': index == data!.today_month && month_details === 0,
-                            'table-info': index == month_details && month_details !== 0,
+                            'table-primary': index == data!.today_month && month_details === null,
+                            'table-info': index == month_details && month_details !== null,
                         }">
 
                         {{ __currency(month, 'EUR') }}
@@ -99,14 +99,19 @@ const month_details = ref(0);
                 </tbody>
             </table>
 
-            <div v-if="month_details !== 0">
+            <div v-if="month_details !== null">
 
-                <div class="text-center mt-8">
+                <div class="text-right mt-8">
 
-                    <button class="btn btn-primary w-[120px]"
+                    <button class="btn btn-light"
                             type="button"
-                            @click="month_details = 0">
-                        Chiudi
+                            @click="month_details = null">
+
+                        <svg class="w-6 h-6"
+                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+
                     </button>
 
                 </div>
@@ -122,7 +127,7 @@ const month_details = ref(0);
                         <div class="card-body">
 
                             <Month_details :data="data!.month_details"
-                                           :year="data!.this_year" />
+                                           :year="parseInt(data!.this_year)" />
 
                         </div>
                     </div>
@@ -135,7 +140,7 @@ const month_details = ref(0);
                         <div class="card-body">
 
                             <Month_details :data="data!.month_details"
-                                           :year="data!.last_year"
+                                           :year="parseInt(data!.last_year)"
                                            class-name="!text-gray-400" />
 
                         </div>
@@ -153,7 +158,7 @@ const month_details = ref(0);
                         <table class="table table-sm">
 
                             <tbody>
-                            <template v-for="category_profit in data.categories_profit.slice().reverse()">
+                            <template v-for="category_profit in data!.categories_profit.slice().reverse()">
 
                                 <tr v-if="category_profit.profit === true">
                                     <td>
@@ -184,7 +189,7 @@ const month_details = ref(0);
                         <table class="table table-sm">
 
                             <tbody>
-                            <template v-for="category_profit in data.categories_profit">
+                            <template v-for="category_profit in data!.categories_profit">
 
                                 <tr v-if="category_profit.profit === false">
                                     <td>

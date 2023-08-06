@@ -20,7 +20,11 @@ class Finance extends Controller
 
     public function outcoming(Request $request)
     {
-        $month_details = false;
+        $month_details = array(
+            'month_details' => null,
+            'month_details_by_name' => null,
+            'month_selected' => null,
+        );
 
         if ($request['month_details']) {
 
@@ -69,6 +73,7 @@ class Finance extends Controller
             $month_details = array(
                 'month_details' => $month_details,
                 'month_details_by_name' => $month_details_by_name,
+                'month_selected' => $request['month_details'],
             );
 
         }

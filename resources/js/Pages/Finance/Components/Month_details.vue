@@ -5,7 +5,7 @@ import Table from "@/Components/Table/Table.vue";
 
 defineProps({
     data: Object,
-    year: String,
+    year: Number,
     className: String,
 });
 
@@ -17,7 +17,6 @@ defineProps({
 
         <thead>
         <tr>
-            <th :class="className" class="text-left">Anno</th>
             <th :class="className" class="text-left"></th>
             <th :class="className" class="text-left">Nome</th>
             <th :class="className" class="text-right">Importo</th>
@@ -29,11 +28,6 @@ defineProps({
         <template v-for="invoice in data.month_details_by_name">
 
             <tr>
-                <td :class="className">
-
-                    {{ invoice[year].anno }}
-
-                </td>
                 <td class="align-middle">
 
                     <div v-if="invoice[year - 1]">
