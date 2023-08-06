@@ -41,6 +41,7 @@ class Finance extends Controller
 
     public function outcoming_category($category)
     {
+
         $data['category'] = $category;
 
         return Inertia::render('Finance/Outcoming/Category', [
