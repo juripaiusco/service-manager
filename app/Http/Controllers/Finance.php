@@ -43,6 +43,9 @@ class Finance extends Controller
 
             for ($y = date('Y') - 1; $y <= date('Y'); $y++) {
 
+                if (!isset($month_details_diff_array[$y]))
+                    $month_details_diff_array[$y] = 0;
+
                 foreach ($month_details as $month_detail) {
 
                     if (!isset($month_details_by_name[$month_detail->nome][$y])) {
@@ -67,14 +70,18 @@ class Finance extends Controller
                 $month_details_by_name[$n][$y]['importo_netto'] += $month_detail->importo_netto;
                 $month_details_by_name[$n][$y]['importo_iva'] += $month_detail->importo_iva;
                 $month_details_by_name[$n][$y]['importo_totale'] += $month_detail->importo_totale;
+
+                $month_details_diff_array[$y] += $month_detail->importo_netto;
             }
+
+            $month_details_diff = $month_details_diff_array[date('Y')] - $month_details_diff_array[date('Y') - 1];
 
             sort($month_details_by_name);
 
             $month_details = array(
                 'month_details' => $month_details,
                 'month_details_by_name' => $month_details_by_name,
-                'month_details_diff' => null,
+                'month_details_diff' => $month_details_diff,
                 'month_selected' => $request['month_details'],
             );
 

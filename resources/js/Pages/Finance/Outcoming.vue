@@ -36,14 +36,31 @@ const month_details = ref(props.data!.month_details.month_selected);
 
             <div class="mt-5 mb-12">
 
-                <h2 class="text-[50px] font-semibold text-center"
-                    :class="{
-                'text-red-600': data!.years_diff > 0,
-                'text-green-600': data!.years_diff < 0,
-                }">
-                    {{ __currency(data!.years_diff, 'EUR') }}
-                </h2>
-                <div class="text-center text-sm">( rispetto lo scorso anno ad oggi )</div>
+                <div v-if="!props.data!.month_details.month_details_diff">
+
+                    <h2 class="text-[50px] font-semibold text-center"
+                        :class="{
+                            'text-red-600': data!.years_diff > 0,
+                            'text-green-600': data!.years_diff < 0,
+                        }">
+                        {{ __currency(data!.years_diff, 'EUR') }}
+                    </h2>
+                    <div class="text-center text-sm">( rispetto lo scorso anno ad oggi )</div>
+
+                </div>
+
+                <div v-if="props.data!.month_details.month_details_diff">
+
+                    <h2 class="text-[50px] font-semibold text-center"
+                        :class="{
+                            'text-red-600': props.data!.month_details.month_details_diff > 0,
+                            'text-green-600': props.data!.month_details.month_details_diff < 0,
+                        }">
+                        {{ __currency(props.data!.month_details.month_details_diff, 'EUR') }}
+                    </h2>
+                    <div class="text-center text-sm">( rispetto il mese dello scorso anno )</div>
+
+                </div>
 
             </div>
 
