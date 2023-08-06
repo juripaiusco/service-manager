@@ -18,8 +18,61 @@ class Finance extends Controller
         ]);
     }
 
-    public function outcoming()
+    public function outcoming(Request $request)
     {
+        $month_details = false;
+
+        if ($request['month_details']) {
+
+            $month_details = \App\Models\Finance::query();
+            $month_details = $month_details->whereMonth('data', '=', $request['month_details']);
+            $month_details = $month_details->where(function ($q) {
+                $q->where('anno', '=', date('Y'));
+                $q->orWhere('anno', '=', date('Y') - 1);
+            });
+            $month_details = $month_details->where('tipo', '=', 'passiva');
+            $month_details = $month_details->orderBy('nome');
+            $month_details = $month_details->get();
+
+            $month_details_by_name = array();
+
+            for ($y = date('Y') - 1; $y <= date('Y'); $y++) {
+
+                foreach ($month_details as $month_detail) {
+
+                    if (!isset($month_details_by_name[$month_detail->nome][$y])) {
+
+                        $month_details_by_name[$month_detail->nome][$y] = array(
+                            'nome' => $month_detail->nome,
+                            'anno' => $y,
+                            'importo_netto' => 0,
+                            'importo_iva' => 0,
+                            'importo_totale' => 0,
+                        );
+
+                    }
+                }
+            }
+
+            foreach ($month_details as $month_detail) {
+
+                $n = $month_detail->nome;
+                $y = $month_detail->anno;
+
+                $month_details_by_name[$n][$y]['importo_netto'] += $month_detail->importo_netto;
+                $month_details_by_name[$n][$y]['importo_iva'] += $month_detail->importo_iva;
+                $month_details_by_name[$n][$y]['importo_totale'] += $month_detail->importo_totale;
+            }
+
+            sort($month_details_by_name);
+
+            $month_details = array(
+                'month_details' => $month_details,
+                'month_details_by_name' => $month_details_by_name,
+            );
+
+        }
+
         return Inertia::render('Finance/Outcoming', [
             'data' => array_merge(
                 $this->months_calc('passiva'),
@@ -33,7 +86,10 @@ class Finance extends Controller
                     'invoice_this_year' => $this->invoice_get()
                         ->where('anno', '=', date('Y'))
                         ->get()
-                )
+                ),
+                array( 'month_details' => $month_details ),
+                array( 'this_year' => date('Y') ),
+                array( 'last_year' => date('Y') - 1 ),
             ),
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);

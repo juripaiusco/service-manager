@@ -8,11 +8,15 @@ import {__currency} from "@/ComponentsExt/Currency";
 import {__} from "@/ComponentsExt/Translations";
 import Table from "@/Components/Table/Table.vue";
 import TableSearch from "@/Components/Table/TableSearch.vue";
+import Month_details from "@/Pages/Finance/Components/Month_details.vue";
+import {ref} from "vue";
 
 defineProps({
     data: Object,
     filters: Object
 });
+
+const month_details = ref(0);
 
 </script>
 
@@ -47,17 +51,29 @@ defineProps({
                 <thead>
                 <tr>
                     <th></th>
-                    <th v-for="(month, index) in data.months_list"
+                    <th v-for="(month, index) in data!.months_list"
                         class="w-[120px] text-sm"
-                        :class="{'table-primary': index == data.today_month}">
-                        {{ __(month) }}
+                        :class="{
+                            'table-primary': index == data!.today_month && month_details === 0,
+                            'table-info': index == month_details && month_details !== 0,
+                        }">
+
+                        <Link :href="route('finance.outcoming', {
+                                month_details: index
+                              })"
+                              @click="month_details = index"
+                              preserve-state
+                              preserve-scroll>
+                            {{ __(month) }}
+                        </Link>
+
                     </th>
                     <th class="w-[140px]"></th>
                 </tr>
                 </thead>
                 <tbody>
 
-                <tr v-for="months in data.months_calc">
+                <tr v-for="months in data!.months_calc">
 
                     <th>
                         {{ months.y }}
@@ -65,7 +81,10 @@ defineProps({
 
                     <td v-for="(month, index) in months.m"
                         class="text-right align-middle !text-sm"
-                        :class="{'table-primary': index == data.today_month}">
+                        :class="{
+                            'table-primary': index == data!.today_month && month_details === 0,
+                            'table-info': index == month_details && month_details !== 0,
+                        }">
 
                         {{ __currency(month, 'EUR') }}
 
@@ -79,6 +98,52 @@ defineProps({
 
                 </tbody>
             </table>
+
+            <div v-if="month_details !== 0">
+
+                <div class="text-center mt-8">
+
+                    <button class="btn btn-primary w-[120px]"
+                            type="button"
+                            @click="month_details = 0">
+                        Chiudi
+                    </button>
+
+                </div>
+
+                <div class="card-group mt-8">
+
+                    <div class="card">
+                        <div class="card-header font-bold">
+
+                            {{ data!.this_year }}
+
+                        </div>
+                        <div class="card-body">
+
+                            <Month_details :data="data!.month_details"
+                                           :year="data!.this_year" />
+
+                        </div>
+                    </div>
+                    <div class="card !text-gray-400">
+                        <div class="card-header">
+
+                            {{ data!.last_year }}
+
+                        </div>
+                        <div class="card-body">
+
+                            <Month_details :data="data!.month_details"
+                                           :year="data!.last_year"
+                                           class-name="!text-gray-400" />
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
 
             <div class="card-group mt-8">
                 <div class="card !border-green-600 !border-r-gray-200">
