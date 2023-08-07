@@ -30,10 +30,10 @@ defineProps({
 
                 <h2 class="text-[50px] font-semibold text-center"
                     :class="{
-                'text-red-600': data.years_diff < 0,
-                'text-green-600': data.years_diff > 0,
+                'text-red-600': data!.years_diff < 0,
+                'text-green-600': data!.years_diff > 0,
                 }">
-                    {{ __currency(data.years_diff, 'EUR') }}
+                    {{ __currency(data!.years_diff, 'EUR') }}
                 </h2>
                 <div class="text-center text-sm">
                     ( rispetto lo scorso anno a fine
@@ -46,9 +46,9 @@ defineProps({
                 <thead>
                 <tr>
                     <th></th>
-                    <th v-for="(month, index) in data.months_list"
+                    <th v-for="(month, index) in data!.months_list"
                         class="w-[120px] text-sm"
-                        :class="{'table-primary': index == data.today_month}">
+                        :class="{'table-primary': index == data!.today_month}">
                         {{ __(month) }}
                     </th>
                     <th class="w-[140px]"></th>
@@ -56,7 +56,7 @@ defineProps({
                 </thead>
                 <tbody>
 
-                <tr v-for="months in data.months_calc">
+                <tr v-for="months in data!.months_calc">
 
                     <th>
                         {{ months.y }}
@@ -64,7 +64,7 @@ defineProps({
 
                     <td v-for="(month, index) in months.m"
                         class="text-right align-middle !text-sm"
-                        :class="{'table-primary': index == data.today_month}">
+                        :class="{'table-primary': index == data!.today_month}">
 
                         {{ __currency(month, 'EUR') }}
 
