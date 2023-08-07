@@ -86,12 +86,22 @@ class Finance extends Controller
             }
         }
 
+        foreach ($this->category_calc_array()['categories_profit'] as $category_calc) {
+
+            if ($category_calc['categoria'] == $category) {
+
+                $category_diff = $category_calc['diff'];
+                break;
+            }
+        }
+
         return Inertia::render('Finance/Outcoming/Category', [
             'data' => array(
                 'today_month' => date('n'),
                 'months_list' => $months_list,
                 'category' => $category,
                 'category_count' => $category_count,
+                'category_diff' => $category_diff,
                 'invoices' => $finances,
             )
         ]);
