@@ -26,25 +26,31 @@ defineProps({
 
         <ApplicationContainer>
 
-            <div class="inline-flex w-full mb-6">
+            <div class="mt-5 mb-12">
 
-                <div class="w-3/4">
+                <Link class="btn btn-light absolute mt-[-20px]"
+                      :href="route('finance.outcoming')"
+                      preserve-state
+                      preserve-scroll >
 
-                    <Link class="btn btn-light"
-                          :href="route('finance.outcoming')"
-                          preserve-state
-                          preserve-scroll >
+                    <svg class="w-6 h-6"
+                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
 
-                        <svg class="w-6 h-6"
-                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                </Link>
 
-                    </Link>
-
+                <h2 class="text-[50px] font-semibold text-center"
+                    :class="{
+                            'text-red-600': data!.years_diff > 0,
+                            'text-green-600': data!.years_diff < 0,
+                        }">
+                    {{ __currency(data!.years_diff, 'EUR') }}
+                </h2>
+                <div class="text-center text-sm">
+                    ( rispetto lo scorso anno a fine
+                    <span class="font-semibold">{{ __(data!.months_list[data!.today_month]) }}</span> )
                 </div>
-
-                <div class="w-1/4"></div>
 
             </div>
 
