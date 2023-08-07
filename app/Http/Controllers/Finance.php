@@ -69,8 +69,16 @@ class Finance extends Controller
                     if (substr($finance->data, 0, 7) ==
                         date('Y-m', mktime(0, 0, 0, $m, 1, $y))) {
 
-                        $category_count[$y . ' ']['m'][$m] += $finance->importo_netto;
-                        $category_count[$y . ' ']['total'] += $finance->importo_netto;
+                        if ($finance->tipo_doc == 'spesa') {
+
+                            $category_count[$y . ' ']['m'][$m] += $finance->importo_netto;
+                            $category_count[$y . ' ']['total'] += $finance->importo_netto;
+
+                        } else if ($finance->tipo_doc == 'ndc') {
+
+                            $category_count[$y . ' ']['m'][$m] -= $finance->importo_netto;
+                            $category_count[$y . ' ']['total'] -= $finance->importo_netto;
+                        }
 
                     }
 
@@ -279,7 +287,7 @@ class Finance extends Controller
         $finances = $finances->select(DB::raw('
             anno,
             categoria,
-            SUM(importo_netto) as importo_netto
+            SUM(IF (tipo_doc = \'ndc\', importo_netto * -1, importo_netto)) as importo_netto
         '));
 
         $finances = $finances->orderBy('importo_netto', 'DESC');
