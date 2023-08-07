@@ -209,7 +209,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                                     </td>
                                     <td class="text-right">
 
-                                        {{ category_profit.diff ? __currency(category_profit.diff, 'EUR') : '-' }}
+                                        - {{ category_profit.diff ? __currency(Math.abs(category_profit.diff), 'EUR') : '' }}
 
                                     </td>
                                 </tr>
@@ -240,7 +240,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                                     </td>
                                     <td class="text-right">
 
-                                        {{ __currency(category_profit.diff, 'EUR') }}
+                                        + {{ __currency(category_profit.diff, 'EUR') }}
 
                                     </td>
                                 </tr>

@@ -205,11 +205,12 @@ class Finance extends Controller
 
     private function category_calc_array()
     {
-        $finances_last_year = $this->category_calc((date('Y') - 1) . '-01-01', (date('Y') - 1) . date('-m-d'));
-        $finances_this_year = $this->category_calc(date('Y') . '-01-01', date('Y-m-d'));
-        $finances_all_category = $this->category_calc((date('Y') - 1) . '-01-01', date('Y-m-d'));
+        $finances_last_year = $this->category_calc((date('Y') - 1) . '-01-01', (date('Y') - 1) . date('-m-t'));
+        $finances_this_year = $this->category_calc(date('Y') . '-01-01', date('Y-m-t'));
+        $finances_all_category = $this->category_calc((date('Y') - 1) . '-01-01', date('Y') . '-12-31');
 
         $category_array = array();
+
         foreach ($finances_all_category as $finance_category) {
             $category_array[$finance_category->categoria] = array(
                 'categoria' => $finance_category->categoria,
@@ -218,29 +219,47 @@ class Finance extends Controller
             );
         }
 
-        foreach ($finances_last_year as $finance_last_year) {
+        foreach ($category_array as $category) {
+
+            foreach ($finances_last_year as $finance_last_year) {
+
+                if ($finance_last_year->categoria == $category['categoria']) {
+
+                    $finance_last_year_category_cost = $finance_last_year->importo_netto;
+                    break;
+
+                } else {
+
+                    $finance_last_year_category_cost = 0;
+                }
+
+            }
 
             foreach ($finances_this_year as $finance_this_year) {
 
-                if ($finance_last_year->categoria == $finance_this_year->categoria) {
+                if ($finance_this_year->categoria == $category['categoria']) {
 
-                    $diff = $finance_this_year->importo_netto - $finance_last_year->importo_netto;
-
-                    if ($diff <= 0) {
-                        $category_array[$finance_last_year->categoria]['profit'] = true;
-                    } else if ($diff > 0) {
-                        $category_array[$finance_last_year->categoria]['profit'] = false;
-                    }
-
-                    $category_array[$finance_last_year->categoria]['diff'] = $diff;
-
+                    $finance_this_year_category_cost = $finance_this_year->importo_netto;
                     break;
 
-                }
-            }
-        }
+                } else {
 
-//        dd($category_array);
+                    $finance_this_year_category_cost = 0;
+                }
+
+            }
+
+            $diff = $finance_this_year_category_cost - $finance_last_year_category_cost;
+
+            if ($diff <= 0) {
+                $category_array[$category['categoria']]['profit'] = true;
+            } else if ($diff > 0) {
+                $category_array[$category['categoria']]['profit'] = false;
+            }
+
+            $category_array[$category['categoria']]['diff'] = $diff;
+
+        }
 
         usort($category_array, function ($a, $b) {
             return $a['diff'] <=> $b['diff'];
