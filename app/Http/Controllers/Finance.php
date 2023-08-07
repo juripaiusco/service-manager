@@ -34,7 +34,7 @@ class Finance extends Controller
                         ->where('anno', '=', date('Y'))
                         ->get()
                 ),
-                array( 'month_details' => $this->month_details($request['month_details']) ),
+                array( 'month_details' => $this->month_details($request['month_selected']) ),
                 array( 'this_year' => date('Y') ),
                 array( 'last_year' => date('Y') - 1 ),
             ),
@@ -89,7 +89,7 @@ class Finance extends Controller
         ]);
     }
 
-    private function month_details($month_details_request)
+    private function month_details($month_selected)
     {
         $month_details = array(
             'month_details' => null,
@@ -98,10 +98,10 @@ class Finance extends Controller
             'month_selected' => null,
         );
 
-        if ($month_details_request) {
+        if ($month_selected) {
 
             $month_details = \App\Models\Finance::query();
-            $month_details = $month_details->whereMonth('data', '=', $month_details_request);
+            $month_details = $month_details->whereMonth('data', '=', $month_selected);
             $month_details = $month_details->where(function ($q) {
                 $q->where('anno', '=', date('Y'));
                 $q->orWhere('anno', '=', date('Y') - 1);
@@ -153,7 +153,7 @@ class Finance extends Controller
                 'month_details' => $month_details,
                 'month_details_by_name' => $month_details_by_name,
                 'month_details_diff' => $month_details_diff,
-                'month_selected' => $month_details_request,
+                'month_selected' => $month_selected,
             );
 
         }

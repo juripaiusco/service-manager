@@ -16,7 +16,7 @@ const props = defineProps({
     filters: Object
 });
 
-const month_details = ref(props.data!.month_details.month_selected);
+const month_selected = ref(props.data!.month_details.month_selected);
 
 </script>
 
@@ -29,7 +29,7 @@ const month_details = ref(props.data!.month_details.month_selected);
         <template #header>
 
             <ApplicationHeader :breadcrumb-array="
-                month_details ? ['Finanze', 'Uscite', __(data!.months_list[month_details])] : ['Finanze', 'Uscite']
+                month_selected ? ['Finanze', 'Uscite', __(data!.months_list[month_selected])] : ['Finanze', 'Uscite']
             " />
 
         </template>
@@ -65,7 +65,7 @@ const month_details = ref(props.data!.month_details.month_selected);
                     </h2>
                     <div class="text-center text-sm">
                         ( rispetto
-                        <span class="font-semibold">{{ __(data!.months_list[month_details]) }}</span>
+                        <span class="font-semibold">{{ __(data!.months_list[month_selected]) }}</span>
                         dello scorso anno )
                     </div>
 
@@ -80,14 +80,14 @@ const month_details = ref(props.data!.month_details.month_selected);
                     <th v-for="(month, index) in data!.months_list"
                         class="w-[120px] text-sm"
                         :class="{
-                            'table-primary': index == data!.today_month && month_details === null,
-                            'table-info': index == month_details && month_details !== null,
+                            'table-primary': index == data!.today_month && month_selected === null,
+                            'table-info': index == month_selected && month_selected !== null,
                         }">
 
                         <Link :href="route('finance.outcoming', {
-                                month_details: index
+                                month_selected: index
                               })"
-                              @click="month_details = index"
+                              @click="month_selected = index"
                               preserve-state
                               preserve-scroll>
                             {{ __(month) }}
@@ -108,8 +108,8 @@ const month_details = ref(props.data!.month_details.month_selected);
                     <td v-for="(month, index) in months.m"
                         class="text-right align-middle !text-sm"
                         :class="{
-                            'table-primary': index == data!.today_month && month_details === null,
-                            'table-info': index == month_details && month_details !== null,
+                            'table-primary': index == data!.today_month && month_selected === null,
+                            'table-info': index == month_selected && month_selected !== null,
                         }">
 
                         {{ __currency(month, 'EUR') }}
@@ -125,7 +125,7 @@ const month_details = ref(props.data!.month_details.month_selected);
                 </tbody>
             </table>
 
-            <div v-if="month_details !== null">
+            <div v-if="month_selected !== null">
 
                 <div class="text-right mt-8">
 
@@ -141,7 +141,7 @@ const month_details = ref(props.data!.month_details.month_selected);
                     </button> -->
 
                     <Link class="btn btn-light"
-                          @click="month_details = null"
+                          @click="month_selected = null"
                           :href="route('finance.outcoming')"
                           preserve-state
                           preserve-scroll >
@@ -160,7 +160,7 @@ const month_details = ref(props.data!.month_details.month_selected);
                     <div class="card">
                         <div class="card-header font-bold">
 
-                            {{ data!.this_year }} {{ __(data!.months_list[month_details]) }}
+                            {{ data!.this_year }} {{ __(data!.months_list[month_selected]) }}
 
                         </div>
                         <div class="card-body">
@@ -173,7 +173,7 @@ const month_details = ref(props.data!.month_details.month_selected);
                     <div class="card !text-gray-400">
                         <div class="card-header">
 
-                            {{ data!.last_year }} {{ __(data!.months_list[month_details]) }}
+                            {{ data!.last_year }} {{ __(data!.months_list[month_selected]) }}
 
                         </div>
                         <div class="card-body">
