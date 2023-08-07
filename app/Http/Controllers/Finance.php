@@ -240,6 +240,8 @@ class Finance extends Controller
             }
         }
 
+//        dd($category_array);
+
         usort($category_array, function ($a, $b) {
             return $a['diff'] <=> $b['diff'];
         });
@@ -285,14 +287,14 @@ class Finance extends Controller
                 // Calcolo differenza tra anno precedente -------------------------
                 if (!isset($years_diff[$y])) {
                     $finances_invoice = \App\Models\Finance::query()
-                        ->where('data', '<=', $y . '-' . date('m-d'))
+                        ->where('data', '<=', $y . '-' . date('m-t'))
                         ->where('data', '>=', $y . '-01-01')
                         ->where('tipo_doc', '=', $tipo == 'attiva' ? 'fatture' : 'spesa')
                         ->where('tipo', '=', $tipo)
                         ->sum('importo_netto');
 
                     $finances_ndc = \App\Models\Finance::query()
-                        ->where('data', '<=', $y . '-' . date('m'). '-' . date('d'))
+                        ->where('data', '<=', $y . '-' . date('m'). '-' . date('t'))
                         ->where('data', '>', $y . '-01-01')
                         ->where('tipo_doc', '=', 'ndc')
                         ->where('tipo', '=', $tipo)
