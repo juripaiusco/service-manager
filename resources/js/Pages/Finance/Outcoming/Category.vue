@@ -51,7 +51,7 @@ const year_month_selected = ref(null);
                             'text-red-600': data!.category_diff > 0,
                             'text-green-600': data!.category_diff < 0,
                         }">
-                    {{ __currency(data!.category_diff, 'EUR') }}
+                    {{ __currency(data!.category_diff, 'EUR', true) }}
                 </h2>
                 <div class="text-center text-sm">
                     ( rispetto lo scorso anno a fine

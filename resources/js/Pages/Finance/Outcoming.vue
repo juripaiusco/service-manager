@@ -45,7 +45,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                             'text-red-600': data!.years_diff > 0,
                             'text-green-600': data!.years_diff < 0,
                         }">
-                        {{ __currency(data!.years_diff, 'EUR') }}
+                        {{ __currency(data!.years_diff, 'EUR', true) }}
                     </h2>
                     <div class="text-center text-sm">
                         ( rispetto lo scorso anno a fine
@@ -61,7 +61,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                             'text-red-600': props.data!.month_details.month_details_diff > 0,
                             'text-green-600': props.data!.month_details.month_details_diff < 0,
                         }">
-                        {{ __currency(props.data!.month_details.month_details_diff, 'EUR') }}
+                        {{ __currency(props.data!.month_details.month_details_diff, 'EUR', true) }}
                     </h2>
                     <div class="text-center text-sm">
                         ( rispetto

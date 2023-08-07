@@ -1,6 +1,7 @@
-export function __currency(data, currency) {
+export function __currency(data, currency, sign = false) {
 
     let currencyFormat;
+    let out = '';
 
     switch (currency) {
 
@@ -15,6 +16,14 @@ export function __currency(data, currency) {
 
     }
 
-    return currencyFormat.format(data);
+    if (sign === true) {
+
+        out = (data >= 0 ? '+' : '-') + ' ';
+        data = Math.abs(data);
+    }
+
+    out = out + currencyFormat.format(data)
+
+    return out;
 
 }
