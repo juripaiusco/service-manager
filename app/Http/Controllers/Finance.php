@@ -53,6 +53,8 @@ class Finance extends Controller
 
         foreach ($finances as $finance) {
 
+            $invoices[$finance->anno . ' '][] = $finance;
+
             for ($y = date('Y'); $y >= $finances[count($finances) - 1]->anno; $y--) {
 
                 if (!isset($category_count[$y . ' ']['total']))
@@ -102,8 +104,9 @@ class Finance extends Controller
                 'category' => $category,
                 'category_count' => $category_count,
                 'category_diff' => $category_diff,
-                'invoices' => $finances,
-            )
+                'invoices' => $invoices,
+            ),
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
 
