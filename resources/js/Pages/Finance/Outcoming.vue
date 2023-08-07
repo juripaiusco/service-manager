@@ -47,7 +47,10 @@ const month_details = ref(props.data!.month_details.month_selected);
                         }">
                         {{ __currency(data!.years_diff, 'EUR') }}
                     </h2>
-                    <div class="text-center text-sm">( rispetto lo scorso anno ad oggi )</div>
+                    <div class="text-center text-sm">
+                        ( rispetto lo scorso anno a fine
+                        <span class="font-semibold">{{ __(data!.months_list[data!.today_month]) }}</span> )
+                    </div>
 
                 </div>
 
@@ -60,7 +63,11 @@ const month_details = ref(props.data!.month_details.month_selected);
                         }">
                         {{ __currency(props.data!.month_details.month_details_diff, 'EUR') }}
                     </h2>
-                    <div class="text-center text-sm">( rispetto il mese dello scorso anno )</div>
+                    <div class="text-center text-sm">
+                        ( rispetto
+                        <span class="font-semibold">{{ __(data!.months_list[month_details]) }}</span>
+                        dello scorso anno )
+                    </div>
 
                 </div>
 
@@ -221,7 +228,7 @@ const month_details = ref(props.data!.month_details.month_selected);
                         <table class="table table-sm">
 
                             <tbody>
-                            <template v-for="category_profit in data!.categories_profit">
+                            <template v-for="category_profit in data!.categories_profit.slice().reverse()">
 
                                 <tr v-if="category_profit.profit === false">
                                     <td>
