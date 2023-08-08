@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
@@ -58,7 +58,7 @@ defineProps({
                         filters: filters,
                         tblName: 'service',
                         routeSearch: 'service.index',
-                        data: data!.data,
+                        data: data.data,
                         structure: [{
                             class: 'text-left !align-top w-[5%]',
                             label: 'Cod.',
@@ -161,7 +161,7 @@ defineProps({
                             route: 'service.destroy'
                         }],
                     }"
-                   @openModal="(data: any, route: any) => {
+                   @openModal="(data, route) => {
                        modalData = data;
                        modalData.confirmURL = route;
                        modalData.confirmBtnClass = 'btn-danger';

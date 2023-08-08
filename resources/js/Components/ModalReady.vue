@@ -57,18 +57,18 @@ const props = defineProps({
 
                 <div class="w-1/2 ml-2">
 
-                    <Link v-if="data.confirmURL"
+                    <Link v-if="data!.confirmURL"
                           class="btn w-full"
-                          :class="data.confirmBtnClass"
-                          :href="data.confirmURL">
-                        {{ data.confirmBtnText }}
+                          :class="data!.confirmBtnClass"
+                          :href="data!.confirmURL">
+                        {{ data!.confirmBtnText }}
                     </Link>
 
-                    <button v-if="data.confirmFNC === true"
+                    <button v-if="data!.confirmFNC === true"
                             class="btn w-full"
-                            :class="data.confirmBtnClass"
+                            :class="data!.confirmBtnClass"
                             @click="$emit('fncConfirm', data)">
-                        {{ data.confirmBtnText }}
+                        {{ data!.confirmBtnText }}
                     </button>
 
                 </div>

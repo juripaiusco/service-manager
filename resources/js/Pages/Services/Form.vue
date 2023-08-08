@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, useForm} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
@@ -20,7 +20,7 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
-function collapse(indexSelected: any)
+function collapse(indexSelected)
 {
     let customers = props.customers;
     let document = window.document;

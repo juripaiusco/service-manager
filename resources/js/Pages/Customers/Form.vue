@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link, useForm} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
@@ -132,7 +132,7 @@ const form = useForm(dataForm);
                         <div class="w-1/2 text-right">
 
                             <Link class="btn btn-dark w-[120px]"
-                                  :href="route('customer.serviceExpiration.create', data!.id)">
+                                  :href="route('customer.serviceExpiration.create', data.id)">
                                 Aggiungi
                             </Link>
 
@@ -144,7 +144,7 @@ const form = useForm(dataForm);
                             filters: filters,
                             tblName: 'customer_service',
                             routeSearch: 'customer.edit',
-                            data: data!.customer_service,
+                            data: data.customer_service,
                             structure: [{
                                 class: 'text-center w-[140px]',
                                 label: 'Scadenza',
@@ -230,7 +230,7 @@ const form = useForm(dataForm);
                                 route: 'customer.serviceExpiration.destroy'
                             }],
                         }"
-                           @openModal="(data: any, route: any) => {
+                           @openModal="(data, route) => {
                                modalData = data;
                                modalData.confirmURL = route;
                                modalData.confirmBtnClass = 'btn-danger';

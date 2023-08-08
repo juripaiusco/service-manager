@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
@@ -18,17 +18,17 @@ const props = defineProps({
     create_url: String
 })
 
-const dataForm = Object.fromEntries(Object.entries(props.data!).map((v) => {
+const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
     return props.data ? v : '';
 }));
 
-dataForm.customer_id = props.customer!.id;
-dataForm.expiration = __date(props.data!.expiration, 'date');
+dataForm.customer_id = props.customer.id;
+dataForm.expiration = __date(props.data.expiration, 'date');
 dataForm.details = usePage().props.serviceExp;
 
 const form = useForm(dataForm);
 
-function serviceExpActionRoute (route: any, data: any, action: any) {
+function serviceExpActionRoute (route, data, action) {
 
     let formSession = useForm({
         serviceExp_data: form.details,
@@ -436,7 +436,7 @@ function serviceExpActionRoute (route: any, data: any, action: any) {
 
 </template>
 
-<script lang="ts">
+<script>
 import {router} from "@inertiajs/vue3";
 
 export default {

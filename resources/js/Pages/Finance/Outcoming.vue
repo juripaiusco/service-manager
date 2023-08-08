@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
@@ -16,7 +16,7 @@ const props = defineProps({
     filters: Object
 });
 
-const month_selected = ref(props.data!.month_details.month_selected);
+const month_selected = ref(props.data.month_details.month_selected);
 
 </script>
 
@@ -29,7 +29,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
         <template #header>
 
             <ApplicationHeader :breadcrumb-array="
-                month_selected ? ['Finanze', 'Uscite', __(data!.months_list[month_selected])] : ['Finanze', 'Uscite']
+                month_selected ? ['Finanze', 'Uscite', __(data.months_list[month_selected])] : ['Finanze', 'Uscite']
             " />
 
         </template>
@@ -38,34 +38,34 @@ const month_selected = ref(props.data!.month_details.month_selected);
 
             <div class="mt-5 mb-12">
 
-                <div v-if="!props.data!.month_details.month_details_diff">
+                <div v-if="!props.data.month_details.month_details_diff">
 
                     <h2 class="text-[50px] font-semibold text-center"
                         :class="{
-                            'text-red-600': data!.years_diff > 0,
-                            'text-green-600': data!.years_diff < 0,
+                            'text-red-600': data.years_diff > 0,
+                            'text-green-600': data.years_diff < 0,
                         }">
-                        {{ __currency(data!.years_diff, 'EUR', true) }}
+                        {{ __currency(data.years_diff, 'EUR', true) }}
                     </h2>
                     <div class="text-center text-sm">
                         ( rispetto lo scorso anno a fine
-                        <span class="font-semibold">{{ __(data!.months_list[data!.today_month]) }}</span> )
+                        <span class="font-semibold">{{ __(data.months_list[data.today_month]) }}</span> )
                     </div>
 
                 </div>
 
-                <div v-if="props.data!.month_details.month_details_diff">
+                <div v-if="props.data.month_details.month_details_diff">
 
                     <h2 class="text-[50px] font-semibold text-center"
                         :class="{
-                            'text-red-600': props.data!.month_details.month_details_diff > 0,
-                            'text-green-600': props.data!.month_details.month_details_diff < 0,
+                            'text-red-600': props.data.month_details.month_details_diff > 0,
+                            'text-green-600': props.data.month_details.month_details_diff < 0,
                         }">
-                        {{ __currency(props.data!.month_details.month_details_diff, 'EUR', true) }}
+                        {{ __currency(props.data.month_details.month_details_diff, 'EUR', true) }}
                     </h2>
                     <div class="text-center text-sm">
                         ( rispetto
-                        <span class="font-semibold">{{ __(data!.months_list[month_selected]) }}</span>
+                        <span class="font-semibold">{{ __(data.months_list[month_selected]) }}</span>
                         dello scorso anno )
                     </div>
 
@@ -77,10 +77,10 @@ const month_selected = ref(props.data!.month_details.month_selected);
                 <thead>
                 <tr>
                     <th></th>
-                    <th v-for="(month, index) in data!.months_list"
+                    <th v-for="(month, index) in data.months_list"
                         class="w-[120px] text-sm"
                         :class="{
-                            'table-primary': index == data!.today_month && month_selected === null,
+                            'table-primary': index == data.today_month && month_selected === null,
                             'table-info': index == month_selected && month_selected !== null,
                         }">
 
@@ -99,7 +99,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                 </thead>
                 <tbody>
 
-                <tr v-for="months in data!.months_calc">
+                <tr v-for="months in data.months_calc">
 
                     <th>
                         {{ months.y }}
@@ -108,7 +108,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                     <td v-for="(month, index) in months.m"
                         class="text-right align-middle !text-sm"
                         :class="{
-                            'table-primary': index == data!.today_month && month_selected === null,
+                            'table-primary': index == data.today_month && month_selected === null,
                             'table-info': index == month_selected && month_selected !== null,
                         }">
 
@@ -160,26 +160,26 @@ const month_selected = ref(props.data!.month_details.month_selected);
                     <div class="card">
                         <div class="card-header font-bold">
 
-                            {{ data!.this_year }} {{ __(data!.months_list[month_selected]) }}
+                            {{ data.this_year }} {{ __(data.months_list[month_selected]) }}
 
                         </div>
                         <div class="card-body">
 
-                            <Month_details :data="data!.month_details"
-                                           :year="parseInt(data!.this_year)" />
+                            <Month_details :data="data.month_details"
+                                           :year="parseInt(data.this_year)" />
 
                         </div>
                     </div>
                     <div class="card !text-gray-400">
                         <div class="card-header">
 
-                            {{ data!.last_year }} {{ __(data!.months_list[month_selected]) }}
+                            {{ data.last_year }} {{ __(data.months_list[month_selected]) }}
 
                         </div>
                         <div class="card-body">
 
-                            <Month_details :data="data!.month_details"
-                                           :year="parseInt(data!.last_year)"
+                            <Month_details :data="data.month_details"
+                                           :year="parseInt(data.last_year)"
                                            class-name="!text-gray-400" />
 
                         </div>
@@ -197,7 +197,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                         <table class="table table-sm">
 
                             <tbody>
-                            <template v-for="category_profit in data!.categories_profit.slice().reverse()">
+                            <template v-for="category_profit in data.categories_profit.slice().reverse()">
 
                                 <tr v-if="category_profit.profit === true">
                                     <td>
@@ -228,7 +228,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                         <table class="table table-sm">
 
                             <tbody>
-                            <template v-for="category_profit in data!.categories_profit.slice().reverse()">
+                            <template v-for="category_profit in data.categories_profit.slice().reverse()">
 
                                 <tr v-if="category_profit.profit === false">
                                     <td>
@@ -274,7 +274,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
 
             <div class="card">
                 <div class="card-header">
-                    {{ __date(data!.invoice_this_year[0].data, 'y') }}
+                    {{ __date(data.invoice_this_year[0].data, 'y') }}
                 </div>
                 <div class="card-body">
 
@@ -283,7 +283,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                                 filters: filters,
                                 tblName: 'invoice',
                                 routeSearch: 'finance.outcoming',
-                                data: data!.invoice_this_year,
+                                data: data.invoice_this_year,
                                 structure: [{
                                     class: 'text-left',
                                     label: 'Numero',
@@ -340,7 +340,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
 
             <div class="card">
                 <div class="card-header">
-                    {{ __date(data!.invoice_last_year[0].data, 'y') }}
+                    {{ __date(data.invoice_last_year[0].data, 'y') }}
                 </div>
                 <div class="card-body">
 
@@ -349,7 +349,7 @@ const month_selected = ref(props.data!.month_details.month_selected);
                                 filters: filters,
                                 tblName: 'invoice',
                                 routeSearch: 'finance.outcoming',
-                                data: data!.invoice_last_year,
+                                data: data.invoice_last_year,
                                 structure: [{
                                     class: 'text-left',
                                     label: 'Numero',

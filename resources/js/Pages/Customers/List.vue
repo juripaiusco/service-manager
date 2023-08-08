@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
@@ -58,7 +58,7 @@ defineProps({
                         filters: filters,
                         tblName: 'customer',
                         routeSearch: 'customer.index',
-                        data: data!.data,
+                        data: data.data,
                         structure: [{
                             class: 'text-left',
                             label: 'Nome',
@@ -152,7 +152,7 @@ defineProps({
                             route: 'customer.destroy'
                         }],
                     }"
-                   @openModal="(data: any, route: any) => {
+                   @openModal="(data, route) => {
                        modalData = data;
                        modalData.confirmURL = route;
                        modalData.confirmBtnClass = 'btn-danger';

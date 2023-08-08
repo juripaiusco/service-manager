@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
@@ -26,7 +26,7 @@ const year_month_selected = ref(null);
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Finanze', 'Uscite', data!.category]" />
+            <ApplicationHeader :breadcrumb-array="['Finanze', 'Uscite', data.category]" />
 
         </template>
 
@@ -48,14 +48,14 @@ const year_month_selected = ref(null);
 
                 <h2 class="text-[50px] font-semibold text-center"
                     :class="{
-                            'text-red-600': data!.category_diff > 0,
-                            'text-green-600': data!.category_diff < 0,
+                            'text-red-600': data.category_diff > 0,
+                            'text-green-600': data.category_diff < 0,
                         }">
-                    {{ __currency(data!.category_diff, 'EUR', true) }}
+                    {{ __currency(data.category_diff, 'EUR', true) }}
                 </h2>
                 <div class="text-center text-sm">
                     ( rispetto lo scorso anno a fine
-                    <span class="font-semibold">{{ __(data!.months_list[data!.today_month]) }}</span> )
+                    <span class="font-semibold">{{ __(data.months_list[data.today_month]) }}</span> )
                 </div>
 
             </div>
@@ -64,9 +64,9 @@ const year_month_selected = ref(null);
                 <thead>
                 <tr>
                     <th></th>
-                    <th v-for="(month, n) in data!.months_list"
+                    <th v-for="(month, n) in data.months_list"
                         :class="{
-                            'table-primary': data!.today_month === n
+                            'table-primary': data.today_month === n
                         }" >
                         {{ __(month) }}
                     </th>
@@ -74,14 +74,14 @@ const year_month_selected = ref(null);
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(months_data, year) in data!.category_count">
+                <tr v-for="(months_data, year) in data.category_count">
                     <th class="text-left">
                         {{ year }}
                     </th>
                     <td v-for="(month_data, n) in months_data['m']"
                         class="text-right"
                         :class="{
-                            'table-primary': data!.today_month === n
+                            'table-primary': data.today_month === n
                         }" >
                         <a :href="'#' + year + '-' + n"
                            @click="year_month_selected=year + '-' + n">
@@ -90,13 +90,13 @@ const year_month_selected = ref(null);
                     </td>
 
                     <th class="text-right">
-                        {{ __currency(months_data!.total, 'EUR') }}
+                        {{ __currency(months_data.total, 'EUR') }}
                     </th>
                 </tr>
                 </tbody>
             </table>
 
-            <template v-for="(invoices_data, year) in data!.invoices">
+            <template v-for="(invoices_data, year) in data.invoices">
 
                 <br>
 
