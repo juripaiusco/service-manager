@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use FattureInCloud\Filter\Filter;
+use FattureInCloud\Filter\Operator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -54,6 +56,15 @@ class GoogleSheetsAPI extends Controller
         /**
          * Prendo i dati da fattureincloud.it
          */
+        $filter = new Filter();
+        $filter->where('date', Operator::GTE, env('GOOGLE_SHEETS_YEAR') . '-01-01');
+        $q = $filter->buildQuery();
+
+        $fic = new FattureInCloudAPI();
+        $fatture_attive = $fic->api('get.invoice', array('q' => $q));
+
+        dd($fatture_attive);
+
         $fic = new FattureInCloudAPI();
         $fatture_attive = $fic->get(
             'fatture',

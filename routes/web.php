@@ -79,7 +79,10 @@ Route::get('/mail/service-expiration/all', [\App\Http\Controllers\Email::class, 
 Route::get('/mail/service-expiration/{id}', [\App\Http\Controllers\Email::class, 'sendExpirationService'])->name('email.exp');
 Route::get('/mail/show/{view}/{sid}', [\App\Http\Controllers\Email::class, 'show'])->name('email.show');
 
+// API
 Route::get('/finance/fic/get', [\App\Http\Controllers\Finance::class, 'documentsGet'])->name('finance.documents.get');
+Route::get('/gapi/gsheets', [\App\Http\Controllers\GoogleSheetsAPI::class, 'update']);
+Route::get('/gapi/scriptable', [\App\Http\Controllers\GoogleSheetsAPI::class, 'scriptableGetJSON']);
 // ----------------------------------------
 
 require __DIR__.'/auth.php';

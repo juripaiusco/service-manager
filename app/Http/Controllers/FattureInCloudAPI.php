@@ -104,7 +104,7 @@ class FattureInCloudAPI extends Controller
             null,
             null,
             null,
-            $filter['q']
+            isset($filter['q']) ? $filter['q'] : null
         );
 
         return $results;
