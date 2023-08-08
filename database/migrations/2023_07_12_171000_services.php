@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name_customer_view');
             $table->float('price_buy');
             $table->float('price_sell');
-            $table->string('is_share', 1);
+            $table->string('is_share', 1)->nullable();
 
             $table->timestamps();
         });
