@@ -388,7 +388,7 @@ class GoogleSheetsAPI extends Controller
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         // Recupero di dati delle uscite Divise per categoria
-        $array_costs_months_by_category = $FicData->catDataByMonths(array(
+        $array_costs_months_by_category = $FicData->getDataByMonths(array(
             'from_year' => $from_year,
             'tipo' => 'passiva',
             'tipo_doc' => 'spesa'

@@ -469,9 +469,9 @@ class Finance extends Controller
 
     public function dataByMonth($args = array())
     {
-        $array_catDataByMonths = $this->catDataByMonths($args);
+        $array_getDataByMonths = $this->getDataByMonths($args);
 
-        foreach ($array_catDataByMonths as $cat => $array) {
+        foreach ($array_getDataByMonths as $cat => $array) {
 
             foreach ($array as $y => $array_data_by_months) {
 
@@ -498,7 +498,7 @@ class Finance extends Controller
         return $arary_data_by_years;
     }
 
-    public function catDataByMonths($args = array(
+    public function getDataByMonths($args = array(
         'from_year' => '',
         'tipo' => '',
         'tipo_doc' => '',
