@@ -403,54 +403,64 @@ class Finance extends Controller
 
         // ---------------------------------------
 
-        $invoices = $fic->api('get.invoice', array('q' => $q));
+        $invoices = $fic->api('get.documents', array(
+            'type' => 'invoice',
+            'q' => $q
+        ));
 
-        foreach ($invoices->getData() as $invoice) {
+        $credit_note = $fic->api('get.documents', array(
+            'type' => 'credit_note',
+            'q' => $q
+        ));
+
+        $expense = $fic->api('get.documents.received', array(
+            'type' => 'expense',
+            'q' => $q
+        ));
+
+        $passive_credit_note = $fic->api('get.documents.received', array(
+            'type' => 'passive_credit_note',
+            'q' => $q
+        ));
+
+        $documents = array_merge(
+            $invoices->getData(),
+            $credit_note->getData(),
+            $expense->getData(),
+            $passive_credit_note->getData()
+        );
+
+        foreach ($documents as $document) {
 
             $finance = \App\Models\Finance::query();
-            $finance = $finance->where('fic_id', $invoice->getId())->first();
+            $finance = $finance->where('fic_id', $document->getId())->first();
 
             if (!$finance)
                 $finance = new \App\Models\Finance();
 
-            $finance->fic_id = $invoice->getId();
-            $finance->tipo_doc = 'fatture';
-            $finance->tipo = 'attiva';
-            $finance->numero = $invoice->getNumber();
-            $finance->nome = $invoice->getEntity()->getName();
-            $finance->anno = $invoice->getYear();
-            $finance->data = $invoice->getDate();
-            $finance->importo_netto = $invoice->getAmountNet();
-            $finance->importo_iva = $invoice->getAmountVat();
-            $finance->importo_totale = $invoice->getAmountGross();
+            $finance->fic_id = $document->getId();
+            $finance->nome = $document->getEntity()->getName();
+            $finance->data = $document->getDate();
+            $finance->importo_netto = $document->getAmountNet();
+            $finance->importo_iva = $document->getAmountVat();
+            $finance->importo_totale = $document->getAmountGross();
 
-            $finance->save();
+            if ($document->getType() == 'expense' ||
+                $document->getType() == 'passive_credit_note') {
 
-        }
+                $finance->numero = $document->getInvoiceNumber();
+                $finance->tipo_doc = $document->getType() == 'expense' ? 'spesa' : 'ndc';
+                $finance->tipo = 'passiva';
+                $finance->anno = date('Y', $document->getDate()->getTimestamp());
+                $finance->categoria = $document->getCategory();
 
-        // ---------------------------------------
+            } else {
 
-        $invoices_received = $fic->api('get.invoice.received', array('q' => $q));
-
-        foreach ($invoices_received->getData() as $invoice) {
-
-            $finance = \App\Models\Finance::query();
-            $finance = $finance->where('fic_id', $invoice->getId())->first();
-
-            if (!$finance)
-                $finance = new \App\Models\Finance();
-
-            $finance->fic_id = $invoice->getId();
-            $finance->tipo_doc = 'spesa';
-            $finance->tipo = 'passiva';
-            $finance->numero = $invoice->getInvoiceNumber();
-            $finance->nome = $invoice->getEntity()->getName();
-            $finance->anno = date('Y', $invoice->getDate()->getTimestamp());
-            $finance->data = $invoice->getDate();
-            $finance->categoria = $invoice->getCategory();
-            $finance->importo_netto = $invoice->getAmountNet();
-            $finance->importo_iva = $invoice->getAmountVat();
-            $finance->importo_totale = $invoice->getAmountGross();
+                $finance->numero = $document->getNumber();
+                $finance->tipo_doc = $document->getType() == 'invoice' ? 'fatture' : 'ndc';
+                $finance->tipo = 'attiva';
+                $finance->anno = $document->getYear();
+            }
 
             $finance->save();
 
