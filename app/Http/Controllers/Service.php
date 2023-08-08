@@ -541,4 +541,25 @@ class Service extends Controller
         $customer = new \App\Http\Controllers\Customer();
         $customer->service_exp_renew($id);
     }
+
+    public function autorenew()
+    {
+        $customers_services = CustomerService::query();
+        $customers_services = $customers_services->where(
+            'expiration', '<=', date('Y-m-d H:i:s')
+        );
+        $customers_services = $customers_services->where('autorenew', '=', 1);
+        $customers_services = $customers_services->orderBy('expiration');
+        $customers_services = $customers_services->get();
+
+        foreach ($customers_services as $customer_service) {
+
+            $this->service_exp_invoice(array(
+                'date' => date('Y-m-d'),
+                'payment_received' => 'not_paid',
+                'email_send' => 0,
+            ), $customer_service->id);
+
+        }
+    }
 }

@@ -100,7 +100,7 @@ Route::get('gapi/gsheets', [\App\Http\Controllers\GoogleSheetsAPI::class, 'updat
  * serviceM - autoRenew
  * Auto rinnovo i servizi auto rinnovabili
  */
-
+Route::get('service/autorenew', [\App\Http\Controllers\Service::class, 'autorenew']);
 
 /**
  * serviceM - expiration alert
