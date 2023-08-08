@@ -48,59 +48,43 @@ class GoogleSheetsAPI extends Controller
         }
 
         /**
-         * Importo i documenti in DB
-         */
-        /*$fic = new FattureInCloudAPI();
-        $fic->getDocToday();*/
-
-        /**
          * Prendo i dati da fattureincloud.it
          */
-        $filter = new Filter();
-        $filter->where('date', Operator::GTE, env('GOOGLE_SHEETS_YEAR') . '-01-01');
+        /*$filter = new Filter();
+        $filter->where('date', Operator::GTE, env('GOOGLE_SHEETS_YEAR') . date('-01-01'));
         $q = $filter->buildQuery();
 
         $fic = new FattureInCloudAPI();
-        $fatture_attive = $fic->api('get.invoice', array('q' => $q));
 
-        dd($fatture_attive);
+        $fatture_attive = $fic->api('get.documents', array(
+            'type' => 'invoice',
+            'q' => $q,
+        ));
 
-        $fic = new FattureInCloudAPI();
-        $fatture_attive = $fic->get(
-            'fatture',
-            'lista',
-            array(
-                'anno' => env('GOOGLE_SHEETS_YEAR'),
-                'data_inizio' => '01/01/' . env('GOOGLE_SHEETS_YEAR'),
-                'data_fine' => '31/12/' . env('GOOGLE_SHEETS_YEAR')
-            )
-        );
+        $ndc_attive = $fic->api('get.documents', array(
+            'type' => 'credit_note',
+            'q' => $q,
+        ));
 
-        $fic = new FattureInCloudAPI();
-        $ndc_attive = $fic->get(
-            'ndc',
-            'lista',
-            array(
-                'anno' => env('GOOGLE_SHEETS_YEAR'),
-                'data_inizio' => '01/01/' . env('GOOGLE_SHEETS_YEAR'),
-                'data_fine' => '31/12/' . env('GOOGLE_SHEETS_YEAR')
-            )
-        );
+        $fatture_attive = array_merge($fatture_attive->getData(), $ndc_attive->getData());
 
-        // Fattura in cloud unice Fatture e Note di credito solo per i documenti passivi,
-        // per i documenti attivi li divice, quindi utilizzo array_merge.
-        $fatture_attive = array_merge($fatture_attive, $ndc_attive);
+        // --------------------------------------------
 
-        $fic = new FattureInCloudAPI();
-        $fatture_passive = $fic->get(
-            'acquisti',
-            'lista',
-            array(
-                'anno' => env('GOOGLE_SHEETS_YEAR'),
-                'data_inizio' => '01/01/' . env('GOOGLE_SHEETS_YEAR'),
-                'data_fine' => '31/12/' . env('GOOGLE_SHEETS_YEAR')
-            )
-        );
+        $fatture_passive = $fic->api('get.documents.received', array(
+            'type' => 'expense',
+            'q' => $q,
+        ));
+
+        $ndc_passive = $fic->api('get.documents.received', array(
+            'type' => 'passive_credit_note',
+            'q' => $q,
+        ));
+
+        $fatture_passive = array_merge($fatture_passive->getData(), $ndc_passive->getData());*/
+
+        $finances = \App\Models\Finance::query();
+        $finances = $finances->where('data', '>=', env('GOOGLE_SHEETS_YEAR') . '-01-01');
+        $finances = $finances->get();
 
         /**
          * Calcolo i totali per mese delle fatture attive e passive
@@ -108,11 +92,13 @@ class GoogleSheetsAPI extends Controller
          */
         $tot_month_attivo = array();
         $iva_debito = array();
+        $tot_month_passivo = array();
+        $iva_credito = array();
 
-        foreach ($fatture_attive as $fattura) {
+        foreach ($finances as $fattura) {
 
             // Calcolo importo netto in attivo per mese
-            $month_n = date('n', strtotime(str_replace('/', '-', $fattura['data'])));
+            $month_n = date('n', strtotime($fattura->data));
 
             if (!isset($tot_month_attivo[$range_array[$month_n]['in']])) {
                 $tot_month_attivo[$range_array[$month_n]['in']] = 0;
@@ -123,42 +109,6 @@ class GoogleSheetsAPI extends Controller
                 $iva_debito[$month_n] = 0;
             }
 
-            // Correggo l'importo attivo in base alle note di credito attive
-            switch ($fattura['tipo']) {
-                case 'fatture':
-                    $tot_month_attivo[$range_array[$month_n]['in']] += $fattura['importo_netto'];
-
-                    // Verifica se PA per Split Payment
-                    if ($fattura['PA_tipo_cliente'] != 'PA') {
-                        $iva_debito[$month_n] += $fattura['importo_totale'] - $fattura['importo_netto'];
-                    }
-                    break;
-
-                case 'ndc':
-                    $tot_month_attivo[$range_array[$month_n]['in']] -= $fattura['importo_netto'];
-
-                    // Verifica se PA per Split Payment
-                    if ($fattura['PA_tipo_cliente'] != 'PA') {
-                        $iva_debito[$month_n] -= $fattura['importo_totale'] - $fattura['importo_netto'];
-                    }
-                    break;
-            }
-
-        }
-
-        // Sistemo l'array dei totali per importarli correttamente in Google Sheets
-        $tot_month_attivo = array_reverse($tot_month_attivo, true);
-
-        // - - -
-
-        $tot_month_passivo = array();
-        $iva_credito = array();
-
-        foreach ($fatture_passive as $fattura) {
-
-            // Calcolo importo netto in passivo per mese
-            $month_n = date('n', strtotime(str_replace('/', '-', $fattura['data'])));
-
             if (!isset($tot_month_passivo[$range_array[$month_n]['out']])) {
                 $tot_month_passivo[$range_array[$month_n]['out']] = 0;
             }
@@ -168,20 +118,46 @@ class GoogleSheetsAPI extends Controller
                 $iva_credito[$month_n] = 0;
             }
 
-            // Correggo l'importo passivo in base alle note di credito passive
-            switch ($fattura['tipo']) {
-                case 'spesa':
-                    $tot_month_passivo[$range_array[$month_n]['out']] -= $fattura['importo_netto'];
-                    $iva_credito[$month_n] += $fattura['importo_iva'];
-                    break;
+            // Correggo l'importo attivo in base alle note di credito attive
+            if ($fattura->tipo == 'attiva') {
 
-                case 'ndc':
-                    $tot_month_passivo[$range_array[$month_n]['out']] += $fattura['importo_netto'];
-                    $iva_credito[$month_n] -= $fattura['importo_iva'];
-                    break;
+                switch ($fattura->tipo_doc) {
+                    case 'fatture':
+                        $tot_month_attivo[$range_array[$month_n]['in']] += $fattura->importo_netto;
+                        // Verifica se PA per Split Payment
+                        /*if ($fattura['PA_tipo_cliente'] != 'PA') {
+                            $iva_debito[$month_n] += $fattura['importo_totale'] - $fattura['importo_netto'];
+                        }*/
+                        break;
+                    case 'ndc':
+                        $tot_month_attivo[$range_array[$month_n]['in']] -= $fattura->importo_netto;
+                        // Verifica se PA per Split Payment
+                        /*if ($fattura['PA_tipo_cliente'] != 'PA') {
+                            $iva_debito[$month_n] -= $fattura['importo_totale'] - $fattura['importo_netto'];
+                        }*/
+                        break;
+                }
+
             }
 
+            if ($fattura->tipo == 'passiva') {
+
+                switch ($fattura->tipo_doc) {
+                    case 'spesa':
+                        $tot_month_passivo[$range_array[$month_n]['out']] -= $fattura->importo_netto;
+                        $iva_credito[$month_n] += $fattura->importo_iva;
+                        break;
+                    case 'ndc':
+                        $tot_month_passivo[$range_array[$month_n]['out']] += $fattura->importo_netto;
+                        $iva_credito[$month_n] -= $fattura->importo_iva;
+                        break;
+                }
+
+            }
         }
+
+        // Sistemo l'array dei totali per importarli correttamente in Google Sheets
+        $tot_month_attivo = array_reverse($tot_month_attivo, true);
 
         // Sistemo l'array dei totali per importarli correttamente in Google Sheets
         $tot_month_passivo = array_reverse($tot_month_passivo, true);
@@ -191,7 +167,7 @@ class GoogleSheetsAPI extends Controller
         /**
          * Allineamento Keys dei totali attivi e passivi per mese
          */
-        if (count($tot_month_attivo) > count($tot_month_passivo)) {
+        if (count($tot_month_attivo) >= count($tot_month_passivo)) {
 
             $count_m = count($tot_month_attivo);
 
@@ -200,7 +176,7 @@ class GoogleSheetsAPI extends Controller
             $count_m = count($tot_month_passivo);
         }
 
-        for ($i = 0; $i < $count_m; $i++) {
+        for ($i = 0; $i <= $count_m; $i++) {
 
             if (!isset($tot_month_attivo[$range_array[$i + 1]['in']])) {
                 $tot_month_attivo[$range_array[$i + 1]['in']] = 0;
@@ -211,6 +187,9 @@ class GoogleSheetsAPI extends Controller
             }
 
         }
+
+        ksort($tot_month_attivo);
+        ksort($tot_month_passivo);
 
         // Sistemo l'array Keys dei totali per importarli correttamente in Google Sheets
         $k_tot_month_attivo = array_keys($tot_month_attivo);
@@ -323,22 +302,7 @@ class GoogleSheetsAPI extends Controller
 
         $result = $service->spreadsheets_values->batchUpdate($spreadsheetId, $body);
 
-        /*$body = new \Google_Service_Sheets_ValueRange([
-            'values' => $values
-        ]);
-
-        $params = [
-            'valueInputOption' => 'RAW'
-        ];
-
-        $result = $service->spreadsheets_values->update(
-            $spreadsheetId,
-            $range,
-            $body,
-            $params
-        );*/
-
-        $this->scriptableWriteJSON();
+//        $this->scriptableWriteJSON();
     }
 
     /**
@@ -589,8 +553,6 @@ class GoogleSheetsAPI extends Controller
 
         }
 
-//        dd($array_fatture);
-
         $gSheets_values = array();
 
         $gSheets_values[0][0]= '';
@@ -610,8 +572,6 @@ class GoogleSheetsAPI extends Controller
 
             $c++;
         }
-
-//        dd(count($gSheets_values[1]));
 
         /*$c = 1;
         for ($i = $y_start; $i <= $y_end; $i++) {
@@ -706,8 +666,6 @@ class GoogleSheetsAPI extends Controller
             $gSheets_values[0][$c] = intval($i);
             $c++;
         }
-
-//        dd($gSheets_values);
 
         // - - -
 
