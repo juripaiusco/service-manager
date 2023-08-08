@@ -71,18 +71,44 @@ Route::middleware('auth')->group(function () {
 });
 
 // ----------------------------------------
+
 Route::get('payment/checkout/{sid}', [\App\Http\Controllers\Payment::class, 'show'])->name('payment.checkout');
 Route::post('payment/checkout/update/{sid}', [\App\Http\Controllers\Payment::class, 'update'])->name('payment.update');
 Route::get('payment/confirm/{sid}', [\App\Http\Controllers\Payment::class, 'confirm'])->name('payment.confirm');
 
-Route::get('mail/service-expiration/all', [\App\Http\Controllers\Email::class, 'sendExpirationList'])->name('email.exp.all');
-Route::get('mail/service-expiration/{id}', [\App\Http\Controllers\Email::class, 'sendExpirationService'])->name('email.exp');
 Route::get('mail/show/{view}/{sid}', [\App\Http\Controllers\Email::class, 'show'])->name('email.show');
 
-// API
-Route::get('finance/fic/get', [\App\Http\Controllers\Finance::class, 'documentsGet'])->name('finance.documents.get');
-Route::get('gapi/gsheets', [\App\Http\Controllers\GoogleSheetsAPI::class, 'update']);
 Route::get('gapi/scriptable', [\App\Http\Controllers\GoogleSheetsAPI::class, 'scriptableGetJSON']);
-// ----------------------------------------
+
+/**
+ * CronJob
+ * ======================================================================
+ */
+/**
+ * serviceM - FiC2DB
+ * Recupero i dati da FIC e li importo nel DB
+ */
+Route::get('finance/fic/get', [\App\Http\Controllers\Finance::class, 'documentsGet'])->name('finance.documents.get');
+
+/**
+ * serviceM - gSheets
+ * Prendo i dati dal DB e li inserito in un foglio di calcolo Google Sheets
+ */
+Route::get('gapi/gsheets', [\App\Http\Controllers\GoogleSheetsAPI::class, 'update']);
+
+/**
+ * serviceM - autoRenew
+ * Auto rinnovo i servizi auto rinnovabili
+ */
+
+
+/**
+ * serviceM - expiration alert
+ * Invio email di avviso scadenza
+ */
+Route::get('mail/service-expiration/all', [\App\Http\Controllers\Email::class, 'sendExpirationList'])->name('email.exp.all');
+/**
+ * ======================================================================
+ */
 
 require __DIR__.'/auth.php';

@@ -83,6 +83,29 @@ class Email extends Controller
     }
 
     /**
+     * Send email to customer with expiration services
+     * @return void
+     */
+    public function sendExpirationList()
+    {
+        $customers_services = CustomerService::query();
+        $customers_services = $customers_services->where(
+            'expiration', '>=', date('Y-m-d H:i:s')
+        );
+        $customers_services = $customers_services->where(
+            'expiration', '<=', date('Y-m-d', strtotime('+2 month'))
+        );
+        $customers_services = $customers_services->orderBy('expiration');
+        $customers_services = $customers_services->get();
+
+        foreach ($customers_services as $customer_service) {
+
+            $this->sendExpiration($customer_service->id);
+
+        }
+    }
+
+    /**
      * Creazione template da inviare via email e visualizzare online
      *
      * @param $customer_service_id
