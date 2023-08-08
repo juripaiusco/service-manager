@@ -104,7 +104,7 @@ const year_month_selected = ref(null);
                     <div class="card-header">{{ year }}</div>
                     <div class="card-body">
 
-                        <table class="table table-sm text-sm">
+                        <table class="table table-sm text-sm table-hover">
                             <thead>
                             <tr>
                                 <th class="text-left w-[140px]">
@@ -132,29 +132,45 @@ const year_month_selected = ref(null);
                             </thead>
                             <tbody>
                             <tr v-for="invoice in invoices_data"
-                                :id="year + '-' + __date(invoice.data, 'n')"
-                                :class="{
-                                    'year-month-selected': year_month_selected == year + '-' + __date(invoice.data, 'n')
+                                :id="year + '-' + __date(invoice.data, 'n')">
+                                <td :class="{
+                                    '!bg-sky-50 !text-sky-700': year_month_selected == year + '-' + __date(invoice.data, 'n')
                                 }">
-                                <td>
                                     {{ invoice.numero }}
                                 </td>
-                                <td>
+                                <td :class="{
+                                    '!bg-sky-50 !text-sky-700': year_month_selected == year + '-' + __date(invoice.data, 'n')
+                                }">
                                     {{ invoice.nome }}
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center"
+                                    :class="{
+                                    '!bg-sky-50 !text-sky-700': year_month_selected == year + '-' + __date(invoice.data, 'n')
+                                }">
                                     {{ invoice.tipo_doc }}
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center"
+                                    :class="{
+                                    '!bg-sky-50 !text-sky-700': year_month_selected == year + '-' + __date(invoice.data, 'n')
+                                }">
                                     {{ __date(invoice.data, 'day') }}
                                 </td>
-                                <td class="text-right">
+                                <td class="text-right"
+                                    :class="{
+                                    '!bg-sky-50 !text-sky-700': year_month_selected == year + '-' + __date(invoice.data, 'n')
+                                }">
                                     {{ __currency(invoice.importo_netto, 'EUR') }}
                                 </td>
-                                <td class="text-right">
+                                <td class="text-right"
+                                    :class="{
+                                    '!bg-sky-50 !text-sky-700': year_month_selected == year + '-' + __date(invoice.data, 'n')
+                                }">
                                     {{ __currency(invoice.importo_iva, 'EUR') }}
                                 </td>
-                                <td class="text-right">
+                                <td class="text-right"
+                                    :class="{
+                                    '!bg-sky-50 !text-sky-700': year_month_selected == year + '-' + __date(invoice.data, 'n')
+                                }">
                                     {{ __currency(invoice.importo_totale, 'EUR') }}
                                 </td>
                             </tr>
@@ -226,9 +242,3 @@ const year_month_selected = ref(null);
     </AuthenticatedLayout>
 
 </template>
-
-<style>
-.year-month-selected td {
-    background-color: lightblue !important;
-}
-</style>
