@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('customer_name')->nullable();
             $table->string('name');
             $table->string('reference')->nullable();
-            $table->timestamp('expiration');
+            $table->timestamp('expiration')->nullable();
             $table->string('expiration_monthly', 1)->nullable();
             $table->string('autorenew', 1)->nullable();
             $table->string('no_email_alert', 1)->nullable();
