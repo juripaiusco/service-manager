@@ -111,6 +111,7 @@ function serviceExpActionRoute (route: any, data: any, action: any) {
                         <span class="text-sm">
                             In questa sezione puoi creare il tuo pacchetto scadenza,
                             associando i servizi desiderati.
+                            Il servizio sarà collegato al cliente selezionato.
                         </span>
 
                         <br><br>
@@ -152,6 +153,59 @@ function serviceExpActionRoute (route: any, data: any, action: any) {
                         </div>
 
                         <br>
+
+                        <div class="row">
+                            <div class="col-5">
+
+                                <div class="form-check form-switch">
+
+                                    <input class="form-check-input !mt-[30px]"
+                                           type="checkbox"
+                                           id="autorenew"
+                                           true-value="1"
+                                           false-value="0"
+                                           v-model="form.autorenew"
+                                           checked />
+
+                                    <label class="form-check-label"
+                                           for="autorenew">
+                                        <span class="text-gray-500 text-[0.9em]">Auto rinnovo</span>
+                                        <br>
+                                        <span class="text-xs">
+                                    (se lo switch è attivo, il servizio si auto rinnoverà, inviando la fattura)
+                                </span>
+                                    </label>
+
+                                </div>
+
+                            </div>
+                            <div class="col">
+
+                                <div class="form-check form-switch">
+
+                                    <input class="form-check-input !mt-[30px]"
+                                           type="checkbox"
+                                           id="no_email_alert"
+                                           true-value="1"
+                                           false-value="0"
+                                           v-model="form.no_email_alert"
+                                           checked />
+
+                                    <label class="form-check-label"
+                                           for="no_email_alert">
+                                        <span class="text-gray-500 text-[0.9em]">Disattiva avviso via email</span>
+                                        <br>
+                                        <span class="text-xs">
+                                    (se lo switch è attivo, il cliente non riceverà nessun avviso scadenza via mail)
+                                </span>
+                                    </label>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <br><br>
 
                         <div class="row">
                             <div class="col-5">

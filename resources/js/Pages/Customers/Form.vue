@@ -177,6 +177,34 @@ const form = useForm(dataForm);
 
                                 }
                             }, {
+                                class: 'text-center w-[120px]',
+                                label: 'Auto Rinnovo',
+                                field: 'autorenew',
+                                order: false,
+                                fnc: function (d) {
+
+                                    let html = ''
+
+                                    html += d.autorenew == 1 ? 'Sì' : 'No'
+
+                                    return html
+
+                                }
+                            }, {
+                                class: 'text-center w-[120px]',
+                                label: 'Avviso Email',
+                                field: 'no_email_alert',
+                                order: false,
+                                fnc: function (d) {
+
+                                    let html = ''
+
+                                    html += d.no_email_alert == 1 ? 'No' : 'Sì'
+
+                                    return html
+
+                                }
+                            }, {
                                 class: 'text-right w-[140px]',
                                 label: 'Spesa',
                                 field: 'details_sum_price_sell',
