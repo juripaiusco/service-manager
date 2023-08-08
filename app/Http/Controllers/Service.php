@@ -557,7 +557,7 @@ class Service extends Controller
             $this->service_exp_invoice(array(
                 'date' => date('Y-m-d'),
                 'payment_received' => 'not_paid',
-                'email_send' => 0,
+                'email_send' => 1,
             ), $customer_service->id);
 
         }
