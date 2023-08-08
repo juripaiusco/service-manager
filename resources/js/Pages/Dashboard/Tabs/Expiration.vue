@@ -232,11 +232,11 @@ function invoiceCreate(email_send)
                     @click="collapse(index)">
 
                     <span class="text-lg font-semibold">
-                        {{ __currency(service.total_sell_notax, 'EUR') }}
+                        {{ service.total_sell_notax ? __currency(service.total_sell_notax, 'EUR') : '-' }}
                     </span>
                     <br>
                     <span class="text-xs">
-                        {{ __currency(service.total_sell_tax, 'EUR') }}
+                        {{ service.total_sell_tax ? __currency(service.total_sell_tax, 'EUR') : '' }}
                     </span>
 
                 </td>
