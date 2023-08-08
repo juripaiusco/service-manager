@@ -302,7 +302,7 @@ class GoogleSheetsAPI extends Controller
 
         $result = $service->spreadsheets_values->batchUpdate($spreadsheetId, $body);
 
-//        $this->scriptableWriteJSON();
+        $this->scriptableWriteJSON();
     }
 
     /**
@@ -349,9 +349,6 @@ class GoogleSheetsAPI extends Controller
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        // Classe FattureInCloudData per recuperare i dati di entrate e uscite
-        $FicData = new FattureInCloudData();
-
         // Definizione anno di partenza recupero dati
         $from_year = env('GOOGLE_SHEETS_YEAR') - 1;
 
@@ -372,6 +369,11 @@ class GoogleSheetsAPI extends Controller
         $m_lastYear = date('m', $timeJSON_lastYear);
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        // Classe FattureInCloudData per recuperare i dati di entrate e uscite
+//        $FicData = new FattureInCloudData();
+        $FicData = new Finance();
+
         // Recupero i dati delle entrate
         $array_income_by_months = $FicData->dataByMonth(array(
             'from_year' => $from_year,
