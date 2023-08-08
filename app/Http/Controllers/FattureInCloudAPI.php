@@ -43,6 +43,9 @@ class FattureInCloudAPI extends Controller
                 case 'get.documents':
                     return $this->documentsGet($args);
                     break;
+                case 'get.documents.received':
+                    return $this->documentsReceivedGet($args);
+                    break;
             }
 
         } catch (Exception $e) {
@@ -213,6 +216,27 @@ class FattureInCloudAPI extends Controller
             null,
             null,
             null,
+            isset($args['q']) ? $args['q'] : null
+        );
+
+        return $results;
+    }
+
+    private function documentsReceivedGet(array $args = array())
+    {
+        $apiIstance = new Api\ReceivedDocumentsApi(
+            new GuzzleHttp\Client(),
+            Configuration::getDefaultConfiguration()->setAccessToken(env('FIC_API_TOKEN'))
+        );
+
+        $results = $apiIstance->listReceivedDocuments(
+            env('FIC_API_UID'),
+            isset($args['type']) ? $args['type'] : null,
+            null,
+            'detailed',
+            '-date',
+            null,
+            100,
             isset($args['q']) ? $args['q'] : null
         );
 
