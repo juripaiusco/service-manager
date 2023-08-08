@@ -23,7 +23,7 @@ const dataForm = Object.fromEntries(Object.entries(props.data!).map((v) => {
 }));
 
 dataForm.customer_id = props.customer!.id;
-dataForm.expiration = __date(props.data!.expiration, 'day');
+dataForm.expiration = __date(props.data!.expiration, 'date');
 dataForm.details = usePage().props.serviceExp;
 
 const form = useForm(dataForm);
@@ -141,10 +141,11 @@ function serviceExpActionRoute (route: any, data: any, action: any) {
                             </div>
                             <div class="col-3">
 
-                                <label class="form-label">Data scadenza</label>
-                                <input type="text"
-                                       class="form-control text-center"
-                                       placeholder="dd/mm/yyyy"
+                                <label class="form-label"
+                                       for="expiration">Data scadenza</label>
+                                <input class="form-control text-center"
+                                       type="date"
+                                       id="expiration"
                                        v-model="form.expiration" />
                                 <div class="text-red-500 text-center"
                                      v-if="form.errors.expiration">{{ form.errors.expiration }}</div>

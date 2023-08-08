@@ -60,9 +60,6 @@ class CustomerServiceExpiration extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->session()->get('serviceExp'));
-//        dd($request->all());
-
         $request->validate([
             'name'          => ['required'],
             'expiration'    => ['required'],
@@ -72,19 +69,6 @@ class CustomerServiceExpiration extends Controller
         $details = $request['details'];
         unset($request['saveRedirect']);
         unset($request['details']);
-
-        $expiration = date(
-            'Y-m-d H:i:s',
-            strtotime(
-                str_replace(
-                    '/',
-                    '-',
-                    $request['expiration']
-                )
-            )
-        );
-
-        $request['expiration'] = $expiration;
 
         // Salvo il servizio
         $customerService = new CustomerService();
@@ -152,19 +136,6 @@ class CustomerServiceExpiration extends Controller
         unset($request['created_at']);
         unset($request['updated_at']);
         unset($request['details']);
-
-        $expiration = date(
-            'Y-m-d H:i:s',
-            strtotime(
-                str_replace(
-                    '/',
-                    '-',
-                    $request['expiration']
-                )
-            )
-        );
-
-        $request['expiration'] = $expiration;
 
         // Salvo il servizio
         $data = \App\Models\CustomerService::find($id);
