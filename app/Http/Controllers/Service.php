@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\CustomerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -373,5 +374,171 @@ class Service extends Controller
         \App\Models\Service::destroy($id);
 
         return \redirect()->back();
+    }
+
+    public function service_exp_invoice($args, $id)
+    {
+        $service_exp = CustomerService::query();
+        $service_exp = $service_exp->with('customer');
+        $service_exp = $service_exp->with('details');
+        $service_exp = $service_exp->with('details.service');
+        $service_exp = $service_exp->where('id', $id);
+        $service_exp = $service_exp->first();
+
+        // -----------------------------
+
+        $fic = new FattureInCloudAPI();
+
+        $fic_clients = $fic->api('get.clients', array(
+            'vat_number' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
+        ));
+
+        if (!$fic_clients->getData()) {
+            $fic_clients = $fic->api('get.clients', array(
+                'tax_code' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
+            ));
+        }
+
+        if (!$fic_clients->getData()) {
+            dd('Cliente non trovato in Fatture in Cloud');
+        }
+
+        // -----------------------------
+
+        $fic_products = $fic->api('get.products');
+        $items_list = array();
+        $invoice_items_rows = array();
+        $items_net_price_total = 0;
+        $items_gross_price_total = 0;
+
+        foreach ($service_exp->details as $details) {
+
+            $index = $details->service_id . $details->price_sell;
+
+            if (!isset($invoice_items_rows[$index])) {
+
+                foreach ($fic_products->getData() as $product) {
+
+                    if ($details->service->fic_cod == $product->getCode()) {
+
+                        $invoice_items_rows[$index] = array(
+                            'id' => $product->getId(),
+                            'code' => $product->getCode(),
+                            'name' => $details->service->name_customer_view,
+                            'category' => $product->getCategory(),
+                            /*'description' => $details->reference,
+                            'qty' => 1,*/
+                            'net_price' => $details->price_sell,
+                            'gross_price' => $details->price_sell * 1.22,
+                        );
+
+                        break;
+
+                    }
+                }
+            }
+
+            $invoice_items_rows[$index]['reference'][] = $details->reference;
+
+        }
+
+        foreach ($invoice_items_rows as $k => $item_row) {
+
+            $item_row_unique = array_unique($item_row['reference']);
+            sort($item_row_unique);
+            $description = implode("\n", $item_row_unique);
+
+            $item_row['qty'] = count($item_row['reference']);
+            $item_row['description'] = $description;
+
+            $items_net_price_total += $item_row['net_price'] * $item_row['qty'];
+            $items_gross_price_total += $item_row['gross_price'] * $item_row['qty'];
+
+            $items_list[$k] = $item_row;
+
+            unset($items_list[$k]['reference']);
+
+        }
+
+        sort($items_list);
+
+        // -----------------------------
+
+        $invoice_args = array(
+            'entity' => array(
+                'id' => $fic_clients->getData()[0]->getId(),
+                'name' => $fic_clients->getData()[0]->getName(),
+                'vat_number' => $fic_clients->getData()[0]->getVatNumber(),
+                'tax_code' => $fic_clients->getData()[0]->getTaxCode(),
+                'address_street' => $fic_clients->getData()[0]->getAddressStreet(),
+                'address_postal_code' => $fic_clients->getData()[0]->getAddressPostalCode(),
+                'address_city' => $fic_clients->getData()[0]->getAddressCity(),
+                'address_province' => $fic_clients->getData()[0]->getAddressProvince(),
+                'address_extra' => $fic_clients->getData()[0]->getAddressExtra(),
+                'country' => $fic_clients->getData()[0]->getCountry(),
+                'certified_email' => $fic_clients->getData()[0]->getCertifiedEmail(),
+                'ei_code' => $fic_clients->getData()[0]->getEiCode(),
+            ),
+            'date' => $args['date'],
+            'items_list' => $items_list,
+            'payments_list' => array(
+                array(
+                    'due_date' => $args['date'],
+                    'amount' => $items_gross_price_total,
+                    'status' => $args['payment_received'] == 1 ? 'paid' : 'not_paid',
+                    'paid_date' => $args['payment_received'] == 1 ? $args['date'] : null,
+                    'payment_terms' => array(
+                        'days' => 0,
+                        'type' => 'standard'
+                    ),
+                    'payment_account' => array(
+                        'id' => env('FIC_pay_account_id'),
+                        'name' => env('FIC_pay_account_name'),
+                    )
+                )
+            ),
+            'payment_method' => array(
+                'id' => env('FIC_pay_method_id'),
+                'name' => env('FIC_pay_method_name'),
+            ),
+            'show_payment_method' => true,
+            'e_invoice' => true,
+            'ei_data' => array(
+                'payment_method' => env('FIC_EI_method'),
+                'bank_iban' => env('FIC_EI_bank_iban'),
+                'bank_beneficiary' => env('FIC_EI_bank_beneficiary'),
+            )
+        );
+
+        $invoice = $fic->api('create.invoice', $invoice_args);
+
+        if ($args['email_send'] == 1) {
+
+            $emailData = $fic->api('get.invoice.email', array('document_id' => $invoice->getData()->getId()));
+
+            $emailSend_args = array(
+                'document_id' => $invoice->getData()->getId(),
+                'data' => array(
+                    'sender_email' => $emailData->getData()->getDefaultSenderEmail()->getEmail(),
+                    'recipient_email' => $emailData->getData()->getRecipientEmail(),
+                    'subject' => $emailData->getData()->getSubject(),
+                    'body' => $emailData->getData()->getBody(),
+                    'include' => array(
+                        'document' => $emailData->getData()->getDocumentExists(),
+                        'delivery_note' => $emailData->getData()->getDeliveryNoteExists(),
+                        'attachment' => $emailData->getData()->getAttachmentExists(),
+                        'accompanying_invoice' => $emailData->getData()->getAccompanyingInvoiceExists(),
+                    ),
+                    'attach_pdf' => false,
+                    'send_copy' => false,
+                )
+            );
+            $fic->api('send.invoice.email', $emailSend_args);
+
+        }
+
+        // Rinnovo servizio
+        $customer = new \App\Http\Controllers\Customer();
+        $customer->service_exp_renew($id);
     }
 }
