@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('reference')->nullable();
             $table->timestamp('expiration');
-            $table->string('expiration_monthly', 1);
-            $table->string('autorenew', 1);
-            $table->string('no_email_alert', 1);
+            $table->string('expiration_monthly', 1)->nullable();
+            $table->string('autorenew', 1)->nullable();
+            $table->string('no_email_alert', 1)->nullable();
 
             $table->timestamps();
         });
