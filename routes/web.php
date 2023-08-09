@@ -88,13 +88,13 @@ Route::get('scriptable/json', [\App\Http\Controllers\GoogleSheetsAPI::class, 'sc
  * serviceM - FiC2DB
  * Recupero i dati da FIC e li importo nel DB
  */
-Route::get('finance/fic/get', [\App\Http\Controllers\Finance::class, 'documentsGet'])->name('finance.documents.get');
+Route::get('finance/fic2db', [\App\Http\Controllers\Finance::class, 'documentsGet'])->name('finance.documents.get');
 
 /**
  * serviceM - gSheets
  * Prendo i dati dal DB e li inserito in un foglio di calcolo Google Sheets
  */
-Route::get('gapi/gsheets', [\App\Http\Controllers\GoogleSheetsAPI::class, 'update']);
+Route::get('gapi/gsheets/update', [\App\Http\Controllers\GoogleSheetsAPI::class, 'update']);
 
 /**
  * serviceM - autoRenew
