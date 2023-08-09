@@ -19,6 +19,7 @@ class Customer extends Model
     public function customerService()
     {
         return $this->hasMany(CustomerService::class, 'customer_id', 'id')
+            ->orderBy('expiration')
             ->withSum('details', 'price_sell');
     }
 
