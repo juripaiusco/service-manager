@@ -78,7 +78,7 @@ Route::get('payment/confirm/{sid}', [\App\Http\Controllers\Payment::class, 'conf
 
 Route::get('mail/show/{view}/{sid}', [\App\Http\Controllers\Email::class, 'show'])->name('email.show');
 
-Route::get('gapi/scriptable', [\App\Http\Controllers\GoogleSheetsAPI::class, 'scriptableGetJSON']);
+Route::get('scriptable/json', [\App\Http\Controllers\GoogleSheetsAPI::class, 'scriptableGetJSON']);
 
 /**
  * CronJob
