@@ -11,20 +11,21 @@ const props = defineProps({
 
 <template>
 
-    <div class="row">
-        <div class="col-6">
+    <div class="lg:inline-flex w-full lg:mb-4">
 
-            <div class="card">
+        <div class="w-full lg:mr-[12px] lg:w-1/2">
+
+            <div class="card mb-6 lg:mb-0">
                 <div class="card-body">
 
-                    <div class="inline-flex w-full">
+                    <div class="sm:inline-flex w-full">
 
-                        <div class="w-1/2 text-3xl font-semibold text-center pt-6">
+                        <div class="sm:w-1/2 text-3xl font-semibold text-center pt-3 pb-3 sm:pt-6 sm:pb-0">
 
                             {{ __currency(props.data.services_total_profit, 'EUR') }}
 
                         </div>
-                        <div class="w-1/2">
+                        <div class="sm:w-1/2">
 
                             <div class="inline-flex w-full p-2">
                                 <div class="w-1/2">
@@ -52,26 +53,50 @@ const props = defineProps({
             </div>
 
         </div>
-        <div class="col">
 
-            <div class="card">
-                <div class="card-body">
+        <div class="w-full sm:ml-[12px] sm:w-1/2 container-fluid">
 
-                    <div class="inline-flex w-full p-2">
-                        <div class="w-1/4 font-bold">
-                            {{ props.data.customers_count }}
-                        </div>
-                        <div>
-                            Clienti attivi
+            <div class="row">
+                <div class="col">
+
+                    <div class="card mb-6 sm:mb-0">
+                        <div class="card-body">
+
+                            <div class="inline-flex w-full p-2">
+                                <div class="w-1/4 font-bold">
+                                    {{ props.data.customers_count }}
+                                </div>
+                                <div>
+                                    Clienti attivi
+                                </div>
+                            </div>
+
+                            <div class="inline-flex w-full p-2">
+                                <div class="w-1/4 font-bold">
+                                    {{ props.data.services_exp.length }}
+                                </div>
+                                <div>
+                                    Abbonamenti attivi
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="inline-flex w-full p-2">
-                        <div class="w-1/4 font-bold">
-                            {{ props.data.services_exp.length }}
-                        </div>
-                        <div>
-                            Abbonamenti attivi
+                </div>
+                <div class="col">
+
+                    <div class="card">
+                        <div class="card-body text-center">
+
+                            <div class="p-2 font-bold">
+                                {{ __currency(props.data.customers_avg, 'EUR') }}
+                            </div>
+
+                            <div class="p-2">
+                                spende mediamente ogni cliente
+                            </div>
+
                         </div>
                     </div>
 
@@ -79,28 +104,12 @@ const props = defineProps({
             </div>
 
         </div>
-        <div class="col">
 
-            <div class="card">
-                <div class="card-body text-center">
-
-                    <div class="p-2 font-bold">
-                        {{ __currency(props.data.customers_avg, 'EUR') }}
-                    </div>
-
-                    <div class="p-2">
-                        spende mediamente ogni cliente
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
     </div>
 
     <br>
 
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover text-xs sm:text-base">
         <thead>
         <tr>
             <th class="w-1/2 text-left">Servizio</th>
@@ -125,7 +134,7 @@ const props = defineProps({
                 {{ service.incoming > 0 ? __currency(service.incoming, 'EUR') : '-' }}
 
             </td>
-            <td class="text-right !text-red-600">
+            <td class="text-right align-middle !text-red-600">
 
                 {{ service.outcoming > 0 ? __currency(service.outcoming, 'EUR') : '-' }}
 

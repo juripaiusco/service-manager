@@ -60,7 +60,7 @@ defineProps({
                         routeSearch: 'service.index',
                         data: data.data,
                         structure: [{
-                            class: 'text-left !align-top w-[5%]',
+                            class: 'text-left !align-top w-[5%] hidden lg:table-cell',
                             label: 'Cod.',
                             field: 'fic_cod',
                         }, {
@@ -79,7 +79,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-center !align-middle w-[5%]',
+                            class: 'text-center !align-middle w-[5%] hidden lg:table-cell',
                             label: 'Share',
                             field: 'is_share',
                             fnc: function (d) {
@@ -96,7 +96,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%]',
+                            class: 'text-right !align-top w-[10%] hidden lg:table-cell',
                             classData: '!text-green-600',
                             label: 'Entrate',
                             field: 'price_sell',
@@ -106,7 +106,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%]',
+                            class: 'text-right !align-top w-[10%] hidden lg:table-cell',
                             classData: '!text-red-600',
                             label: 'Uscite',
                             field: 'price_buy',
@@ -116,7 +116,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%] font-semibold',
+                            class: 'text-right !align-top w-[10%] font-semibold hidden lg:table-cell',
                             label: 'Utile',
                             field: 'profit',
                             fnc: function (d) {
@@ -125,8 +125,8 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%]',
-                            label: '% Ut.Tot.',
+                            class: 'text-right !align-top w-[10%] hidden sm:table-cell',
+                            label: '%&nbsp;Ut.Tot.',
                             field: 'total_service_profit',
                             fnc: function (d) {
 

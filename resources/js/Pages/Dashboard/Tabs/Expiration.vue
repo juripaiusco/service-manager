@@ -79,10 +79,10 @@ function invoiceCreate(email_send)
                 Cliente
                 <span class="text-xs font-normal">(hai {{ props.data.services_exp.length }} scadenze)</span>
             </th>
-            <th class="text-left">
+            <th class="text-left hidden sm:table-cell">
                 Servizio
             </th>
-            <th>
+            <th class="hidden sm:table-cell">
                 Scadenza
             </th>
             <th>
@@ -103,14 +103,14 @@ function invoiceCreate(email_send)
                 }"
                 :id="'service-header-' + index">
 
-                <td class="align-middle w-[140px]">
+                <td class="align-middle lg:w-[140px]">
 
-                    <div class="flex w-full"
+                    <div class="lg:flex lg:w-full"
                          :class="{
                             'hidden': getDate(props.data.today, 60) < getDate(service.expiration),
                          }">
 
-                        <div class="flex-initial mr-2">
+                        <div class="flex-initial mr-2 mb-2 lg:mb-0">
 
                             <button class="btn btn-primary btn-sm"
                                     :class="{
@@ -138,7 +138,7 @@ function invoiceCreate(email_send)
 
                         </div>
 
-                        <div class="flex-initial mr-2">
+                        <div class="flex-initial mr-2 mb-2 lg:mb-0">
 
                             <button class="btn btn-primary btn-sm"
                                     :class="{
@@ -199,7 +199,7 @@ function invoiceCreate(email_send)
                     </div>
 
                 </td>
-                <td class="align-middle"
+                <td class="align-middle hidden sm:table-cell"
                     @click="collapse(index)">
 
                     {{ service.company ? service.company : service.customer.company }}
@@ -219,10 +219,14 @@ function invoiceCreate(email_send)
                     <br>
                     <span class="text-xs">
                         {{ service.reference }}
+                        <br>
+                        <span class="font-bold sm:hidden">
+                            {{ __date(service.expiration, 'day') }}
+                        </span>
                     </span>
 
                 </td>
-                <td class="align-middle text-center"
+                <td class="align-middle text-center hidden sm:table-cell"
                     @click="collapse(index)">
 
                     {{ __date(service.expiration, 'day') }}
@@ -263,8 +267,8 @@ function invoiceCreate(email_send)
                             <tr v-for="serviceDetail in service.details"
                                 class="!border-sky-600 !border-b-[0.5px]">
 
-                                <td class="w-[140px]"></td>
-                                <td class="pl-8 pt-1 pb-1">
+                                <td class="w-[60px] lg:w-[140px] hidden sm:table-cell"></td>
+                                <td class="pl-2 lg:pl-8 pt-1 pb-1">
 
                                     {{ serviceDetail.service.name }}
                                     <br>

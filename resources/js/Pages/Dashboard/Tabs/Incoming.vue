@@ -13,14 +13,14 @@ const props = defineProps({
 
 <template>
 
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover text-sm sm:text-base">
         <thead>
         <tr>
             <th class="text-left">Mese</th>
             <th class="text-right">Entrate</th>
             <th class="text-right">Uscite</th>
             <th class="text-right">Utile</th>
-            <th class="text-right">U. Trimestre</th>
+            <th class="text-right hidden sm:table-cell">U. Trimestre</th>
         </tr>
         </thead>
         <tbody>
@@ -52,7 +52,7 @@ const props = defineProps({
                     '!font-semibold': index >= __date(props.data.today, 'n'),
                 }">
                 {{ __currency(month.profit, 'EUR') }}</td>
-            <td class="text-right align-middle"
+            <td class="text-right align-middle hidden sm:table-cell"
                 v-if="index % 3 === 1"
                 :rowspan="index % 3 === 1 ? 3 : ''">
                 {{ __currency(props.data.trim_incoming[index], 'EUR') }}
@@ -71,7 +71,7 @@ const props = defineProps({
             <th class="text-right">
                 {{ __currency(props.data.services_total_profit, 'EUR') }}
             </th>
-            <th class="text-right"></th>
+            <th class="text-right hidden sm:table-cell"></th>
         </tr>
         </tfoot>
     </table>

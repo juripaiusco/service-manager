@@ -67,15 +67,15 @@ defineProps({
 
                                 let html = ''
                                 html += d.company
-                                html += '<br><span class=\'text-xs\'>Venduti '
+                                html += '<div class=\'hidden sm:block\'><span class=\'text-xs\'>email: '
                                 html += '<span class=\'font-semibold\'>' + d.email + '</span>'
-                                html += '</span>'
+                                html += '</span></div>'
 
                                 return html
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%]',
+                            class: 'text-right !align-top w-[10%] hidden sm:table-cell',
                             classData: '!text-green-600',
                             label: 'Entrate',
                             field: 'incoming',
@@ -85,7 +85,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%]',
+                            class: 'text-right !align-top w-[10%] hidden sm:table-cell',
                             classData: '!text-red-600',
                             label: 'Uscite',
                             field: 'outcoming',
@@ -95,7 +95,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%] font-semibold',
+                            class: 'text-right !align-top w-[10%] font-semibold hidden sm:table-cell',
                             label: 'Utile',
                             field: 'profit',
                             fnc: function (d) {
@@ -113,7 +113,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-center !align-middle w-[10%]',
+                            class: 'text-center !align-middle w-[10%] hidden lg:table-cell',
                             label: '% Ut.Tot.',
                             field: 'total_customer_profit',
                             order: false,

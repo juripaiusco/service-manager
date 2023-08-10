@@ -72,14 +72,6 @@ const showingNavigationDropdown = ref(false);
                                     </ul>
                                 </div>
 
-                                <!-- <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Fatturato
-                                </NavLink>
-
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Impostazioni
-                                </NavLink>-->
-
                             </div>
                         </div>
 
@@ -162,6 +154,19 @@ const showingNavigationDropdown = ref(false);
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('service.index')"
+                                           :active="route().current().search('service') === 0 ? true : false">
+                            Servizi
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('customer.index')"
+                                           :active="route().current().search('customer') === 0 ? true : false">
+                            Clienti
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink href="#"
+                                           :active="route().current().search('finance') === 0 ? true : false">
+                            Finanze
                         </ResponsiveNavLink>
                     </div>
 

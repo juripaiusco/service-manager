@@ -35,9 +35,9 @@ const props = defineProps({
 
             <div class="inline-flex w-full">
 
-                <div class="w-3/4"></div>
+                <div class="w-3/4 hidden lg:block"></div>
 
-                <div class="w-1/4">
+                <div class="w-full mb-4 lg:mb-0 lg:w-1/4">
 
                     <TableSearch placeholder="Cerca servizio o cliente"
                                  route-search="dashboard"
@@ -50,7 +50,7 @@ const props = defineProps({
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
 
-                    <button class="w-[180px] nav-link active"
+                    <button class="w-auto sm:w-[180px] nav-link active"
                             id="nav-expiration-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#nav-expiration"
@@ -59,7 +59,7 @@ const props = defineProps({
                             aria-controls="nav-expiration"
                             aria-selected="true">Scadenze</button>
 
-                    <button class="w-[180px] nav-link"
+                    <button class="w-auto sm:w-[180px] nav-link"
                             id="nav-incoming-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#nav-incoming"
@@ -68,7 +68,7 @@ const props = defineProps({
                             aria-controls="nav-incoming"
                             aria-selected="false">Entrate per mese</button>
 
-                    <button class="w-[180px] nav-link"
+                    <button class="w-auto sm:w-[180px] nav-link"
                             id="nav-profit-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#nav-profit"
