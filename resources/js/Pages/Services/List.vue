@@ -60,7 +60,7 @@ defineProps({
                         routeSearch: 'service.index',
                         data: data.data,
                         structure: [{
-                            class: 'text-left !align-top w-[5%] hidden lg:table-cell',
+                            class: 'text-left !align-top w-[5%] hidden sm:table-cell',
                             label: 'Cod.',
                             field: 'fic_cod',
                         }, {
@@ -96,7 +96,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%] hidden lg:table-cell',
+                            class: 'text-right !align-top w-[10%] hidden sm:table-cell',
                             classData: '!text-green-600',
                             label: 'Entrate',
                             field: 'price_sell',
@@ -106,7 +106,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-right !align-top w-[10%] hidden lg:table-cell',
+                            class: 'text-right !align-top w-[10%] hidden sm:table-cell',
                             classData: '!text-red-600',
                             label: 'Uscite',
                             field: 'price_buy',

@@ -54,10 +54,10 @@ const props = defineProps({
 
         </div>
 
-        <div class="w-full sm:ml-[12px] sm:w-1/2 container-fluid">
+        <div class="w-full lg:ml-[12px] lg:w-1/2">
 
-            <div class="row">
-                <div class="col">
+            <div class="w-full sm:inline-flex">
+                <div class="sm:w-1/2 sm:mr-[12px]">
 
                     <div class="card mb-6 sm:mb-0">
                         <div class="card-body">
@@ -84,7 +84,7 @@ const props = defineProps({
                     </div>
 
                 </div>
-                <div class="col">
+                <div class="sm:w-1/2 sm:ml-[12px]">
 
                     <div class="card">
                         <div class="card-body text-center">
@@ -94,7 +94,7 @@ const props = defineProps({
                             </div>
 
                             <div class="p-2">
-                                spende mediamente ogni cliente
+                                spende in media ogni cliente
                             </div>
 
                         </div>

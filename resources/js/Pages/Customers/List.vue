@@ -113,7 +113,7 @@ defineProps({
 
                             }
                         }, {
-                            class: 'text-center !align-middle w-[10%] hidden lg:table-cell',
+                            class: 'text-center !align-middle w-[10%] hidden sm:table-cell',
                             label: '% Ut.Tot.',
                             field: 'total_customer_profit',
                             order: false,
