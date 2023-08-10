@@ -95,6 +95,10 @@ class Email extends Controller
         $customers_services = $customers_services->where(
             'expiration', '<=', date('Y-m-d', strtotime('+2 month'))
         );
+        $customers_services = $customers_services->where(function ($q) {
+            $q->where('no_email_alert', '=', null);
+            $q->orWhere('no_email_alert', '=', 0);
+        });
         $customers_services = $customers_services->orderBy('expiration');
         $customers_services = $customers_services->get();
 
