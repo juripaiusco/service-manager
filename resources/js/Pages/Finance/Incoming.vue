@@ -42,12 +42,12 @@ defineProps({
 
             </div>
 
-            <table class="table table-sm">
+            <table class="table table-sm text-xs lg:text-sm">
                 <thead>
                 <tr>
-                    <th></th>
+                    <th class="hidden lg:table-cell"></th>
                     <th v-for="(month, index) in data!.months_list"
-                        class="w-[120px] text-sm"
+                        class="w-[120px]"
                         :class="{'table-primary': index == data!.today_month}">
                         {{ __(month) }}
                     </th>
@@ -58,12 +58,12 @@ defineProps({
 
                 <tr v-for="months in data!.months_calc">
 
-                    <th>
+                    <th class="hidden lg:table-cell">
                         {{ months.y }}
                     </th>
 
                     <td v-for="(month, index) in months.m"
-                        class="text-right align-middle !text-sm"
+                        class="text-right align-middle"
                         :class="{'table-primary': index == data!.today_month}">
 
                         {{ __currency(month, 'EUR') }}

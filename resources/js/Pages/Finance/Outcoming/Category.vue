@@ -60,7 +60,7 @@ const year_month_selected = ref(null);
 
             </div>
 
-            <table class="table table-sm text-sm">
+            <table class="table table-sm text-xs lg:text-sm">
                 <thead>
                 <tr>
                     <th></th>

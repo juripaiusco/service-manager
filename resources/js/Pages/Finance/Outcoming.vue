@@ -73,12 +73,12 @@ const month_selected = ref(props.data.month_details.month_selected);
 
             </div>
 
-            <table class="table table-sm">
+            <table class="table table-sm text-xs lg:text-sm">
                 <thead>
                 <tr>
-                    <th></th>
+                    <th class="hidden lg:table-cell"></th>
                     <th v-for="(month, index) in data.months_list"
-                        class="w-[120px] text-sm"
+                        class="w-[120px]"
                         :class="{
                             'table-primary': index == data.today_month && month_selected === null,
                             'table-info': index == month_selected && month_selected !== null,
@@ -101,12 +101,12 @@ const month_selected = ref(props.data.month_details.month_selected);
 
                 <tr v-for="months in data.months_calc">
 
-                    <th>
+                    <th class="hidden lg:table-cell">
                         {{ months.y }}
                     </th>
 
                     <td v-for="(month, index) in months.m"
-                        class="text-right align-middle !text-sm"
+                        class="text-right align-middle"
                         :class="{
                             'table-primary': index == data.today_month && month_selected === null,
                             'table-info': index == month_selected && month_selected !== null,
@@ -260,9 +260,9 @@ const month_selected = ref(props.data.month_details.month_selected);
 
             <div class="inline-flex w-full mb-6">
 
-                <div class="w-3/4"></div>
+                <div class="w-3/4 hidden lg:block"></div>
 
-                <div class="w-1/4">
+                <div class="w-full lg:w-1/4">
 
                     <TableSearch placeholder="Cerca fattura passiva"
                                  route-search="finance.outcoming"
