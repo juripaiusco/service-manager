@@ -313,7 +313,14 @@ class GoogleSheetsAPI extends Controller
     {
         // Mostro i dati del trimestre per almeno 10 giorni passato il trimestre,
         // così da poter modificare eventuali contabilità e poterle avere sempre sotto controllo.
-        $timeJSON = mktime(0, 0, 0, date('m'), (date('d') - 10), env('GOOGLE_SHEETS_YEAR'));
+        $timeJSON = mktime(
+            0,
+            0,
+            0,
+            date('m'),
+            (date('d') - 10),
+            env('GOOGLE_SHEETS_YEAR')
+        );
 
         $alpha = array('B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M');
 
@@ -326,7 +333,6 @@ class GoogleSheetsAPI extends Controller
         $spreadsheetId = env('GOOGLE_SHEETS_ID');
 
         $c = 0;
-
         foreach (array_chunk($alpha, 3) as $k => $v) {
 
             $c += 3;
@@ -371,16 +377,15 @@ class GoogleSheetsAPI extends Controller
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         // Classe FattureInCloudData per recuperare i dati di entrate e uscite
-//        $FicData = new FattureInCloudData();
-        $FicData = new Finance();
+        $finances = new Finance();
 
         // Recupero i dati delle entrate
-        $array_income_by_months = $FicData->dataByMonth(array(
+        $array_income_by_months = $finances->dataByMonth(array(
             'from_year' => $from_year,
             'tipo' => 'attiva',
             'tipo_doc' => 'fatture'
         ));
-        $array_income_comparison_by_year = $FicData->yearComparison(
+        $array_income_comparison_by_year = $finances->yearComparison(
             $array_income_by_months,
             env('GOOGLE_SHEETS_YEAR'),
             date('m', $timeJSON)
@@ -388,12 +393,12 @@ class GoogleSheetsAPI extends Controller
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         // Recupero di dati delle uscite Divise per categoria
-        $array_costs_months_by_category = $FicData->getDataByMonths(array(
+        $array_costs_months_by_category = $finances->getDataByMonths(array(
             'from_year' => $from_year,
             'tipo' => 'passiva',
             'tipo_doc' => 'spesa'
         ));
-        $array_costs_comparison_by_category = $FicData->catComparison(
+        $array_costs_comparison_by_category = $finances->catComparison(
             $array_costs_months_by_category,
             env('GOOGLE_SHEETS_YEAR'),
             date('m', $timeJSON)
@@ -401,12 +406,12 @@ class GoogleSheetsAPI extends Controller
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         // Recupero di dati delle uscite
-        $array_costs_by_months = $FicData->dataByMonth(array(
+        $array_costs_by_months = $finances->dataByMonth(array(
             'from_year' => $from_year,
             'tipo' => 'passiva',
             'tipo_doc' => 'spesa'
         ));
-        $array_costs_comparison_by_year = $FicData->yearComparison(
+        $array_costs_comparison_by_year = $finances->yearComparison(
             $array_costs_by_months,
             env('GOOGLE_SHEETS_YEAR'),
             date('m', $timeJSON)
