@@ -51,7 +51,7 @@ defineProps({
                         :class="{'table-primary': index == data!.today_month}">
                         {{ __(month) }}
                     </th>
-                    <th class="w-[140px]"></th>
+                    <th class="w-[140px] hidden lg:table-cell"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -70,7 +70,7 @@ defineProps({
 
                     </td>
 
-                    <th class="text-right">
+                    <th class="text-right hidden lg:table-cell">
                         {{ __currency(months.total, 'EUR') }}
                     </th>
 

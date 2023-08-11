@@ -94,7 +94,7 @@ const month_selected = ref(props.data.month_details.month_selected);
                         </Link>
 
                     </th>
-                    <th class="w-[140px]"></th>
+                    <th class="w-[140px] hidden lg:table-cell"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -116,7 +116,7 @@ const month_selected = ref(props.data.month_details.month_selected);
 
                     </td>
 
-                    <th class="text-right">
+                    <th class="text-right hidden lg:table-cell">
                         {{ __currency(months.total, 'EUR') }}
                     </th>
 
