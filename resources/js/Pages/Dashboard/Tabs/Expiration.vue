@@ -107,7 +107,7 @@ function invoiceCreate(email_send)
 
                     <div class="lg:flex lg:w-full"
                          :class="{
-                            'hidden': getDate(props.data.today, 60) < getDate(service.expiration),
+                            '!hidden': getDate(props.data.today, 60) < getDate(service.expiration),
                          }">
 
                         <div class="flex-initial mr-2 mb-2 lg:mb-0">
