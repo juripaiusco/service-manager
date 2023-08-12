@@ -208,7 +208,59 @@ function invoiceCreate(email_send)
                     <span class="text-xs">
                         {{ service.customer_name ? service.customer_name : service.customer.name }}
                         -
-                        {{ service.email ? service.email : service.customer.email }}
+
+                        <!-- Mostro se invio multiplo -->
+                        <span v-if="service.email">
+
+                            {{ service.email.split(';')[0] }}
+
+                            <span v-if="service.email.split(';').length > 1"
+                                  class="tooltip">
+
+                                + <svg class="inline mb-[1px] w-4 h-4 text-sky-400"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                </svg>
+
+                                <span class="tooltiptext tooltip-top">
+                                    {{ service.email.split(';').join("\n") }}
+                                </span>
+
+                            </span>
+
+                        </span>
+
+                        <span v-else-if="service.customer.email">
+
+                            {{ service.customer.email.split(';')[0] }}
+
+                            <span v-if="service.customer.email.split(';').length > 1"
+                                  class="tooltip">
+
+                                + <svg class="inline mb-[1px] w-4 h-4 text-sky-400"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                </svg>
+
+                                <span class="tooltiptext tooltip-top">
+                                    {{ service.customer.email.split(';').join("\n") }}
+                                </span>
+
+                            </span>
+
+                        </span>
+
+<!--                        {{
+                            service.email ?
+
+                                service.email.split(';').length > 1 ?
+                                    service.email.split(';')[0] + ' + [CC]' : service.email
+
+                                :
+
+                                service.customer.email.split(';').length > 1 ?
+                                    service.customer.email.split(';')[0] + ' + [CC]' : service.customer.email
+                        }}-->
                     </span>
 
                 </td>
@@ -445,3 +497,44 @@ function invoiceCreate(email_send)
     </Modal>
 
 </template>
+
+<style>
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    /*width: 120px;*/
+    bottom: 25px;
+    left: 50%;
+    margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+/*.tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}*/
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+</style>

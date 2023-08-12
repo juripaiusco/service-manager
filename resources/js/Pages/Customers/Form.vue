@@ -101,6 +101,7 @@ const form = useForm(dataForm);
                                v-model="form.email" />
                         <div class="text-red-500 text-center"
                              v-if="form.errors.email">{{ __(form.errors.email) }}</div>
+                        <label class="form-label !text-xs mt-2">separare con ";" per invio multiplo</label>
 
                     </div>
                 </div>
