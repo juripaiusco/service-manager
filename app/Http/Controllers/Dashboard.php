@@ -349,11 +349,9 @@ class Dashboard extends Controller
 
     public function index()
     {
-        $data = $this->getData();
-
         return Inertia::render('Dashboard/Dashboard', [
 
-            'data' => $data,
+            'data' => $this->getData(),
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
 
         ]);
