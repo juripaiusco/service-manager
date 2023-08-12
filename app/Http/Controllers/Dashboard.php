@@ -178,6 +178,26 @@ class Dashboard extends Controller
 
         }
 
+        // Divisione della spesa condivisa per i mesi dell'anno
+        foreach ($services_exp as $service) {
+
+            foreach ($service->detailsService as $detailService) {
+
+                if ($detailService->is_share == 1 && $detailService->is_monthly_cost == 1) {
+
+                    $services_q = $this->getServices();
+                    $services_q = $services_q->where('id', $detailService->id);
+                    $services_q = $services_q->first();
+
+                    foreach ($months_incoming as $m => $month_incoming) {
+
+                        $months_incoming[$m]['outcoming'] += $detailService->price_buy / $services_q->customers_count / 12;
+                        $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
+                    }
+                }
+            }
+        }
+
         // Suddivizione entrate per mese e tipo servizio
         foreach ($services_exp as $service) {
 
@@ -193,11 +213,15 @@ class Dashboard extends Controller
 
                 } else {
 
-                    $services_q = $this->getServices();
-                    $services_q = $services_q->where('id', $detailService->id);
-                    $services_q = $services_q->first();
+                    if ($detailService->is_monthly_cost != 1) {
 
-                    $months_incoming[$m]['outcoming'] += $detailService->price_buy / $services_q->customers_count;
+                        $services_q = $this->getServices();
+                        $services_q = $services_q->where('id', $detailService->id);
+                        $services_q = $services_q->first();
+
+                        $months_incoming[$m]['outcoming'] += $detailService->price_buy / $services_q->customers_count;
+
+                    }
 
                 }
             }

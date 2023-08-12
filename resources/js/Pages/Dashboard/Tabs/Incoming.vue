@@ -28,7 +28,7 @@ const props = defineProps({
             :class="{
                 'table-secondary': index < __date(props.data.today, 'n'),
                 'line-through': index < __date(props.data.today, 'n'),
-                'table-warning': index == __date(props.data.today, 'n'),
+                'table-warning': parseInt(index) === parseInt(__date(props.data.today, 'n')),
             }">
             <td class="capitalize w-1/2">
                 {{ __(props.data.months_array[index]) }}

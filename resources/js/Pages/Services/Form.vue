@@ -143,17 +143,42 @@ function collapse(indexSelected)
 
                 <br>
 
-                <div class="form-check form-switch">
+                <div class="row">
+                    <div class="col-3">
 
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="is_share"
-                           id="is_share"
-                           true-value="1"
-                           false-value="0"
-                           v-model="form.is_share">
-                    <label class="form-check-label" for="is_share">Servizio condiviso su più clienti</label>
+                        <div class="form-check form-switch">
 
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="is_share"
+                                   id="is_share"
+                                   true-value="1"
+                                   false-value="0"
+                                   v-model="form.is_share">
+                            <label class="form-check-label" for="is_share">Servizio condiviso su più clienti</label>
+
+                        </div>
+
+                    </div>
+                    <div class="col">
+
+                        <div class="form-check form-switch">
+
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="is_monthly_cost"
+                                   id="is_monthly_cost"
+                                   true-value="1"
+                                   false-value="0"
+                                   v-model="form.is_monthly_cost">
+                            <label class="form-check-label" for="is_monthly_cost">
+                                Spesa divisa su 12 mesi
+                                (funziona solo sui servizi condivisi)
+                            </label>
+
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="text-right mt-10">

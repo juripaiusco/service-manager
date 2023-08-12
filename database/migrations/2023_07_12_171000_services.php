@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('price_buy');
             $table->float('price_sell');
             $table->string('is_share', 1)->nullable();
+            $table->string('is_monthly_cost', 1)->nullable();
 
             $table->timestamps();
         });
