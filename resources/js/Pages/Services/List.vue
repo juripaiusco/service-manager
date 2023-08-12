@@ -131,12 +131,13 @@ defineProps({
                             fnc: function (d) {
 
                                 let html = '';
-                                html += d.total_service_profit > 0 ? __currency(d.total_service_profit, 'EUR') : '-';
+                                html += d.total_service_profit !== 0 ? __currency(d.total_service_profit, 'EUR') : '-';
                                 html += '<br>';
 
-                                if (d.total_service_profit > 0) {
+                                if (d.total_service_profit !== 0) {
 
                                     html += '<span class=\'text-xs\'>';
+                                    html += d.total_service_profit < 0 ? '-' : ''
                                     html += parseFloat(
                                         parseFloat(d.total_service_profit) / parseFloat(d.services_total_profit) * 100
                                     ).toFixed(2);
