@@ -44,3 +44,9 @@ label.form-label {
 #nprogress .bar {
     display: none;
 }
+
+@media (prefers-color-scheme: dark) {
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: white !important;
+    }
+}
