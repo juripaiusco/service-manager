@@ -81,36 +81,22 @@ class Service extends Controller
         ));
         $data->addSelect(DB::raw(
             'IF(
-                is_share = 1,
-
-                ((
-                    SELECT
-                      sum(`' . env('DB_PREFIX') . 'customers_services_details`.`price_sell`)
-                    FROM
-                      `' . env('DB_PREFIX') . 'customers_services_details`
-                    WHERE
-                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
-                    )
-                    -
-                    (IF(
                     is_share = 1,
 
-                    (price_buy),
+                    (
+                        (
+                        SELECT
+                          sum(`' . env('DB_PREFIX') . 'customers_services_details`.`price_sell`)
+                        FROM
+                          `' . env('DB_PREFIX') . 'customers_services_details`
+                        WHERE
+                          `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
+                        ) - price_buy
+                    ),
 
-                    (price_buy * (
-                    SELECT
-                      count(*)
-                    FROM
-                      `' . env('DB_PREFIX') . 'customers_services_details`
-                    WHERE
-                      `' . env('DB_PREFIX') . 'services`.`id` = `' . env('DB_PREFIX') . 'customers_services_details`.`service_id`
-                    ))
+                    (price_sell - price_buy)
 
-                ))),
-
-                (price_sell - price_buy)
-
-            ) AS profit'
+                ) AS profit'
         ));
         $data->addSelect(DB::raw(
             'IF(

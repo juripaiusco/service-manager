@@ -121,7 +121,7 @@ defineProps({
                             field: 'profit',
                             fnc: function (d) {
 
-                                return d.profit > 0 ? __currency(d.profit, 'EUR') : '-'
+                                return d.profit !== 0 ? __currency(d.profit, 'EUR') : '-'
 
                             }
                         }, {
