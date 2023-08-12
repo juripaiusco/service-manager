@@ -89,6 +89,14 @@ class Email extends Controller
     public function sendExpirationList()
     {
         $customers_services = CustomerService::query();
+        $customers_services = $customers_services->leftJoin('payments', function($join) {
+            $join->on('payments.customer_service_id', '=', 'customers_services.id');
+            $join->on('payments.customer_service_expiration', '=', 'customers_services.expiration');
+        });
+        $customers_services = $customers_services->where(function ($query){
+            $query->where('payments.type', '')
+                ->orWhereNull('payments.type');
+        });
         $customers_services = $customers_services->where(
             'expiration', '>=', date('Y-m-d H:i:s')
         );
@@ -96,14 +104,16 @@ class Email extends Controller
             'expiration', '<=', date('Y-m-d', strtotime('+2 month'))
         );
         $customers_services = $customers_services->where(function ($q) {
-            $q->where('no_email_alert', '=', null);
-            $q->orWhere('no_email_alert', '=', 0);
+            $q->where('no_email_alert', '=', 0);
+            $q->orWhereNull('no_email_alert');
         });
         $customers_services = $customers_services->orderBy('expiration');
         $customers_services = $customers_services->get();
 
         foreach ($customers_services as $customer_service) {
 
+            /*echo $customer_service->expiration . ' - ';
+            echo $customer_service->reference . '<br>';*/
             $this->sendExpiration($customer_service->id);
 
         }
