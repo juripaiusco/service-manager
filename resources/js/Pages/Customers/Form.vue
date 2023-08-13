@@ -54,7 +54,7 @@ const form = useForm(dataForm);
                 <br>
 
                 <div class="row">
-                    <div class="col">
+                    <div class="col-sm mb-6">
 
                         <label class="form-label">Azienda</label>
                         <input type="text"
@@ -65,7 +65,7 @@ const form = useForm(dataForm);
                              v-if="form.errors.company">{{ __(form.errors.company) }}</div>
 
                     </div>
-                    <div class="col">
+                    <div class="col-sm mb-6">
 
                         <label class="form-label">P.IVA o C.F.</label>
                         <input type="text"
@@ -78,10 +78,8 @@ const form = useForm(dataForm);
                     </div>
                 </div>
 
-                <br>
-
                 <div class="row">
-                    <div class="col">
+                    <div class="col-sm mb-6">
 
                         <label class="form-label">Referente</label>
                         <input type="text"
@@ -92,7 +90,7 @@ const form = useForm(dataForm);
                              v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
                     </div>
-                    <div class="col">
+                    <div class="col-sm mb-6">
 
                         <label class="form-label">Email</label>
                         <input type="text"
@@ -106,7 +104,7 @@ const form = useForm(dataForm);
                     </div>
                 </div>
 
-                <div class="text-right mt-10">
+                <div class="text-right lg:mt-10">
 
                     <Link class="btn btn-secondary w-[120px]"
                           :href="data.saveRedirect">
@@ -122,15 +120,15 @@ const form = useForm(dataForm);
 
                     <hr class="m-10">
 
-                    <div class="inline-flex w-full">
-                        <div class="w-1/2">
+                    <div class="w-full sm:inline-flex">
+                        <div class="w-full sm:w-1/2">
 
                             <h2 class="text-3xl mb-5">
                                 Servizi in scadenza
                             </h2>
 
                         </div>
-                        <div class="w-1/2 text-right">
+                        <div class="w-full sm:w-1/2 sm:text-right mb-8 sm:mb-0">
 
                             <Link class="btn btn-dark w-[120px]"
                                   :href="route('customer.serviceExpiration.create', data.id)">
@@ -140,14 +138,14 @@ const form = useForm(dataForm);
                         </div>
                     </div>
 
-                    <Table class=""
+                    <Table class="text-sm"
                            :data="{
                             filters: filters,
                             tblName: 'customer_service',
                             routeSearch: 'customer.edit',
                             data: data.customer_service,
                             structure: [{
-                                class: 'text-center w-[140px]',
+                                class: 'text-center sm:w-[140px]',
                                 label: 'Scadenza',
                                 field: 'expiration',
                                 order: false,
@@ -178,7 +176,7 @@ const form = useForm(dataForm);
 
                                 }
                             }, {
-                                class: 'text-center w-[120px]',
+                                class: 'text-center w-[120px] hidden sm:table-cell',
                                 label: 'Auto Rinnovo',
                                 field: 'autorenew',
                                 order: false,
@@ -192,7 +190,7 @@ const form = useForm(dataForm);
 
                                 }
                             }, {
-                                class: 'text-center w-[120px]',
+                                class: 'text-center w-[120px] hidden sm:table-cell',
                                 label: 'Avviso Email',
                                 field: 'no_email_alert',
                                 order: false,
@@ -206,7 +204,7 @@ const form = useForm(dataForm);
 
                                 }
                             }, {
-                                class: 'text-right w-[140px]',
+                                class: 'text-right w-[140px] hidden sm:table-cell',
                                 label: 'Spesa',
                                 field: 'details_sum_price_sell',
                                 order: false,

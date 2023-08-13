@@ -73,7 +73,7 @@ function collapse(indexSelected)
                 <br>
 
                 <div class="row">
-                    <div class="col-lg mb-6">
+                    <div class="col-sm mb-6">
 
                         <label class="form-label">Nome del servizio</label>
                         <input type="text"
@@ -84,7 +84,7 @@ function collapse(indexSelected)
                              v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
                     </div>
-                    <div class="col-lg-3 mb-6">
+                    <div class="col-sm-3 mb-6">
 
                         <label class="form-label lg:text-right">Prezzo di vendita</label>
                         <div class="input-group">
@@ -98,7 +98,7 @@ function collapse(indexSelected)
                              v-if="form.errors.price_sell">{{ __(form.errors.price_sell) }}</div>
 
                     </div>
-                    <div class="col-lg-3 mb-6">
+                    <div class="col-sm-3 mb-6">
 
                         <label class="form-label lg:text-right">Prezzo di acquisto</label>
                         <div class="input-group">
@@ -115,7 +115,7 @@ function collapse(indexSelected)
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-3 mb-6">
+                    <div class="col-sm-3 mb-6">
 
                         <label class="form-label">Codice (fatture in cloud)</label>
                         <input type="text"
@@ -126,7 +126,7 @@ function collapse(indexSelected)
                              v-if="form.errors.fic_cod">{{ __(form.errors.fic_cod) }}</div>
 
                     </div>
-                    <div class="col-lg mb-6">
+                    <div class="col-sm mb-6">
 
                         <label class="form-label">Nome del servizio visualizzato dal cliente</label>
                         <input type="text"
