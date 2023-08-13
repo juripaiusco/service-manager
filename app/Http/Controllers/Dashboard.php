@@ -195,6 +195,15 @@ class Dashboard extends Controller
                         $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
                     }
                 }
+
+                if ($detailService->is_share != 1 && $detailService->is_monthly_cost == 1) {
+
+                    foreach ($months_incoming as $m => $month_incoming) {
+
+                        $months_incoming[$m]['outcoming'] += $detailService->price_buy / 12;
+                        $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
+                    }
+                }
             }
         }
 
@@ -227,7 +236,6 @@ class Dashboard extends Controller
             }
 
             $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
-
         }
 
         ksort($months_incoming);
