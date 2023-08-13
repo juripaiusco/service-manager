@@ -73,7 +73,7 @@ function collapse(indexSelected)
                 <br>
 
                 <div class="row">
-                    <div class="col">
+                    <div class="col-lg mb-6">
 
                         <label class="form-label">Nome del servizio</label>
                         <input type="text"
@@ -84,9 +84,9 @@ function collapse(indexSelected)
                              v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
                     </div>
-                    <div class="col-3">
+                    <div class="col-lg-3 mb-6">
 
-                        <label class="form-label text-right">Prezzo di vendita</label>
+                        <label class="form-label lg:text-right">Prezzo di vendita</label>
                         <div class="input-group">
                             <span class="input-group-text !text-green-600">&euro;</span>
                             <input type="text"
@@ -98,9 +98,9 @@ function collapse(indexSelected)
                              v-if="form.errors.price_sell">{{ __(form.errors.price_sell) }}</div>
 
                     </div>
-                    <div class="col-3">
+                    <div class="col-lg-3 mb-6">
 
-                        <label class="form-label text-right">Prezzo di acquisto</label>
+                        <label class="form-label lg:text-right">Prezzo di acquisto</label>
                         <div class="input-group">
                             <span class="input-group-text !text-red-600">&euro;</span>
                             <input type="text"
@@ -114,10 +114,8 @@ function collapse(indexSelected)
                     </div>
                 </div>
 
-                <br>
-
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-lg-3 mb-6">
 
                         <label class="form-label">Codice (fatture in cloud)</label>
                         <input type="text"
@@ -128,7 +126,7 @@ function collapse(indexSelected)
                              v-if="form.errors.fic_cod">{{ __(form.errors.fic_cod) }}</div>
 
                     </div>
-                    <div class="col">
+                    <div class="col-lg mb-6">
 
                         <label class="form-label">Nome del servizio visualizzato dal cliente</label>
                         <input type="text"
@@ -141,10 +139,8 @@ function collapse(indexSelected)
                     </div>
                 </div>
 
-                <br>
-
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-lg-3 mb-6">
 
                         <div class="form-check form-switch">
 
@@ -160,7 +156,7 @@ function collapse(indexSelected)
                         </div>
 
                     </div>
-                    <div class="col">
+                    <div class="col-lg mb-6">
 
                         <div class="form-check form-switch">
 
@@ -181,7 +177,7 @@ function collapse(indexSelected)
                     </div>
                 </div>
 
-                <div class="text-right mt-10">
+                <div class="text-right mt-2">
 
                     <a href="#"
                        onclick="window.history.back(); return false;"
@@ -208,10 +204,10 @@ function collapse(indexSelected)
                         <th class="text-left">
                             Cliente
                         </th>
-                        <th class="text-right w-[120px]">
+                        <th class="text-right w-[120px] hidden lg:table-cell">
                             Entrate
                         </th>
-                        <th class="text-right w-[120px]">
+                        <th class="text-right w-[120px] hidden lg:table-cell">
                             Uscite
                         </th>
                         <th class="text-right w-[120px]">
@@ -234,13 +230,13 @@ function collapse(indexSelected)
                                 {{ customer.name }} - {{ customer.email }}
                             </span>
                             </td>
-                            <td @click="collapse(index)" class="text-right !text-green-600">
+                            <td @click="collapse(index)" class="text-right align-middle !text-green-600 hidden lg:table-cell">
                                 {{ customer.customer_total_sell_notax === 0 ? '-' : __currency(customer.customer_total_sell_notax, 'EUR') }}
                             </td>
-                            <td @click="collapse(index)" class="text-right !text-red-600">
+                            <td @click="collapse(index)" class="text-right align-middle !text-red-600 hidden lg:table-cell">
                                 {{ customer.customer_total_buy_notax === 0 ? '-' : __currency(customer.customer_total_buy_notax, 'EUR') }}
                             </td>
-                            <td @click="collapse(index)" class="text-right font-semibold"
+                            <td @click="collapse(index)" class="text-right align-middle font-semibold"
                                 :class="{
                                 '!text-red-600': (customer.customer_total_sell_notax - customer.customer_total_buy_notax < 0)
                             }">
