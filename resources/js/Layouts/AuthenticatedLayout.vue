@@ -168,7 +168,7 @@ const showingNavigationDropdown = ref(false);
                             Entrate
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('finance.outcoming')"
-                                           :active="route().current().search('finance.incoming') === 0 ? true : false">
+                                           :active="route().current().search('finance.outcoming') === 0 ? true : false">
                             Uscite
                         </ResponsiveNavLink>
                     </div>
