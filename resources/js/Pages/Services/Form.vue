@@ -115,7 +115,7 @@ function collapse(indexSelected)
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-3 mb-6">
+                    <div class="col-sm-6 col-lg-3 mb-6">
 
                         <label class="form-label">Codice (fatture in cloud)</label>
                         <input type="text"
