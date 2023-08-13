@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-    
+
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li v-for="(breadcrumb, i) in breadcrumbArray"
