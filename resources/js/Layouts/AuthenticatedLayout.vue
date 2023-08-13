@@ -163,6 +163,14 @@ const showingNavigationDropdown = ref(false);
                                            :active="route().current().search('customer') === 0 ? true : false">
                             Clienti
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('finance.incoming')"
+                                           :active="route().current().search('customer') === 0 ? true : false">
+                            Entrate
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('finance.outcoming')"
+                                           :active="route().current().search('customer') === 0 ? true : false">
+                            Uscite
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
