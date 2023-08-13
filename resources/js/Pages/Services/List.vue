@@ -34,7 +34,7 @@ defineProps({
 
             <div class="inline-flex w-full mb-6">
 
-                <div class="w-3/4">
+                <div class="lg:w-3/4 mr-4 lg:mr-0">
 
                     <Link class="btn btn-dark w-[120px]"
                           :href="route('service.create')">
@@ -43,7 +43,7 @@ defineProps({
 
                 </div>
 
-                <div class="w-1/4">
+                <div class="w-full lg:w-1/4">
 
                     <TableSearch placeholder="Cerca servizio"
                                  route-search="service.index"
