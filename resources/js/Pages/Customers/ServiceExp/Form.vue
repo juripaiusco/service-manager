@@ -117,7 +117,7 @@ function serviceExpActionRoute (route, data, action) {
                         <br><br>
 
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-sm-5 mb-6">
 
                                 <label class="form-label">Nome servizio in scadenza</label>
                                 <input type="text"
@@ -128,7 +128,7 @@ function serviceExpActionRoute (route, data, action) {
                                      v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
                             </div>
-                            <div class="col">
+                            <div class="col-sm-4 mb-6">
 
                                 <label class="form-label">Riferimento</label>
                                 <input type="text"
@@ -139,11 +139,11 @@ function serviceExpActionRoute (route, data, action) {
                                      v-if="form.errors.reference">{{ __(form.errors.reference) }}</div>
 
                             </div>
-                            <div class="col-3">
+                            <div class="col-sm-3 mb-6">
 
                                 <label class="form-label"
                                        for="expiration">Data scadenza</label>
-                                <input class="form-control text-center"
+                                <input class="form-control lg:text-center"
                                        type="date"
                                        id="expiration"
                                        v-model="form.expiration" />
@@ -153,10 +153,8 @@ function serviceExpActionRoute (route, data, action) {
                             </div>
                         </div>
 
-                        <br>
-
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-lg-5 mb-6">
 
                                 <div class="form-check form-switch">
 
@@ -180,7 +178,7 @@ function serviceExpActionRoute (route, data, action) {
                                 </div>
 
                             </div>
-                            <div class="col">
+                            <div class="col-lg mb-6">
 
                                 <div class="form-check form-switch">
 
@@ -206,10 +204,8 @@ function serviceExpActionRoute (route, data, action) {
                             </div>
                         </div>
 
-                        <br><br>
-
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-lg-5 mb-6 lg:mb-0">
 
                                 <div class="card !border-gray-200">
                                     <div class="card-body">
@@ -278,7 +274,7 @@ function serviceExpActionRoute (route, data, action) {
                                 </div>
 
                             </div>
-                            <div class="col">
+                            <div class="col-lg mb-6 lg:mb-0">
 
                                 <div class="card !border-gray-200">
                                     <div class="card-body">
@@ -292,12 +288,12 @@ function serviceExpActionRoute (route, data, action) {
                                         <div v-for="(detail, index) in form.details" :key="index">
 
                                             <div class="row mb-2">
-                                                <div class="col-5 text-sm pt-1">
+                                                <div class="col-sm-5 text-sm pt-1 mb-2">
 
                                                     {{ detail.service.name }}
 
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-sm-4 mb-2">
 
                                                     <input type="text"
                                                            class="form-control form-control-sm"
@@ -305,7 +301,7 @@ function serviceExpActionRoute (route, data, action) {
                                                            v-model="detail.reference" />
 
                                                 </div>
-                                                <div class="col-2">
+                                                <div class="col-sm-2 mb-2">
 
                                                     <div class="input-group input-group-sm">
                                                         <span class="input-group-text">&euro;</span>
@@ -316,7 +312,7 @@ function serviceExpActionRoute (route, data, action) {
                                                     </div>
 
                                                 </div>
-                                                <div class="col-1">
+                                                <div class="col-sm-1 mb-2">
 
                                                     <button type="button"
                                                             class="btn btn-sm w-full btn-secondary"
@@ -361,7 +357,7 @@ function serviceExpActionRoute (route, data, action) {
                         <br><br>
 
                         <div class="row">
-                            <div class="col">
+                            <div class="col-sm mb-6">
 
                                 <label class="form-label">Azienda</label>
                                 <input type="text"
@@ -372,7 +368,7 @@ function serviceExpActionRoute (route, data, action) {
                                      v-if="form.errors.company">{{ __(form.errors.company) }}</div>
 
                             </div>
-                            <div class="col">
+                            <div class="col-sm mb-6">
 
                                 <label class="form-label">P.IVA o C.F.</label>
                                 <input type="text"
@@ -385,10 +381,8 @@ function serviceExpActionRoute (route, data, action) {
                             </div>
                         </div>
 
-                        <br>
-
                         <div class="row">
-                            <div class="col">
+                            <div class="col-sm mb-6">
 
                                 <label class="form-label">Referente</label>
                                 <input type="text"
@@ -399,7 +393,7 @@ function serviceExpActionRoute (route, data, action) {
                                      v-if="form.errors.customer_name">{{ __(form.errors.customer_name) }}</div>
 
                             </div>
-                            <div class="col">
+                            <div class="col-sm mb-6">
 
                                 <label class="form-label">Email</label>
                                 <input type="text"
@@ -417,7 +411,7 @@ function serviceExpActionRoute (route, data, action) {
 
                 </div>
 
-                <div class="text-right mt-10">
+                <div class="text-right mt-0 sm:mt-2">
 
                     <Link class="btn btn-secondary w-[120px]"
                           :href="route('customer.edit', customer.id)">
