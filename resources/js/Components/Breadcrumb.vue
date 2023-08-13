@@ -20,8 +20,16 @@ defineProps({
                 <span class="hidden sm:inline">
                     {{ breadcrumb }}
                 </span>
+
                 <span class="sm:hidden">
-                    {{ breadcrumb.length > 18 ? breadcrumb.substring(0, 18) + ' ...' : breadcrumb }}
+
+                    <span v-if="breadcrumbArray.toString().length <= 42">
+                        {{ breadcrumb }}
+                    </span>
+                    <span v-else>
+                        {{ breadcrumb.length > 15 ? breadcrumb.substring(0, 15) + ' ...' : breadcrumb }}
+                    </span>
+
                 </span>
 
             </li>
