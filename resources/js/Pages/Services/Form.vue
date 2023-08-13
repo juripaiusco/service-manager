@@ -287,7 +287,7 @@ function collapse(indexSelected)
                                                             {{ service.name }} {{ service.reference }}
                                                         </span>
                                                         <br>
-                                                        <span class="hidden lg:block">
+                                                        <span class="hidden lg:inline">
                                                             {{ service_detail.reference }}
                                                         </span>
                                                     </div>

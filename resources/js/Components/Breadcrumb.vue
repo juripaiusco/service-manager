@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-
+    
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li v-for="(breadcrumb, i) in breadcrumbArray"
@@ -17,8 +17,12 @@ defineProps({
                 '': (i === 0)
                 }">
 
-                {{ breadcrumb }}
-                <!-- {{ breadcrumb.length > 40 ? breadcrumb.substring(0, 40) + ' ...' : breadcrumb }} -->
+                <span class="hidden sm:inline">
+                    {{ breadcrumb }}
+                </span>
+                <span class="sm:hidden">
+                    {{ breadcrumb.length > 18 ? breadcrumb.substring(0, 18) + ' ...' : breadcrumb }}
+                </span>
 
             </li>
         </ol>
