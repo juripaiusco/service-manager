@@ -204,10 +204,10 @@ function collapse(indexSelected)
                         <th class="text-left">
                             Cliente
                         </th>
-                        <th class="text-right w-[120px] hidden lg:table-cell">
+                        <th class="text-right w-[120px] hidden sm:table-cell">
                             Entrate
                         </th>
-                        <th class="text-right w-[120px] hidden lg:table-cell">
+                        <th class="text-right w-[120px] hidden sm:table-cell">
                             Uscite
                         </th>
                         <th class="text-right w-[120px]">
@@ -230,10 +230,10 @@ function collapse(indexSelected)
                                 {{ customer.name }} - {{ customer.email }}
                             </span>
                             </td>
-                            <td @click="collapse(index)" class="text-right align-middle !text-green-600 hidden lg:table-cell">
+                            <td @click="collapse(index)" class="text-right align-middle !text-green-600 hidden sm:table-cell">
                                 {{ customer.customer_total_sell_notax === 0 ? '-' : __currency(customer.customer_total_sell_notax, 'EUR') }}
                             </td>
-                            <td @click="collapse(index)" class="text-right align-middle !text-red-600 hidden lg:table-cell">
+                            <td @click="collapse(index)" class="text-right align-middle !text-red-600 hidden sm:table-cell">
                                 {{ customer.customer_total_buy_notax === 0 ? '-' : __currency(customer.customer_total_buy_notax, 'EUR') }}
                             </td>
                             <td @click="collapse(index)" class="text-right align-middle font-semibold"
@@ -268,14 +268,14 @@ function collapse(indexSelected)
                                         <template v-for="service in customer.customer_service">
 
                                             <tr v-for="service_detail in service.details">
-                                                <td class="text-center w-[140px]">
+                                                <td class="text-center sm:w-[140px]">
 
-                                                    <div class="text-sm font-semibold !bg-transparent !border-0">
+                                                    <div class="text-sm font-semibold !bg-transparent !border-0 hidden sm:table-cell">
                                                         <span class="font-normal text-xs">
                                                             scadenza
                                                         </span>
                                                         <br>
-                                                        <span class="">
+                                                        <span>
                                                             {{ __date(service.expiration, 'day') }}
                                                         </span>
                                                     </div>
@@ -287,18 +287,20 @@ function collapse(indexSelected)
                                                             {{ service.name }} {{ service.reference }}
                                                         </span>
                                                         <br>
-                                                        {{ service_detail.reference }}
+                                                        <span class="hidden lg:block">
+                                                            {{ service_detail.reference }}
+                                                        </span>
                                                     </div>
 
                                                 </td>
-                                                <td class="text-right text-sm w-[120px] p-[8px]">
+                                                <td class="text-right text-sm w-[120px] p-[8px] hidden sm:table-cell">
 
                                                     {{ service_detail.price_sell === 0 ? '-' : __currency(service_detail.price_sell, 'EUR') }}
 
                                                 </td>
-                                                <td class="text-right text-sm w-[120px] p-[8px]">
+                                                <td class="text-right text-sm w-[120px] p-[8px] hidden sm:table-cell">
 
-                                                    <div v-if="service.details_service[0]['is_share'] === 1"
+                                                    <div v-if="service.details_service[0]['is_share'] == 1"
                                                          class="!bg-transparent !border-0 !p-0 !m-0">
                                                         {{ __currency(customer.customer_single_buy_share_notax, 'EUR') }}
                                                     </div>
@@ -311,7 +313,7 @@ function collapse(indexSelected)
                                                 </td>
                                                 <td class="text-right text-sm w-[120px] p-[8px]">
 
-                                                    <div v-if="service.details_service[0]['is_share'] === 1"
+                                                    <div v-if="service.details_service[0]['is_share'] == 1"
                                                          class="!bg-transparent !border-0 !p-0 !m-0"
                                                          :class="{
                                                             '!text-red-600': (service_detail.price_sell - customer.customer_single_buy_share_notax) < 0
