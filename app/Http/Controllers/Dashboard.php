@@ -216,11 +216,11 @@ class Dashboard extends Controller
 
             foreach ($service->detailsService as $detailService) {
 
-                if ($detailService->is_share != 1) {
+                if (/*$detailService->is_share != 1 && */$detailService->is_monthly_cost != 1) {
 
                     $months_incoming[$m]['outcoming'] += $detailService->price_buy;
 
-                } else {
+                }/* else {
 
                     if ($detailService->is_monthly_cost != 1) {
 
@@ -232,7 +232,7 @@ class Dashboard extends Controller
 
                     }
 
-                }
+                }*/
             }
 
             $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
@@ -379,15 +379,75 @@ class Dashboard extends Controller
         );
     }
 
-    public function index()
+    public function getCosts(Request $request)
     {
+        $servicesExpCost_array = array();
+
+        if (isset($request['month-costs-get'])) {
+
+            $services = \App\Models\Service::query();
+            $services = $services->with('customersServicesDetails');
+            $services = $services->where('is_monthly_cost', 1);
+            $services = $services->get();
+
+            foreach ($services as $service) {
+
+                $servicesExpCost_array[] = array(
+                    'name' => $service->name,
+                    'price_buy' => $service->price_buy / 12,
+                );
+            }
+
+            // ------------------------------
+
+            $servicesExpCost = CustomerService::query();
+            $servicesExpCost = $servicesExpCost->with('details');
+            $servicesExpCost = $servicesExpCost->with('details.service');
+            $servicesExpCost = $servicesExpCost->whereMonth('expiration', '=', $request['month-costs-get']);
+            $servicesExpCost = $servicesExpCost->whereYear('expiration', '=', date('Y'));
+            $servicesExpCost = $servicesExpCost->get();
+
+            foreach ($servicesExpCost as $serviceExpCost) {
+
+                foreach ($serviceExpCost->details as $detail) {
+
+                    if ($detail->service->is_monthly_cost != 1) {
+
+                        $servicesExpCost_array[] = array(
+                            'name' => $detail->service->name,
+                            'price_buy' => $detail->service->price_buy,
+                        );
+                    }
+                }
+            }
+
+            usort($servicesExpCost_array, function ($a, $b) {
+                return ($a['price_buy'] >= $b['price_buy']) ? -1 : 1;
+            });
+        }
+
+        return array( 'cost_get' => $servicesExpCost_array );
+    }
+
+    public function index(Request $request)
+    {
+
+
         return Inertia::render('Dashboard/Dashboard', [
 
-            'data' => $this->getData(),
+            'data' => array_merge(
+                $this->getData(),
+                $this->getCosts($request),
+            ),
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
 
         ]);
     }
+
+    /*public function costsGet()
+    {
+        return json_decode(array('1'), true);
+    }*/
 
     public function service_exp_renew(Request $request, $id)
     {
