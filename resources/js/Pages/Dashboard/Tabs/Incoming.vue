@@ -141,16 +141,24 @@ const modalCostsExpShow = ref(false)
                     <thead>
                     <tr>
                         <th class="text-left">Nome</th>
-                        <th class="text-right">Prezzo</th>
+                        <th class="text-right">Totale</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="service in props.data.cost_get">
                         <td>
                             {{ service.name }}
+                            <br>
+                            <span class="text-xs">
+                                ( {{ service.amount }} x {{ __currency(service.price_buy, 'EUR') }} )
+                            </span>
+                            <!-- <br>
+                            <span class="text-xs">
+                                {{ service.references }}
+                            </span> -->
                         </td>
                         <td class="text-right">
-                            {{ __currency(service.price_buy, 'EUR') }}
+                            {{ __currency(service.price_buy_total, 'EUR') }}
                         </td>
                     </tr>
                     </tbody>

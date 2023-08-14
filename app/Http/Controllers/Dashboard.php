@@ -392,9 +392,12 @@ class Dashboard extends Controller
 
             foreach ($services as $service) {
 
-                $servicesExpCost_array[] = array(
+                $servicesExpCost_array[$service->id] = array(
                     'name' => $service->name,
+                    'references' => '',
+                    'amount' => 1,
                     'price_buy' => $service->price_buy / 12,
+                    'price_buy_total' => $service->price_buy / 12,
                 );
             }
 
@@ -404,18 +407,32 @@ class Dashboard extends Controller
             $servicesExpCost = $servicesExpCost->with('details');
             $servicesExpCost = $servicesExpCost->with('details.service');
             $servicesExpCost = $servicesExpCost->whereMonth('expiration', '=', $request['month-costs-get']);
-            $servicesExpCost = $servicesExpCost->whereYear('expiration', '=', date('Y'));
+            $servicesExpCost = $servicesExpCost->where(function ($q) {
+                $q->whereYear('expiration', '=', date('Y'));
+                $q->orWhereYear('expiration', '=', date('Y') + 1);
+            });
             $servicesExpCost = $servicesExpCost->get();
 
             foreach ($servicesExpCost as $serviceExpCost) {
 
                 foreach ($serviceExpCost->details as $detail) {
 
-                    if ($detail->service->is_monthly_cost != 1) {
+                    if ($detail->service->is_monthly_cost != 1 && $detail->service->price_buy != 0) {
 
-                        $servicesExpCost_array[] = array(
+                        if (!isset($servicesExpCost_array[$detail->service->id])) {
+                            $amount = 1;
+                            $references = $detail->reference;
+                        } else {
+                            $amount = count($servicesExpCost_array[$detail->service->id]);
+                            $references = $servicesExpCost_array[$detail->service->id]['references'] . ' / ' . $detail->reference;
+                        }
+
+                        $servicesExpCost_array[$detail->service->id] = array(
                             'name' => $detail->service->name,
+                            'references' => $references,
+                            'amount' => $amount,
                             'price_buy' => $detail->service->price_buy,
+                            'price_buy_total' => $detail->service->price_buy * $amount,
                         );
                     }
                 }
