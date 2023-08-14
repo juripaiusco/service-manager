@@ -25,6 +25,7 @@ class Service extends Controller
 
         $request_validate_array = array_merge($request_search_array, [
             'is_share',
+            'is_monthly_cost',
             'price_sell',
             'price_buy',
             'profit',

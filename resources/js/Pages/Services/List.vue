@@ -96,6 +96,21 @@ defineProps({
 
                             }
                         }, {
+                            class: 'text-center !align-middle w-[5%] hidden lg:table-cell',
+                            label: 'Mensile',
+                            field: 'is_monthly_cost',
+                            fnc: function (d) {
+
+                                let html = '';
+
+                                if (d.is_monthly_cost == 1) {
+                                    html += 'Sì';
+                                }
+
+                                return html;
+
+                            }
+                        }, {
                             class: 'text-right !align-top w-[10%] hidden sm:table-cell',
                             classData: '!text-green-600',
                             label: 'Entrate',
