@@ -419,11 +419,13 @@ class Dashboard extends Controller
 
                     if ($detail->service->is_monthly_cost != 1 && $detail->service->price_buy != 0) {
 
+                        // Conto il numero di servizi acquistati
+                        $servicesExpCost_count[$detail->service->id][] = $detail->service->id;
+                        $amount = count($servicesExpCost_count[$detail->service->id]);
+
                         if (!isset($servicesExpCost_array[$detail->service->id])) {
-                            $amount = 1;
                             $references = $detail->reference;
                         } else {
-                            $amount = count($servicesExpCost_array[$detail->service->id]);
                             $references = $servicesExpCost_array[$detail->service->id]['references'] . ' / ' . $detail->reference;
                         }
 
