@@ -102,6 +102,7 @@ const modalCostsExpShow = ref(false)
     </table>
 
     <Modal :show="modalCostsExpShow"
+           max-width="max"
            @close="modalCostsExpShow = false">
 
         <div class="p-8 dark:text-white">
@@ -152,12 +153,13 @@ const modalCostsExpShow = ref(false)
                             <span class="text-xs">
                                 ( {{ service.amount }} x {{ __currency(service.price_buy, 'EUR') }} )
                             </span>
-                            <!-- <br>
+                            <br>
+                            <br v-if="!service.references">
                             <span class="text-xs">
                                 {{ service.references }}
-                            </span> -->
+                            </span>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right font-semibold">
                             {{ __currency(service.price_buy_total, 'EUR') }}
                         </td>
                     </tr>
