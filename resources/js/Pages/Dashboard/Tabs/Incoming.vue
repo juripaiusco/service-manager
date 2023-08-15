@@ -164,6 +164,16 @@ const modalCostsExpShow = ref(false)
                         </td>
                     </tr>
                     </tbody>
+                    <tfoot>
+                    <tr>
+                        <th class="text-left !pt-10 !border-b-0">
+                            Totale
+                        </th>
+                        <th class="text-right text-3xl !pt-10 !border-b-0">
+                            {{ __currency(props.data.cost_get_total, 'EUR') }}
+                        </th>
+                    </tr>
+                    </tfoot>
                 </table>
 
             </div>

@@ -382,6 +382,7 @@ class Dashboard extends Controller
     public function getCosts(Request $request)
     {
         $servicesExpCost_array = array();
+        $servicesExpCost_total = 0;
 
         if (isset($request['month-costs-get'])) {
 
@@ -445,7 +446,14 @@ class Dashboard extends Controller
             });
         }
 
-        return array( 'cost_get' => $servicesExpCost_array );
+        foreach ($servicesExpCost_array as $serviceExpCost) {
+            $servicesExpCost_total += $serviceExpCost['amount'] * $serviceExpCost['price_buy'];
+        }
+
+        return array(
+            'cost_get' => $servicesExpCost_array,
+            'cost_get_total' => $servicesExpCost_total,
+        );
     }
 
     public function index(Request $request)
