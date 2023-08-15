@@ -183,7 +183,7 @@ class Dashboard extends Controller
 
             foreach ($service->detailsService as $detailService) {
 
-                if ($detailService->is_share == 1 && $detailService->is_monthly_cost == 1) {
+                if ($detailService->is_monthly_cost == 1) {
 
                     $services_q = $this->getServices();
                     $services_q = $services_q->where('id', $detailService->id);
@@ -192,15 +192,6 @@ class Dashboard extends Controller
                     foreach ($months_incoming as $m => $month_incoming) {
 
                         $months_incoming[$m]['outcoming'] += $detailService->price_buy / $services_q->customers_count / 12;
-                        $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
-                    }
-                }
-
-                if ($detailService->is_share != 1 && $detailService->is_monthly_cost == 1) {
-
-                    foreach ($months_incoming as $m => $month_incoming) {
-
-                        $months_incoming[$m]['outcoming'] += $detailService->price_buy / 12;
                         $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
                     }
                 }
@@ -216,23 +207,23 @@ class Dashboard extends Controller
 
             foreach ($service->detailsService as $detailService) {
 
-                if (/*$detailService->is_share != 1 && */$detailService->is_monthly_cost != 1) {
+                if ($detailService->is_share != 1 && $detailService->is_monthly_cost != 1) {
 
                     $months_incoming[$m]['outcoming'] += $detailService->price_buy;
 
-                }/* else {
+                }
 
-                    if ($detailService->is_monthly_cost != 1) {
+                // Se il servizio è condiviso su più clienti, ma non ha costo mensile
+                // (il costo mensile comanda per importanza di calcolo)
+                if ($detailService->is_share == 1 && $detailService->is_monthly_cost != 1) {
 
-                        $services_q = $this->getServices();
-                        $services_q = $services_q->where('id', $detailService->id);
-                        $services_q = $services_q->first();
+                    $services_q = $this->getServices();
+                    $services_q = $services_q->where('id', $detailService->id);
+                    $services_q = $services_q->first();
 
-                        $months_incoming[$m]['outcoming'] += $detailService->price_buy / $services_q->customers_count;
+                    $months_incoming[$m]['outcoming'] += $detailService->price_buy / $services_q->customers_count;
 
-                    }
-
-                }*/
+                }
             }
 
             $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
@@ -395,7 +386,7 @@ class Dashboard extends Controller
 
                 $servicesExpCost_array[$service->id] = array(
                     'name' => $service->name,
-                    'references' => '',
+                    'references' => 'Rata mensile',
                     'amount' => 1,
                     'price_buy' => $service->price_buy / 12,
                     'price_buy_total' => $service->price_buy / 12,
@@ -423,6 +414,16 @@ class Dashboard extends Controller
                         // Conto il numero di servizi acquistati
                         $servicesExpCost_count[$detail->service->id][] = $detail->service->id;
                         $amount = count($servicesExpCost_count[$detail->service->id]);
+                        $price_buy = $detail->service->price_buy;
+
+                        // Se il servizio è condiviso su più clienti, viene corretto il prezzo di acquisto
+                        if ($detail->service->is_share == 1) {
+                            $services_q = $this->getServices();
+                            $services_q = $services_q->where('id', $detail->service->id);
+                            $services_q = $services_q->first();
+
+                            $price_buy = $detail->service->price_buy / $services_q->customers_count;
+                        }
 
                         if (!isset($servicesExpCost_array[$detail->service->id])) {
                             $references = $detail->reference;
@@ -434,8 +435,8 @@ class Dashboard extends Controller
                             'name' => $detail->service->name,
                             'references' => $references,
                             'amount' => $amount,
-                            'price_buy' => $detail->service->price_buy,
-                            'price_buy_total' => $detail->service->price_buy * $amount,
+                            'price_buy' => $price_buy,
+                            'price_buy_total' => $price_buy * $amount,
                         );
                     }
                 }
