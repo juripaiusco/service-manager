@@ -89,7 +89,8 @@ function collapse(indexSelected)
                         <label class="form-label lg:text-right">Prezzo di vendita</label>
                         <div class="input-group">
                             <span class="input-group-text !text-green-600">&euro;</span>
-                            <input type="text"
+                            <input type="number"
+                                   step="any"
                                    class="form-control text-right !text-green-600"
                                    placeholder="0.00"
                                    v-model="form.price_sell" />
@@ -103,7 +104,8 @@ function collapse(indexSelected)
                         <label class="form-label lg:text-right">Prezzo di acquisto</label>
                         <div class="input-group">
                             <span class="input-group-text !text-red-600">&euro;</span>
-                            <input type="text"
+                            <input type="number"
+                                   step="any"
                                    class="form-control text-right !text-red-600"
                                    placeholder="0.00"
                                    v-model="form.price_buy" />

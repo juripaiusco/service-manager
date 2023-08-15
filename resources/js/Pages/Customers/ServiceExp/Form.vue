@@ -305,7 +305,8 @@ function serviceExpActionRoute (route, data, action) {
 
                                                     <div class="input-group input-group-sm">
                                                         <span class="input-group-text">&euro;</span>
-                                                        <input type="text"
+                                                        <input type="number"
+                                                               step="any"
                                                                class="form-control form-control-sm text-right"
                                                                placeholder="0.00"
                                                                v-model="detail.price_sell" />
