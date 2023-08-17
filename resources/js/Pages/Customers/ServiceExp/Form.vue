@@ -307,6 +307,7 @@ function serviceExpActionRoute (route, data, action) {
                                                         <span class="input-group-text">&euro;</span>
                                                         <input type="number"
                                                                step="any"
+                                                               inputmode="decimal"
                                                                class="form-control form-control-sm text-right"
                                                                placeholder="0.00"
                                                                v-model="detail.price_sell" />

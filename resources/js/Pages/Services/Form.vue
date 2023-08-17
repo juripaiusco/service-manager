@@ -91,6 +91,7 @@ function collapse(indexSelected)
                             <span class="input-group-text !text-green-600">&euro;</span>
                             <input type="number"
                                    step="any"
+                                   inputmode="decimal"
                                    class="form-control text-right !text-green-600"
                                    placeholder="0.00"
                                    v-model="form.price_sell" />
@@ -106,6 +107,7 @@ function collapse(indexSelected)
                             <span class="input-group-text !text-red-600">&euro;</span>
                             <input type="number"
                                    step="any"
+                                   inputmode="decimal"
                                    class="form-control text-right !text-red-600"
                                    placeholder="0.00"
                                    v-model="form.price_buy" />
