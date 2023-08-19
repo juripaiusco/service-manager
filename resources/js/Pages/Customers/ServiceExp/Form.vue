@@ -221,7 +221,7 @@ function serviceExpActionRoute (route, data, action) {
                                                      :route-search="form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create', customer.id)"
                                                      :filters="filters" />
 
-                                        <Table class="table table-sm"
+                                        <Table class="table table-sm text-sm"
                                                :data="{
                                                     filters: filters,
                                                     routeSearch: form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create', customer.id),
@@ -285,20 +285,33 @@ function serviceExpActionRoute (route, data, action) {
 
                                         <br>
 
-                                        <div v-for="(detail, index) in form.details" :key="index">
+                                        <div v-for="(detail, index) in form.details" :key="index"
+                                             class="text-sm alert alert-light !pb-1">
+
+                                            <div class="ml-2 mb-2 text-xs">
+                                                {{ detail.service.name }}
+                                            </div>
 
                                             <div class="row mb-2">
-                                                <div class="col-sm-5 text-sm pt-1 mb-2">
+                                                <!-- <div class="col-sm-3 text-sm pt-1 mb-2">
 
                                                     {{ detail.service.name }}
 
-                                                </div>
-                                                <div class="col-sm-4 mb-2">
+                                                </div> -->
+                                                <div class="col-sm-5 mb-2">
 
                                                     <input type="text"
                                                            class="form-control form-control-sm"
                                                            placeholder="rif. servizio"
                                                            v-model="detail.reference" />
+
+                                                </div>
+                                                <div class="col-sm-4 mb-2">
+
+                                                    <input type="date"
+                                                           class="form-control form-control-sm"
+                                                           :value="__date(detail.expiration, 'date')"
+                                                           @change="(e) => detail.expiration = e.target.value"/>
 
                                                 </div>
                                                 <div class="col-sm-2 mb-2">
@@ -317,14 +330,14 @@ function serviceExpActionRoute (route, data, action) {
                                                 <div class="col-sm-1 mb-2">
 
                                                     <button type="button"
-                                                            class="btn btn-sm w-full btn-secondary"
+                                                            class="btn btn-sm sm:w-full btn-secondary sm:h-[30px]"
                                                             @click="serviceExpActionRoute(
                                                                 form.id ? route('customer.serviceExpiration.edit', form.id) : route('customer.serviceExpiration.create', customer.id),
                                                                 detail,
                                                                 'remove'
                                                             )">
 
-                                                        <svg class="w-4 h-4 m-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                        <svg class="w-3 h-3 m-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
                                                         </svg>
 

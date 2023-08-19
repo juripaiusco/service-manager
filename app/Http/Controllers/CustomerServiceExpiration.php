@@ -177,6 +177,7 @@ class CustomerServiceExpiration extends Controller
             $data->service_id = $detail['service_id'];
             $data->customer_service_id = $id;
             $data->reference = $detail['reference'];
+            $data->expiration = $detail['expiration'];
             $data->price_sell = $detail['price_sell'];
 
             $data->save();
@@ -234,6 +235,7 @@ class CustomerServiceExpiration extends Controller
                 'service_id' => $service->id,
                 'customer_service_id' => null,
                 'reference' => '',
+                'expiration' => null,
                 'price_sell' => $service->price_sell,
                 'service' => $service,
                 'serviceExp_index' => $request->session()->get('serviceExp') ? array_key_last($request->session()->get('serviceExp')) + 1 : 0
@@ -308,6 +310,6 @@ class CustomerServiceExpiration extends Controller
 
         $services = $services->select();
 
-        return $services->paginate(5)->withQueryString();
+        return $services->paginate(8)->withQueryString();
     }
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('service_id')->index();
             $table->integer('customer_service_id')->index();
             $table->string('reference')->nullable();
+            $table->timestamp('expiration')->nullable();
             $table->float('price_sell')->nullable();
 
             $table->timestamps();

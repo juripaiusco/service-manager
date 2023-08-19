@@ -17,24 +17,29 @@ export function __date(dateString, format = '') {
         s = '0' + s;
     }
 
-    switch (format) {
-        case 'day':
-            return d + '/' + m + '/' + y;
-            break;
-        case 'date':
-            return y + '-' + m + '-' + d;
-            break;
-        case 'y':
-            return y;
-            break;
-        case 'm':
-            return m;
-            break;
-        case 'n':
-            return parseInt(m);
-            break;
-        default:
-            return d + '/' + m + '/' + y + ' ' + h + ':' + i + ':' + s;
+    if (dateString != null) {
+
+        switch (format) {
+            case 'day':
+                return d + '/' + m + '/' + y;
+                break;
+            case 'date':
+                return y + '-' + m + '-' + d;
+                break;
+            case 'y':
+                return y;
+                break;
+            case 'm':
+                return m;
+                break;
+            case 'n':
+                return parseInt(m);
+                break;
+            default:
+                return d + '/' + m + '/' + y + ' ' + h + ':' + i + ':' + s;
+        }
+
     }
 
+    return null;
 }
