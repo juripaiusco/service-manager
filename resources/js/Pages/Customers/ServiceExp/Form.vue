@@ -308,10 +308,25 @@ function serviceExpActionRoute (route, data, action) {
                                                 </div>
                                                 <div class="col-sm-4 mb-2">
 
-                                                    <input type="date"
-                                                           class="form-control form-control-sm"
-                                                           :value="__date(detail.expiration, 'date')"
-                                                           @change="(e) => detail.expiration = e.target.value"/>
+                                                    <div class="w-full inline-flex">
+
+                                                        <div class="w-3/4 sm:w-full">
+                                                            <input type="date"
+                                                                   class="form-control form-control-sm"
+                                                                   :value="__date(detail.expiration, 'date')"
+                                                                   @change="(e) => detail.expiration = e.target.value"/>
+                                                        </div>
+                                                        <div class="w-1/4 ml-2 sm:hidden">
+
+                                                            <button type="button"
+                                                                    class="btn btn-primary btn-sm w-full"
+                                                                    @click="detail.expiration = null">
+                                                                Annulla
+                                                            </button>
+
+                                                        </div>
+
+                                                    </div>
 
                                                 </div>
                                                 <div class="col-sm-2 mb-2">
