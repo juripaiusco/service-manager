@@ -14,8 +14,7 @@ const props = defineProps({
 const modalCostsExp = ref({
     index: 0,
     show: false,
-})
-const modalCostsExpShow = ref(false)
+});
 
 </script>
 
@@ -41,24 +40,6 @@ const modalCostsExpShow = ref(false)
             @click="() => {
                 modalCostsExp.show = true
                 modalCostsExp.index = index
-
-                /*modalCostsExp.monthStr = __(props.data.months_array[index])
-                modalCostsExp.data = month.details*/
-                /*props.data.cost_get = 'loading';
-
-                $inertia.get(
-                    route('dashboard', {
-                        'month-costs-get': index
-                    }),
-                    {},
-                    {
-                        replace: true,
-                        preserveState: true,
-                        preserveScroll: true,
-                    }
-                );*/
-
-                // modalCostsExpShow = true
             }">
             <td class="capitalize w-1/2">
                 {{ __(props.data.months_array[index]) }}
@@ -66,20 +47,20 @@ const modalCostsExpShow = ref(false)
             <td class="text-right"
                 :class="{
                     '!text-green-600': index >= __date(props.data.today, 'n'),
-                    '!font-semibold': index >= __date(props.data.today, 'n'),
+                    '!font-semibold': index == __date(props.data.today, 'n'),
                 }">
                 {{ __currency(month.incoming, 'EUR') }}
             </td>
             <td class="text-right"
                 :class="{
                     '!text-red-600': index >= __date(props.data.today, 'n'),
-                    '!font-semibold': index >= __date(props.data.today, 'n'),
+                    '!font-semibold': index == __date(props.data.today, 'n'),
                 }">
                 {{ __currency(month.outcoming, 'EUR') }}
             </td>
             <td class="text-right"
                 :class="{
-                    '!font-semibold': index >= __date(props.data.today, 'n'),
+                    '!font-semibold': index == __date(props.data.today, 'n'),
                 }">
                 {{ __currency(month.profit, 'EUR') }}</td>
             <td class="text-right align-middle hidden sm:table-cell"
