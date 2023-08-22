@@ -84,6 +84,7 @@ class CustomerServiceExpiration extends Controller
             $data->service_id = $detail['service_id'];
             $data->customer_service_id = $customerService->id;
             $data->reference = $detail['reference'];
+            $data->expiration = $detail['expiration'];
             $data->price_sell = $detail['price_sell'];
 
             $data->save();
