@@ -11,8 +11,9 @@ const props = defineProps({
     filters: Object,
 });
 
-const modalCostsExpData = ref({
-    monthStr: 0,
+const modalCostsExp = ref({
+    index: 0,
+    show: false,
 })
 const modalCostsExpShow = ref(false)
 
@@ -38,8 +39,12 @@ const modalCostsExpShow = ref(false)
                 'table-warning': parseInt(index) === parseInt(__date(props.data.today, 'n')),
             }"
             @click="() => {
-                modalCostsExpData.monthStr = __(props.data.months_array[index])
-                props.data.cost_get = 'loading';
+                modalCostsExp.show = true
+                modalCostsExp.index = index
+
+                /*modalCostsExp.monthStr = __(props.data.months_array[index])
+                modalCostsExp.data = month.details*/
+                /*props.data.cost_get = 'loading';
 
                 $inertia.get(
                     route('dashboard', {
@@ -51,9 +56,9 @@ const modalCostsExpShow = ref(false)
                         preserveState: true,
                         preserveScroll: true,
                     }
-                );
+                );*/
 
-                modalCostsExpShow = true
+                // modalCostsExpShow = true
             }">
             <td class="capitalize w-1/2">
                 {{ __(props.data.months_array[index]) }}
@@ -101,9 +106,9 @@ const modalCostsExpShow = ref(false)
         </tfoot>
     </table>
 
-    <Modal :show="modalCostsExpShow"
+    <Modal :show="modalCostsExp.show"
            max-width="max"
-           @close="modalCostsExpShow = false">
+           @close="modalCostsExp.show = false">
 
         <div class="p-8 dark:text-white">
 
@@ -111,13 +116,13 @@ const modalCostsExpShow = ref(false)
 
                 <div class="w-3/4 font-semibold">
 
-                    Pagamenti di {{ modalCostsExpData.monthStr }}
+                    Pagamenti di {{ __(props.data.months_array[modalCostsExp.index]) }}
 
                 </div>
 
                 <div class="w-1/4 text-right">
 
-                    <button @click="modalCostsExpShow = false">
+                    <button @click="modalCostsExp.show = false">
 
                         <svg class="w-5 h-5"
                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -132,27 +137,17 @@ const modalCostsExpShow = ref(false)
 
             <div class="mt-6">
 
-                <div v-if="props.data.cost_get === 'loading'"
-                     class="text-center">
-                    Loading...
-                </div>
-
-                <table v-if="props.data.cost_get !== 'loading'"
-                       class="table table-sm">
+                <table class="table table-sm">
                     <thead>
                     <tr>
                         <th class="text-left">Nome</th>
-                        <th class="text-right">Totale</th>
+                        <th class="text-right sm:w-1/6">Totale</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="service in props.data.cost_get">
+                    <tr v-for="service in props.data.months_incoming[modalCostsExp.index].details">
                         <td>
                             {{ service.name }}
-                            <br>
-                            <span class="text-xs">
-                                ( {{ service.amount }} x {{ __currency(service.price_buy, 'EUR') }} )
-                            </span>
                             <br>
                             <br v-if="!service.references">
                             <span class="text-xs">
@@ -161,6 +156,10 @@ const modalCostsExpShow = ref(false)
                         </td>
                         <td class="text-right font-semibold">
                             {{ __currency(service.price_buy_total, 'EUR') }}
+                            <br>
+                            <span class="text-xs font-normal">
+                                ( {{ service.amount }} x {{ __currency(service.price_buy, 'EUR') }} )
+                            </span>
                         </td>
                     </tr>
                     </tbody>
@@ -170,7 +169,7 @@ const modalCostsExpShow = ref(false)
                             Totale
                         </th>
                         <th class="text-right !pt-4 !border-b-0">
-                            {{ __currency(props.data.cost_get_total, 'EUR') }}
+                            {{ __currency(props.data.months_incoming[modalCostsExp.index].outcoming, 'EUR') }}
                         </th>
                     </tr>
                     </tfoot>

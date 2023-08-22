@@ -179,50 +179,79 @@ class Dashboard extends Controller
         }
 
         // Divisione della spesa condivisa per i mesi dell'anno
-        foreach ($services_exp as $service) {
+        foreach ($services_exp as $service_exp) {
 
-            foreach ($service->detailsService as $detailService) {
+            foreach ($service_exp->details as $detail) {
 
-                if ($detailService->is_monthly_cost == 1) {
+                if ($detail->service->is_monthly_cost == 1) {
 
                     $services_q = $this->getServices();
-                    $services_q = $services_q->where('id', $detailService->id);
+                    $services_q = $services_q->where('id', $detail->service->id);
                     $services_q = $services_q->first();
 
                     foreach ($months_incoming as $m => $month_incoming) {
 
-                        $months_incoming[$m]['outcoming'] += $detailService->price_buy / $services_q->customers_count / 12;
+                        $months_incoming[$m]['outcoming'] += $detail->service->price_buy / $services_q->customers_count / 12;
                         $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
+                        $months_incoming[$m]['details'][$detail->service->id] = array(
+                            'name' => $detail->service->name,
+                            'references' => 'Rata mensile',
+                            'amount' => 1,
+                            'price_buy' => $detail->service->price_buy / 12,
+                            'price_buy_total' => $detail->service->price_buy / 12,
+                        );
                     }
                 }
             }
         }
 
         // Suddivizione entrate per mese e tipo servizio
-        foreach ($services_exp as $service) {
+        foreach ($services_exp as $service_exp) {
 
-            $m = date('n', strtotime($service->expiration));
+            $m = date('n', strtotime($service_exp->expiration));
 
-            $months_incoming[$m]['incoming'] += $service->total_sell_notax;
+            $months_incoming[$m]['incoming'] += $service_exp->total_sell_notax;
 
-            foreach ($service->detailsService as $detailService) {
+            foreach ($service_exp->details as $detail) {
 
-                if ($detailService->is_share != 1 && $detailService->is_monthly_cost != 1) {
+                if ($detail->service->is_monthly_cost != 1 && $detail->service->price_buy > 0) {
 
-                    $months_incoming[$m]['outcoming'] += $detailService->price_buy;
+                    if ($detail->service->is_share != 1) {
 
-                }
+                        $price_buy = $detail->service->price_buy;
+                        $months_incoming[$m]['outcoming'] += $price_buy;
+                    }
 
-                // Se il servizio è condiviso su più clienti, ma non ha costo mensile
-                // (il costo mensile comanda per importanza di calcolo)
-                if ($detailService->is_share == 1 && $detailService->is_monthly_cost != 1) {
+                    // Se il servizio è condiviso su più clienti, ma non ha costo mensile
+                    // (il costo mensile comanda per importanza di calcolo)
+                    if ($detail->service->is_share == 1) {
 
-                    $services_q = $this->getServices();
-                    $services_q = $services_q->where('id', $detailService->id);
-                    $services_q = $services_q->first();
+                        $services_q = $this->getServices();
+                        $services_q = $services_q->where('id', $detail->service->id);
+                        $services_q = $services_q->first();
 
-                    $months_incoming[$m]['outcoming'] += $detailService->price_buy / $services_q->customers_count;
+                        $price_buy = $detail->service->price_buy / $services_q->customers_count;
+                        $months_incoming[$m]['outcoming'] += $price_buy;
+                    }
 
+                    if (!isset($months_incoming[$m]['details'][$detail->service->id])) {
+                        $references = $detail->reference;
+                    } else {
+                        $references  = $months_incoming[$m]['details'][$detail->service->id]['references'] . ' / ';
+                        $references .= $detail->reference;
+                    }
+
+                    // Conto il numero di servizi acquistati
+                    $servicesExpCost_count[$m][$detail->service->id][] = $detail->service->id;
+                    $amount = count($servicesExpCost_count[$m][$detail->service->id]);
+
+                    $months_incoming[$m]['details'][$detail->service->id] = array(
+                        'name' => $detail->service->name,
+                        'references' => $references,
+                        'amount' => $amount,
+                        'price_buy' => $price_buy,
+                        'price_buy_total' => $price_buy * $amount,
+                    );
                 }
             }
 
@@ -230,6 +259,14 @@ class Dashboard extends Controller
         }
 
         ksort($months_incoming);
+
+        foreach ($months_incoming as $k => $month_incoming) {
+            usort($month_incoming['details'], function ($a, $b) {
+                return ($a['price_buy_total'] >= $b['price_buy_total']) ? -1 : 1;
+            });
+
+            $months_incoming[$k]['details'] = $month_incoming['details'];
+        }
 
         // Suddivizione profitto per trimestre
         $trim_incoming = array();
@@ -370,103 +407,11 @@ class Dashboard extends Controller
         );
     }
 
-    public function getCosts(Request $request)
+    public function index()
     {
-        $servicesExpCost_array = array();
-        $servicesExpCost_total = 0;
-
-        if (isset($request['month-costs-get'])) {
-
-            $services = \App\Models\Service::query();
-            $services = $services->with('customersServicesDetails');
-            $services = $services->where('is_monthly_cost', 1);
-            $services = $services->get();
-
-            foreach ($services as $service) {
-
-                $servicesExpCost_array[$service->id] = array(
-                    'name' => $service->name,
-                    'references' => 'Rata mensile',
-                    'amount' => 1,
-                    'price_buy' => $service->price_buy / 12,
-                    'price_buy_total' => $service->price_buy / 12,
-                );
-            }
-
-            // ------------------------------
-
-            $servicesExpCost = CustomerService::query();
-            $servicesExpCost = $servicesExpCost->with('details');
-            $servicesExpCost = $servicesExpCost->with('details.service');
-            $servicesExpCost = $servicesExpCost->whereMonth('expiration', '=', $request['month-costs-get']);
-            $servicesExpCost = $servicesExpCost->where(function ($q) {
-                $q->whereYear('expiration', '=', date('Y'));
-                $q->orWhereYear('expiration', '=', date('Y') + 1);
-            });
-            $servicesExpCost = $servicesExpCost->get();
-
-            foreach ($servicesExpCost as $serviceExpCost) {
-
-                foreach ($serviceExpCost->details as $detail) {
-
-                    if ($detail->service->is_monthly_cost != 1 && $detail->service->price_buy != 0) {
-
-                        // Conto il numero di servizi acquistati
-                        $servicesExpCost_count[$detail->service->id][] = $detail->service->id;
-                        $amount = count($servicesExpCost_count[$detail->service->id]);
-                        $price_buy = $detail->service->price_buy;
-
-                        // Se il servizio è condiviso su più clienti, viene corretto il prezzo di acquisto
-                        if ($detail->service->is_share == 1) {
-                            $services_q = $this->getServices();
-                            $services_q = $services_q->where('id', $detail->service->id);
-                            $services_q = $services_q->first();
-
-                            $price_buy = $detail->service->price_buy / $services_q->customers_count;
-                        }
-
-                        if (!isset($servicesExpCost_array[$detail->service->id])) {
-                            $references = $detail->reference;
-                        } else {
-                            $references = $servicesExpCost_array[$detail->service->id]['references'] . ' / ' . $detail->reference;
-                        }
-
-                        $servicesExpCost_array[$detail->service->id] = array(
-                            'name' => $detail->service->name,
-                            'references' => $references,
-                            'amount' => $amount,
-                            'price_buy' => $price_buy,
-                            'price_buy_total' => $price_buy * $amount,
-                        );
-                    }
-                }
-            }
-
-            usort($servicesExpCost_array, function ($a, $b) {
-                return ($a['price_buy'] >= $b['price_buy']) ? -1 : 1;
-            });
-        }
-
-        foreach ($servicesExpCost_array as $serviceExpCost) {
-            $servicesExpCost_total += $serviceExpCost['amount'] * $serviceExpCost['price_buy'];
-        }
-
-        return array(
-            'cost_get' => $servicesExpCost_array,
-            'cost_get_total' => $servicesExpCost_total,
-        );
-    }
-
-    public function index(Request $request)
-    {
-
-
         return Inertia::render('Dashboard/Dashboard', [
 
-            'data' => array_merge(
-                $this->getData(),
-                $this->getCosts($request),
-            ),
+            'data' => $this->getData(),
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
 
         ]);
