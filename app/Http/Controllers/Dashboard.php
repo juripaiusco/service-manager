@@ -260,13 +260,13 @@ class Dashboard extends Controller
 
         ksort($months_incoming);
 
-        foreach ($months_incoming as $k => $month_incoming) {
+        /*foreach ($months_incoming as $k => $month_incoming) {
             usort($month_incoming['details'], function ($a, $b) {
                 return ($a['price_buy_total'] >= $b['price_buy_total']) ? -1 : 1;
             });
 
             $months_incoming[$k]['details'] = $month_incoming['details'];
-        }
+        }*/
 
         // Suddivizione profitto per trimestre
         $trim_incoming = array();
@@ -416,11 +416,6 @@ class Dashboard extends Controller
 
         ]);
     }
-
-    /*public function costsGet()
-    {
-        return json_decode(array('1'), true);
-    }*/
 
     public function service_exp_renew(Request $request, $id)
     {
