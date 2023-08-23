@@ -394,9 +394,9 @@ function invoiceCreate(email_send)
 
             <div class="mt-6 mb-10">
 
-                <div class="inline-flex w-full">
+                <div class="sm:inline-flex w-full">
 
-                    <div class="w-1/2 mr-4">
+                    <div class="mb-6 w-full sm:w-1/2 sm:mr-4 sm:mb-0">
 
                         <label for="invoice-date">Data fattura</label>
                         <input id="invoice-date"
@@ -406,11 +406,11 @@ function invoiceCreate(email_send)
 
                     </div>
 
-                    <div class="w-1/2 ml-4">
+                    <div class="w-full sm:w-1/2 sm:ml-4">
 
                         <div class="form-check form-switch">
 
-                            <input class="form-check-input !mt-[30px]"
+                            <input class="form-check-input sm:!mt-[30px]"
                                    type="checkbox"
                                    id="invoice-payment"
                                    true-value="1"
@@ -452,7 +452,7 @@ function invoiceCreate(email_send)
                     <br>
                     <span class="text-sm">
                         {{ modalInvoiceData.service.name }} {{ modalInvoiceData.service.reference }}
-                        <span class="font-semibold">
+                        <span class="font-semibold whitespace-nowrap">
                             {{ modalInvoiceData.price }} + IVA
                         </span>
                     </span>
@@ -463,14 +463,14 @@ function invoiceCreate(email_send)
 
             <div class="inline-flex w-full">
 
-                <div class="w-1/2 mr-2">
+                <div class="w-1/3 sm:w-1/2 mr-2">
 
                     <div class="btn btn-secondary w-full"
                          @click="modalInvoiceShow = false">Annulla</div>
 
                 </div>
 
-                <div class="w-1/4 mr-2 ml-2">
+                <div class="w-1/3 sm:w-1/4 mr-2 ml-2">
 
                     <button type="button"
                             class="btn btn-danger w-full"
@@ -480,7 +480,7 @@ function invoiceCreate(email_send)
 
                 </div>
 
-                <div class="w-1/4 ml-2">
+                <div class="w-1/3 sm:w-1/4 ml-2">
 
                     <button type="button"
                             class="btn btn-success w-full"

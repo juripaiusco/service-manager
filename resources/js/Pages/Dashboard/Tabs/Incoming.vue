@@ -122,21 +122,21 @@ const modalCostsExp = ref({
                     <thead>
                     <tr>
                         <th class="text-left">Nome</th>
-                        <th class="text-right sm:w-1/6">Totale</th>
+                        <th class="text-right w-1/3 sm:w-1/6">Totale</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="service in props.data.months_incoming[modalCostsExp.index].details">
-                        <td>
+                        <td class="text-sm sm:text-base">
 
                             {{ service.name }}
                             <br>
-                            <br v-if="!service.references">
+                            <div class="hidden sm:block">
+                                <span v-if="service.pref"
+                                      class="text-xs italic">{{ service.pref }}: </span>
 
-                            <span v-if="service.pref"
-                                  class="text-xs italic">{{ service.pref }}: </span>
-
-                            <span class="text-xs">{{ service.references }}</span>
+                                <span class="text-xs">{{ service.references }}</span>
+                            </div>
 
                         </td>
                         <td class="text-right font-semibold">
