@@ -128,12 +128,16 @@ const modalCostsExp = ref({
                     <tbody>
                     <tr v-for="service in props.data.months_incoming[modalCostsExp.index].details">
                         <td>
+
                             {{ service.name }}
                             <br>
                             <br v-if="!service.references">
-                            <span class="text-xs">
-                                {{ service.references }}
-                            </span>
+
+                            <span v-if="service.pref"
+                                  class="text-xs italic">{{ service.pref }}: </span>
+
+                            <span class="text-xs">{{ service.references }}</span>
+
                         </td>
                         <td class="text-right font-semibold">
                             {{ __currency(service.price_buy_total, 'EUR') }}
