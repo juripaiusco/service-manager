@@ -107,6 +107,9 @@ class Email extends Controller
             $q->where('no_email_alert', '=', 0);
             $q->orWhereNull('no_email_alert');
         });
+        $customers_services = $customers_services->select([
+            'customers_services.id as id'
+        ]);
         $customers_services = $customers_services->orderBy('expiration');
         $customers_services = $customers_services->get();
 
