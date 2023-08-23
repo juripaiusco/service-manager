@@ -171,8 +171,8 @@ function invoiceCreate(email_send)
 
                             <button class="btn btn-sm"
                                     :class="{
-                                        'btn-danger': getDate(props.data.today) > getDate(service.expiration) && service.autorenew !== '1',
-                                        'btn-warning': getDate(props.data.today, 60) > getDate(service.expiration) && service.autorenew !== '1',
+                                        'btn-danger': getDate(props.data.today) > getDate(service.expiration) && service.autorenew !== '1' && !service.payment_type,
+                                        'btn-warning': getDate(props.data.today, 60) > getDate(service.expiration) && service.autorenew !== '1' && !service.payment_type,
                                         '!bg-sky-200 !border-1 !border-sky-500 !text-sky-500': service.autorenew === '1' && !service.payment_type,
                                         'btn-success': service.payment_type,
                                     }"
