@@ -304,64 +304,81 @@ class Dashboard extends Controller
 
             foreach ($service_exp->details as $detail) {
 
-                $ms = 0;
-                $pref = '';
+                if ($detail->service->price_buy > 0) {
 
-                // Prezzo di acquisto del singolo servizio
-                $price_buy = $detail->service->price_buy;
+                    $ms = 0;
+                    $pref = '';
 
-                // Se esiste la scadenza specifica per singolo servizio del cliente
-                if (isset($detail->expiration) && $detail->service->is_monthly_cost != 1) {
-                    $ms = date('n', strtotime($detail->expiration));
-                }
+                    // Prezzo di acquisto del singolo servizio
+                    $price_buy = $detail->service->price_buy;
 
-                // Definisco la quantità di servizi presenti nel mese
-                if (!isset($services_month_amount[$ms == 0 ? $m : $ms][$detail->service->id]))
-                    $services_month_amount[$ms == 0 ? $m : $ms][$detail->service->id] = 0;
+                    // Se esiste la scadenza specifica per singolo servizio del cliente
+                    if (isset($detail->expiration) && $detail->service->is_monthly_cost != 1) {
+                        $ms = date('n', strtotime($detail->expiration));
+                    }
 
-                $services_month_amount[$ms == 0 ? $m : $ms][$detail->service->id] += 1;
-                $amount = $services_month_amount[$ms == 0 ? $m : $ms][$detail->service->id];
+                    // Definisco la quantità di servizi presenti nel mese
+                    if (!isset($services_month_amount[$ms == 0 ? $m : $ms][$detail->service->id]))
+                        $services_month_amount[$ms == 0 ? $m : $ms][$detail->service->id] = 0;
 
-                // Definisco le referenze
-                if (!isset($months_incoming[$ms == 0 ? $m : $ms]['details'][$detail->service->id])) {
-                    $references = $detail->reference;
-                } else {
-                    $references  = $months_incoming[$ms == 0 ? $m : $ms]['details'][$detail->service->id]['references'] . ' / ';
-                    $references .= $detail->reference;
-                }
+                    $services_month_amount[$ms == 0 ? $m : $ms][$detail->service->id] += 1;
+                    $amount = $services_month_amount[$ms == 0 ? $m : $ms][$detail->service->id];
 
-                // Se il servizio è condiviso definisco il prezzo
-                if ($detail->service->is_share == 1) {
+                    // Definisco le referenze
+                    if (!isset($months_incoming[$ms == 0 ? $m : $ms]['details'][$detail->service->id])) {
+                        $references = $detail->reference;
+                    } else {
+                        $references  = $months_incoming[$ms == 0 ? $m : $ms]['details'][$detail->service->id]['references'] . ' / ';
+                        $references .= $detail->reference;
+                    }
 
-                    $pref = 'Servizio condiviso';
-                    $getService = $this->getServices();
-                    $getService = $getService->where('id', $detail->service->id);
-                    $getService = $getService->first();
+                    // Se il servizio è condiviso definisco il prezzo
+                    if ($detail->service->is_share == 1) {
 
-                    $price_buy = $price_buy / $getService->customers_count;
-                }
-
-                // Se il servizio è a pagamento rateale annuale
-                if ($detail->service->is_monthly_cost == 1) {
-
-                    $pref = 'Rata mensile' . ($pref != '' ? ' su ' . strtolower($pref) : '');
-
-                    if ($detail->service->is_share != 1) {
-
+                        $pref = 'Servizio condiviso';
                         $getService = $this->getServices();
                         $getService = $getService->where('id', $detail->service->id);
                         $getService = $getService->first();
 
-                        $amount = $getService->customers_count;
+                        $price_buy = $price_buy / $getService->customers_count;
                     }
 
-                    $price_buy = $price_buy / 12;
+                    // Se il servizio è a pagamento rateale annuale
+                    if ($detail->service->is_monthly_cost == 1) {
 
-                    foreach ($months_incoming as $m_monthly => $month_incoming) {
+                        $pref = 'Rata mensile' . ($pref != '' ? ' su ' . strtolower($pref) : '');
 
-                        $months_incoming[$m_monthly]['outcoming'] += $price_buy;
-                        $months_incoming[$m_monthly]['profit'] = $months_incoming[$m_monthly]['incoming'] - $months_incoming[$m_monthly]['outcoming'];
-                        $months_incoming[$m_monthly]['details'][$detail->service->id] = array(
+                        if ($detail->service->is_share == 1) {
+
+                            $getService = $this->getServices();
+                            $getService = $getService->where('id', $detail->service->id);
+                            $getService = $getService->first();
+
+                            $amount = $getService->customers_count;
+                        }
+
+                        $price_buy = $price_buy / 12;
+
+                        foreach ($months_incoming as $m_monthly => $month_incoming) {
+
+                            $months_incoming[$m_monthly]['outcoming'] += $price_buy;
+                            $months_incoming[$m_monthly]['profit'] = $months_incoming[$m_monthly]['incoming'] - $months_incoming[$m_monthly]['outcoming'];
+                            $months_incoming[$m_monthly]['details'][$detail->service->id] = array(
+                                'name' => $detail->service->name,
+                                'pref' => $pref,
+                                'references' => $references,
+                                'amount' => $amount,
+                                'price_buy' => $price_buy,
+                                'price_buy_total' => $price_buy * $amount,
+                            );
+                        }
+                    }
+
+                    // Scrivo le referenze collegate al servizio in scadenza
+                    if ($detail->service->is_monthly_cost != 1) {
+
+                        $months_incoming[$ms == 0 ? $m : $ms]['outcoming'] += $price_buy;
+                        $months_incoming[$ms == 0 ? $m : $ms]['details'][$detail->service->id] = array(
                             'name' => $detail->service->name,
                             'pref' => $pref,
                             'references' => $references,
@@ -369,26 +386,12 @@ class Dashboard extends Controller
                             'price_buy' => $price_buy,
                             'price_buy_total' => $price_buy * $amount,
                         );
+
+                        $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
+
+                        if ($ms != 0)
+                            $months_incoming[$ms]['profit'] = $months_incoming[$ms]['incoming'] - $months_incoming[$ms]['outcoming'];
                     }
-                }
-
-                // Scrivo le referenze collegate al servizio in scadenza
-                if ($detail->service->is_monthly_cost != 1) {
-
-                    $months_incoming[$ms == 0 ? $m : $ms]['outcoming'] += $price_buy;
-                    $months_incoming[$ms == 0 ? $m : $ms]['details'][$detail->service->id] = array(
-                        'name' => $detail->service->name,
-                        'pref' => $pref,
-                        'references' => $references,
-                        'amount' => $amount,
-                        'price_buy' => $price_buy,
-                        'price_buy_total' => $price_buy * $amount,
-                    );
-
-                    $months_incoming[$m]['profit'] = $months_incoming[$m]['incoming'] - $months_incoming[$m]['outcoming'];
-
-                    if ($ms != 0)
-                        $months_incoming[$ms]['profit'] = $months_incoming[$ms]['incoming'] - $months_incoming[$ms]['outcoming'];
                 }
             }
         }
