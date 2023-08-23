@@ -348,14 +348,21 @@ class Dashboard extends Controller
 
                         $pref = 'Rata mensile' . ($pref != '' ? ' su ' . strtolower($pref) : '');
 
-                        if ($detail->service->is_share == 1) {
+                        // Definisco la quantità di servizi a pagamento mensili
+                        if (!isset($amount_monthly[$detail->service->id]))
+                            $amount_monthly[$detail->service->id] = 0;
+
+                        $amount_monthly[$detail->service->id]++;
+                        $amount = $amount_monthly[$detail->service->id];
+
+                        /*if ($detail->service->is_share == 1) {
 
                             $getService = $this->getServices();
                             $getService = $getService->where('id', $detail->service->id);
                             $getService = $getService->first();
 
                             $amount = $getService->customers_count;
-                        }
+                        }*/
 
                         $price_buy = $price_buy / 12;
 
