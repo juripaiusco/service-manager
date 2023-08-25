@@ -83,7 +83,7 @@ const year_month_selected = ref(null);
                         :class="{
                             'table-primary': data.today_month === n
                         }" >
-                        <a :href="'#' + year + '-' + n"
+                        <a :href="'#' + year.replaceAll(/\s/g,'') + n"
                            @click="year_month_selected=year + '-' + n">
                             {{ month_data ? __currency(month_data, 'EUR') : '-' }}
                         </a>
@@ -132,7 +132,7 @@ const year_month_selected = ref(null);
                             </thead>
                             <tbody>
                             <tr v-for="invoice in invoices_data"
-                                :id="year + '-' + __date(invoice.data, 'n')">
+                                :id="year.replaceAll(/\s/g,'') + __date(invoice.data, 'n')">
                                 <td :class="{
                                     '!bg-sky-50 !text-sky-700': year_month_selected == year + '-' + __date(invoice.data, 'n')
                                 }">
