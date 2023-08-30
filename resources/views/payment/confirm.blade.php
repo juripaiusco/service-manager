@@ -90,7 +90,7 @@
             <br>
 
             <div class="row">
-                <div class="col-5">
+                <div class="col-lg-5">
 
                     <table class="table table-sm table-borderless">
                         <thead class="text-small">
@@ -119,7 +119,7 @@
                                     </small>
                                 </td>
                                 <td class="text-right">
-                                    &euro; {{ number_format((count($v['reference']) * $v['price_sell']), 2, ',', '.') }}
+                                    &euro;&nbsp;{{ number_format((count($v['reference']) * $v['price_sell']), 2, ',', '.') }}
                                 </td>
                             </tr>
 
@@ -137,18 +137,18 @@
                         <tr class="text-small">
                             <td>Imponibile</td>
                             <td colspan="2" class="text-right">
-                                &euro; {{ number_format($total, 2, ',', '.') }}
+                                &euro;&nbsp;{{ number_format($total, 2, ',', '.') }}
                             </td>
                         </tr>
                         <tr class="text-small">
                             <td>Totale IVA</td>
                             <td colspan="2" class="text-right">
-                                &euro; {{ number_format(($total * 1.22 - $total), 2, ',', '.') }}
+                                &euro;&nbsp;{{ number_format(($total * 1.22 - $total), 2, ',', '.') }}
                             </td>
                         </tr>
                         <tr class="text-big">
                             <th colspan="3" class="text-right">
-                                &euro; {{ number_format($total * 1.22, 2, ',', '.') }}
+                                &euro;&nbsp;{{ number_format($total * 1.22, 2, ',', '.') }}
                             </th>
                         </tr>
 
