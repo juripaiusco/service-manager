@@ -392,10 +392,15 @@ class Finance extends Controller
         );
     }
 
+    /**
+     *  Recupero i dati da FIC e li importo nel DB
+     *
+     * @return void
+     */
     public function documentsGet()
     {
         $filter = new Filter();
-        $filter->where('date', Operator::GTE, '2023-01-01');
+        $filter->where('date', Operator::GTE, env('GOOGLE_SHEETS_YEAR') . '-01-01');
 //        $filter->where('date', Operator::LTE, '2023-03-01');
         $q = $filter->buildQuery();
 
