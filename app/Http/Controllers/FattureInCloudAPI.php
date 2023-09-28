@@ -213,9 +213,9 @@ class FattureInCloudAPI extends Controller
             isset($args['type']) ? $args['type'] : null,
             null,
             'detailed',
+            '-date',
             null,
-            null,
-            null,
+            100,
             isset($args['q']) ? $args['q'] : null
         );
 

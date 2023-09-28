@@ -435,6 +435,22 @@ class Finance extends Controller
             $passive_credit_note->getData()
         );
 
+        /**
+         * Elimino le fatture presenti nel database,
+         * ma non presenti in Fatture in Cloud.
+         */
+        $this->documentsClear(array(
+            $invoices->getData(),
+            $credit_note->getData(),
+            $expense->getData(),
+            $passive_credit_note->getData()
+        ));
+
+        /**
+         * Inserisco i dati fattura
+         * SE la fattura esiste verrà aggiornata
+         * SE la fattura non esiste verrà creata
+         */
         foreach ($documents as $document) {
 
             $finance = \App\Models\Finance::query();
@@ -469,6 +485,72 @@ class Finance extends Controller
 
             $finance->save();
 
+        }
+    }
+
+    /**
+     * Elimino le fatture presenti nel database,
+     * ma non presenti in Fatture in Cloud.
+     *
+     * Prendo la data più lontana in base al tipo di documento preso da Fatture in Cloud,
+     * da quella data controllo se i docucmenti in DB sono prensenti o meno. In caso di
+     * documenti non prensenti, questi vengono eliminati.
+     *
+     * $documents_array = Inserire i dati di FIC all'interno di un array
+     *
+     * @return void
+     */
+    private function documentsClear($documents_array)
+    {
+        // Inizio la ricerca
+        foreach ($documents_array as $documents) {
+
+            $index = count($documents) - 1;
+
+            // Definisco la data di partenza per la ricerca
+            $date = $documents[$index]->getDate();
+
+            // Definisco il tipo di documento per la ricerca
+            if ($documents[$index]->getType() == 'expense' ||
+                $documents[$index]->getType() == 'passive_credit_note') {
+
+                $tipo_doc = $documents[$index]->getType() == 'expense' ? 'spesa' : 'ndc';
+                $tipo = 'passiva';
+
+            } else {
+
+                $tipo_doc = $documents[$index]->getType() == 'invoice' ? 'fatture' : 'ndc';
+                $tipo = 'attiva';
+            }
+
+            // Recupero i documenti salvati nel DB
+            $finances = \App\Models\Finance::query();
+            $finances->where('data', '>=', $date);
+            $finances->where('tipo_doc', $tipo_doc);
+            $finances->where('tipo', $tipo);
+            $finances->orderBy('data', 'ASC');
+            $finances_get = $finances->get();
+
+            // Confronto l'array dati di Fatture in Cloud con i dati salvati in DB
+            foreach ($finances_get as $finance) {
+
+                $finance_exists = false;
+
+                foreach ($documents as $document) {
+
+                    if ($finance->fic_id == $document->getId()) {
+
+                        $finance_exists = true;
+                        break;
+                    }
+
+                }
+
+                // Se il documento non esiste in Fatture in Cloud viene eliminato
+                if (!$finance_exists) {
+                    \App\Models\Finance::destroy($finance->id);
+                }
+            }
         }
     }
 
