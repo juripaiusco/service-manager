@@ -224,21 +224,21 @@ function stackFooterElement(ObjStack, args)
 
             } else {
 
-                let valueSpace = '   ';
+                let valueSpace = '    ';
 
                 if (parseFloat(args['items'][i].value) < 10) {
 
-                    valueSpace = '    ';
+                    valueSpace = '     ';
 
                 }
 
                 if (parseFloat(args['items'][i].value) > 100) {
 
-                    valueSpace = '  ';
+                    valueSpace = '   ';
 
                 }
 
-                if (parseFloat(args['items'][i].value) > 1000) {
+                if (parseFloat(args['items'][i].value.replace('.', '')) > 1000) {
 
                     valueSpace = ' ';
 
