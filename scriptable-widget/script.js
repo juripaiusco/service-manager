@@ -177,26 +177,26 @@ function stackBodyElement(ObjStack, args)
 {
     let stack = ObjStack.addStack()
     stack.size = new Size(args['config']['stackWidth'], 0)
-    stack.borderWidth = 2
-    stack.borderColor = args['elementColor']
+    /*stack.borderWidth = 2
+    stack.borderColor = args['elementColor']*/
     stack.cornerRadius = 10
-    // stack.backgroundColor = args['elementColor']
+    stack.backgroundColor = args['elementColor']
     stack.setPadding(10, 10, 10, 10)
     stack.layoutVertically()
 
     // text value
     let textValue = stack.addText(args['value'])
     textValue.font = Font.boldSystemFont(16)
-    // textValue.textColor = Color.white()
-    textValue.textColor = args['elementColor']
+    // textValue.textColor = args['elementColor']
+    textValue.textColor = Color.white()
 
     stack.addSpacer(4)
 
     // text comparison
     let textComparison = stack.addText('( ' + args['valueComparison'] + ' )')
     textComparison.font = Font.systemFont(12)
-    // textComparison.textColor = Color.white()
-    textComparison.textColor = args['elementColor']
+    // textComparison.textColor = args['elementColor']
+    textComparison.textColor = Color.white()
 
     return stack
 }
