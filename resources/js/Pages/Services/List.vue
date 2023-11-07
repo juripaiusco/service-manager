@@ -8,6 +8,7 @@ import Table from "@/Components/Table/Table.vue";
 import {__currency} from "@/ComponentsExt/Currency";
 import TableSearch from "@/Components/Table/TableSearch.vue";
 import ModalReady from "@/Components/ModalReady.vue";
+import TablePagination from "@/Components/Table/TablePagination.vue";
 
 defineProps({
     data: Object,
@@ -199,6 +200,8 @@ defineProps({
                 </template>
 
             </ModalReady>
+
+            <TablePagination :links="data.links" />
 
         </ApplicationContainer>
 
