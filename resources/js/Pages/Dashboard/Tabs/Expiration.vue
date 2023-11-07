@@ -7,6 +7,7 @@ import {ref} from "vue";
 import ModalReady from "@/Components/ModalReady.vue";
 import Modal from "@/Components/Modal.vue";
 import {useForm} from "@inertiajs/vue3";
+import TablePagination from "@/Components/Table/TablePagination.vue";
 
 const props = defineProps({
     data: Object,
@@ -33,7 +34,7 @@ function getDate(dateValute, addDays = 0)
 
 function collapse(indexSelected)
 {
-    let services = props.data.services_exp;
+    let services = props.data.services_exp.data;
     let document = window.document;
 
     services.forEach((_, index) => {
@@ -77,7 +78,7 @@ function invoiceCreate(email_send)
             <th></th>
             <th class="text-left">
                 Cliente
-                <span class="text-xs font-normal">(hai {{ props.data.services_exp.length }} scadenze)</span>
+                <span class="text-xs font-normal">(hai {{ props.data.services_exp_count }} scadenze)</span>
             </th>
             <th class="text-left hidden sm:table-cell">
                 Servizio
@@ -94,7 +95,7 @@ function invoiceCreate(email_send)
 
         <tbody>
 
-        <template v-for="(service, index) in props.data.services_exp">
+        <template v-for="(service, index) in props.data.services_exp.data">
 
             <tr class="cursor-pointer service-header"
                 :class="{
@@ -348,6 +349,8 @@ function invoiceCreate(email_send)
         </tbody>
 
     </table>
+
+  <TablePagination :links="props.data.services_exp.links" />
 
     <ModalReady :show="modalShow"
                 :data="modalData"

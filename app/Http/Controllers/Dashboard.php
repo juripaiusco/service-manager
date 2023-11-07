@@ -77,7 +77,7 @@ class Dashboard extends Controller
         return $services;
     }
 
-    public function getData($search = true)
+    public function getServicesExp($search = true)
     {
         $request_validate_array = [
             'piva',
@@ -87,9 +87,6 @@ class Dashboard extends Controller
             'name',
             'reference',
         ];
-
-        // Data TAB Services Expiration
-        // ====================================================
 
         $services_exp = \App\Models\CustomerService::query();
 
@@ -155,7 +152,16 @@ class Dashboard extends Controller
         $services_exp->addSelect(DB::raw('false AS isExpanded'));
 
         $services_exp = $services_exp->orderBy('expiration');
-        $services_exp = $services_exp->get();
+//        $services_exp = $services_exp->get();
+
+        return $services_exp;
+    }
+
+    public function getData($search = true)
+    {
+        // Data TAB Services Expiration
+        // ====================================================
+        $services_exp = $this->getServicesExp($search)->get();
 
         // Data TAB Services Incoming
         // ====================================================
@@ -541,7 +547,8 @@ class Dashboard extends Controller
         // -------------------------------------------------
 
         return array(
-            'services_exp' => $services_exp,
+            'services_exp' => $this->getServicesExp($search)->paginate(env('VIEWS_PAGINATE'))->withQueryString(),
+            'services_exp_count' => $services_exp->count(),
             'today' => date('Y-m-d H:i:s'),
             'months_array' => $months_array,
             'months_incoming' => $months_incoming,
