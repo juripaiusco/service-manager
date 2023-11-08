@@ -104,7 +104,10 @@ function invoiceCreate(email_send)
                 }"
                 :id="'service-header-' + index">
 
-                <td class="align-middle lg:w-[140px]">
+                <td class="align-middle lg:w-[140px] !pl-4"
+                    :class="{
+                        'lg:w-[100px] !pl-6': $inertia.page.props.fic_is_enabled !== true
+                    }" >
 
                     <div class="lg:flex lg:w-full"
                          :class="{
@@ -168,7 +171,8 @@ function invoiceCreate(email_send)
 
                         </div>
 
-                        <div class="flex-initial">
+                        <div v-if="$inertia.page.props.fic_is_enabled === true"
+                             class="flex-initial">
 
                             <button class="btn btn-sm"
                                     :class="{
