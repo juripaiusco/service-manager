@@ -176,7 +176,7 @@ class GoogleSheetsAPI extends Controller
             $count_m = count($tot_month_passivo);
         }
 
-        for ($i = 0; $i <= $count_m; $i++) {
+        for ($i = 0; $i < $count_m; $i++) {
 
             if (!isset($tot_month_attivo[$range_array[$i + 1]['in']])) {
                 $tot_month_attivo[$range_array[$i + 1]['in']] = 0;
