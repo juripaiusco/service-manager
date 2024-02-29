@@ -12,6 +12,11 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        /**
+         * Se non sono presenti utenti, viene mostrato direttamente la pagina di registrazione
+         */
+        $users = \App\Models\User::count();
+
+        return $request->expectsJson() ? null : route($users > 0 ? 'login' : 'register');
     }
 }

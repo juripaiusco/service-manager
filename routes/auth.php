@@ -30,12 +30,23 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+/**
+ * Se non ci sono utenti ci si può registrare, ma se ci sono utenti allora
+ * la registrazione è possibile soltanto dopo il login, così da rendere più
+ * sicura l'app.
+ */
+$users = \App\Models\User::count();
+
+Route::middleware($users > 0 ? 'auth' : 'guest')->group(function () {
+
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
+});
+
+Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
