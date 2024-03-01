@@ -120,7 +120,7 @@ const form = useForm(dataForm);
 
                         <h2 class="text-3xl mb-6">Fatturazione</h2>
 
-                        <label class="form-label">Azienda</label>
+                        <label class="form-label">Azienda / Nominativo fatturazione</label>
                         <input type="text"
                                class="form-control"
                                v-model="form.company" />
