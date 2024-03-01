@@ -49,57 +49,143 @@ const form = useForm(dataForm);
                 form.id ? form.id : ''
                 ))">
 
-                <h2 class="text-3xl mb-2">Dati cliente</h2>
-
-                <br>
 
                 <div class="row">
-                    <div class="col-sm mb-6">
+                    <div class="col-6">
+
+                        <h2 class="text-3xl mb-6">Contatto</h2>
+
+                        <div class="row">
+                            <div class="col-7">
+
+                                <label class="form-label">Referente</label>
+                                <input type="text"
+                                       class="form-control"
+                                       v-model="form.name" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.name">{{ __(form.errors.name) }}</div>
+
+                                <br>
+
+                                <div class="row">
+                                    <div class="col">
+
+                                        <label class="form-label">
+                                            Cellulare
+                                        </label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.email" />
+                                        <div class="text-red-500 text-center"
+                                             v-if="form.errors.email">{{ __(form.errors.email) }}</div>
+
+                                    </div>
+                                    <div class="col">
+
+                                        <label class="form-label">
+                                            Telefono
+                                        </label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.email" />
+                                        <div class="text-red-500 text-center"
+                                             v-if="form.errors.email">{{ __(form.errors.email) }}</div>
+
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <label class="form-label">Email</label>
+                                <input type="text"
+                                       class="form-control"
+                                       v-model="form.email" />
+                                <label class="form-label !text-xs mt-2">( separare con ";" per invio multiplo )</label>
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.email">{{ __(form.errors.email) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <label class="form-label">Note</label>
+                                <textarea class="form-control h-[216px]"></textarea>
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-6">
+
+                        <h2 class="text-3xl mb-6">Fatturazione</h2>
 
                         <label class="form-label">Azienda</label>
                         <input type="text"
                                class="form-control"
-                               placeholder="es. Pitture Rossi Srl"
                                v-model="form.company" />
                         <div class="text-red-500 text-center"
                              v-if="form.errors.company">{{ __(form.errors.company) }}</div>
 
-                    </div>
-                    <div class="col-sm mb-6">
+                        <br>
 
-                        <label class="form-label">P.IVA o C.F.</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="123456789"
-                               v-model="form.piva" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
+                        <div class="row">
+                            <div class="col">
 
-                    </div>
-                </div>
+                                <label class="form-label">Partita IVA</label>
+                                <input type="text"
+                                       class="form-control"
+                                       v-model="form.piva" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
 
-                <div class="row">
-                    <div class="col-sm mb-6">
+                            </div>
+                            <div class="col">
 
-                        <label class="form-label">Referente</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Mario"
-                               v-model="form.name" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.name">{{ __(form.errors.name) }}</div>
+                                <label class="form-label">Codice Fiscale</label>
+                                <input type="text"
+                                       class="form-control"
+                                       v-model="form.piva" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
 
-                    </div>
-                    <div class="col-sm mb-6">
+                            </div>
+                        </div>
 
-                        <label class="form-label">Email</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="info@pitturerossi.it"
-                               v-model="form.email" />
-                        <div class="text-red-500 text-center"
-                             v-if="form.errors.email">{{ __(form.errors.email) }}</div>
-                        <label class="form-label !text-xs mt-2">separare con ";" per invio multiplo</label>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-6">
+
+                                <label class="form-label">Indirizzo</label>
+                                <input type="text"
+                                       class="form-control"
+                                       v-model="form.piva" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
+
+                            </div>
+                            <div class="col-3">
+
+                                <label class="form-label">Città</label>
+                                <input type="text"
+                                       class="form-control"
+                                       v-model="form.piva" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
+
+                            </div>
+                            <div class="col-3">
+
+                                <label class="form-label">CAP</label>
+                                <input type="text"
+                                       class="form-control"
+                                       v-model="form.piva" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
+
+                            </div>
+                        </div>
 
                     </div>
                 </div>

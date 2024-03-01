@@ -14,10 +14,17 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
 
-            $table->string('piva');
             $table->string('company');
+            $table->string('piva');
+            $table->string('cf');
+            $table->string('address');
+            $table->string('city');
+            $table->string('cap');
             $table->string('name');
+            $table->string('cellphone');
+            $table->string('telephone');
             $table->string('email');
+            $table->longText('note');
 
             $table->timestamps();
         });
