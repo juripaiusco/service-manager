@@ -51,12 +51,12 @@ const form = useForm(dataForm);
 
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-lg-6">
 
                         <h2 class="text-3xl mb-6">Contatto</h2>
 
                         <div class="row">
-                            <div class="col-7">
+                            <div class="col-lg-7">
 
                                 <label class="form-label">Referente</label>
                                 <input type="text"
@@ -68,7 +68,7 @@ const form = useForm(dataForm);
                                 <br>
 
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col-lg">
 
                                         <label class="form-label">
                                             Cellulare
@@ -79,8 +79,10 @@ const form = useForm(dataForm);
                                         <div class="text-red-500 text-center"
                                              v-if="form.errors.email">{{ __(form.errors.email) }}</div>
 
+                                        <br class="md:hidden">
+
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg">
 
                                         <label class="form-label">
                                             Telefono
@@ -105,7 +107,9 @@ const form = useForm(dataForm);
                                      v-if="form.errors.email">{{ __(form.errors.email) }}</div>
 
                             </div>
-                            <div class="col">
+                            <div class="col-lg">
+
+                                <br class="md:hidden">
 
                                 <label class="form-label">Note</label>
                                 <textarea class="form-control h-[216px]"></textarea>
@@ -116,7 +120,10 @@ const form = useForm(dataForm);
                         </div>
 
                     </div>
-                    <div class="col-6">
+                    <div class="col-lg-6">
+
+                        <br class="md:hidden">
+                        <br class="md:hidden">
 
                         <h2 class="text-3xl mb-6">Fatturazione</h2>
 
@@ -130,7 +137,7 @@ const form = useForm(dataForm);
                         <br>
 
                         <div class="row">
-                            <div class="col">
+                            <div class="col-lg">
 
                                 <label class="form-label">Partita IVA</label>
                                 <input type="text"
@@ -140,7 +147,9 @@ const form = useForm(dataForm);
                                      v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
 
                             </div>
-                            <div class="col">
+                            <div class="col-lg">
+
+                                <br class="md:hidden">
 
                                 <label class="form-label">Codice Fiscale</label>
                                 <input type="text"
@@ -155,7 +164,7 @@ const form = useForm(dataForm);
                         <br>
 
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-lg-6">
 
                                 <label class="form-label">Indirizzo</label>
                                 <input type="text"
@@ -165,7 +174,9 @@ const form = useForm(dataForm);
                                      v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
 
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-3">
+
+                                <br class="md:hidden">
 
                                 <label class="form-label">Città</label>
                                 <input type="text"
@@ -175,7 +186,9 @@ const form = useForm(dataForm);
                                      v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
 
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-3">
+
+                                <br class="md:hidden">
 
                                 <label class="form-label">CAP</label>
                                 <input type="text"
@@ -190,7 +203,7 @@ const form = useForm(dataForm);
                     </div>
                 </div>
 
-                <div class="text-right lg:mt-10">
+                <div class="text-right mt-10">
 
                     <Link class="btn btn-secondary w-[120px]"
                           :href="data.saveRedirect">
