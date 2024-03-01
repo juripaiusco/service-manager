@@ -35,16 +35,20 @@ Route::middleware('guest')->group(function () {
  * la registrazione è possibile soltanto dopo il login, così da rendere più
  * sicura l'app.
  */
-$users = \App\Models\User::count();
+if (Schema::hasTable('users')) {
 
-Route::middleware($users > 0 ? 'auth' : 'guest')->group(function () {
+    $users = \App\Models\User::count();
 
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
+    Route::middleware($users > 0 ? 'auth' : 'guest')->group(function () {
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+        Route::get('register', [RegisteredUserController::class, 'create'])
+            ->name('register');
 
-});
+        Route::post('register', [RegisteredUserController::class, 'store']);
+
+    });
+    
+}
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
