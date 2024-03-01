@@ -47,7 +47,7 @@ if (Schema::hasTable('users')) {
         Route::post('register', [RegisteredUserController::class, 'store']);
 
     });
-    
+
 }
 
 Route::middleware('auth')->group(function () {
