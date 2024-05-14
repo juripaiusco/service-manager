@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class Customer extends Controller
@@ -15,6 +16,57 @@ class Customer extends Controller
      */
     public function index()
     {
+        /*if (Storage::disk('public')->exists('customer_up/customers.csv')) {
+
+            $customers_file = Storage::disk('public')->get('customer_up/customers.csv');
+            $customers_file_rows = explode("\r\n", $customers_file);
+
+            $c = 0;
+
+            foreach ($customers_file_rows as $i => $file_row) {
+
+                if (!$c) {
+
+                    $array_fields = explode(';', $file_row);
+
+                } else {
+
+                    $array_value = explode(';', $file_row);
+
+                    foreach ($array_fields as $k => $field) {
+
+                        $array_customers[$i - 1][$field] = $array_value[$k];
+
+                    }
+                }
+
+                $c++;
+
+            }
+
+
+            foreach ($array_customers as $customer_d) {
+
+                $customer = new \App\Models\Customer();
+
+                $customer->company = $customer_d['name'] . ' ' . $customer_d['surname'];
+                $customer->piva = '0';
+                $customer->cf = '0';
+                $customer->address = $customer_d['address'];
+                $customer->city = '';
+                $customer->cap = '';
+                $customer->name = $customer_d['name'];
+                $customer->cellphone = $customer_d['cellphone1'];
+                $customer->telephone = '';
+                $customer->email = str_replace(' ::: ', ';', $customer_d['email1']);
+                $customer->note = '';
+
+                $customer->save();
+
+            }
+
+        }*/
+
         $request_search_array = [
             'company',
             'name',
