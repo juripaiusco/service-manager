@@ -9,12 +9,11 @@ import {__currency} from "@/ComponentsExt/Currency";
 import {__date} from "@/ComponentsExt/Date";
 import Table from "@/Components/Table/Table.vue";
 import ModalReady from "@/Components/ModalReady.vue";
+import {ref} from "vue";
 
 const props = defineProps({
     data: Object,
     filters: Object,
-    modalShow: false,
-    modalData: Object,
 })
 
 const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
@@ -22,6 +21,9 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 }));
 
 const form = useForm(dataForm);
+
+let modalShow = ref(false);
+let modalData = ref(props.data);
 
 </script>
 
