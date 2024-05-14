@@ -16,7 +16,7 @@ class Customer extends Controller
      */
     public function index()
     {
-        /*if (Storage::disk('public')->exists('customer_up/customers.csv')) {
+        if (Storage::disk('public')->exists('customer_up/customers.csv')) {
 
             $customers_file = Storage::disk('public')->get('customer_up/customers.csv');
             $customers_file_rows = explode("\r\n", $customers_file);
@@ -50,13 +50,13 @@ class Customer extends Controller
                 $customer = new \App\Models\Customer();
 
                 $customer->company = $customer_d['name'] . ' ' . $customer_d['surname'];
-                $customer->piva = '0';
-                $customer->cf = '0';
+                $customer->piva = '';
+                $customer->cf = '';
                 $customer->address = $customer_d['address'];
                 $customer->city = '';
                 $customer->cap = '';
                 $customer->name = $customer_d['name'];
-                $customer->cellphone = $customer_d['cellphone1'];
+                $customer->cellphone = str_replace(' ', '', $customer_d['cellphone1']);
                 $customer->telephone = '';
                 $customer->email = str_replace(' ::: ', ';', $customer_d['email1']);
                 $customer->note = '';
@@ -65,7 +65,7 @@ class Customer extends Controller
 
             }
 
-        }*/
+        }
 
         $request_search_array = [
             'company',
@@ -212,10 +212,8 @@ class Customer extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'company'   => ['required'],
-            'email'     => ['required'],
             'name'      => ['required'],
-            'piva'      => ['required'],
+            'email'     => ['required'],
         ]);
 
         $saveRedirect = $request['saveRedirect'];
@@ -270,10 +268,8 @@ class Customer extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'company'   => ['required'],
-            'email'     => ['required'],
             'name'      => ['required'],
-            'piva'      => ['required'],
+            'email'     => ['required'],
         ]);
 
         $saveRedirect = $request['saveRedirect'];
