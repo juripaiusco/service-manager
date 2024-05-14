@@ -9,13 +9,15 @@ import {__currency} from "@/ComponentsExt/Currency";
 import TableSearch from "@/Components/Table/TableSearch.vue";
 import ModalReady from "@/Components/ModalReady.vue";
 import TablePagination from "@/Components/Table/TablePagination.vue";
+import {ref} from "vue";
 
-defineProps({
+const props = defineProps({
     data: Object,
     filters: Object,
-    modalShow: false,
-    modalData: Object,
 });
+
+let modalShow = ref(false);
+let modalData = ref(props.data);
 
 </script>
 
