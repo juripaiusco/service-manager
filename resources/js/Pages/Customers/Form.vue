@@ -55,69 +55,6 @@ let modalData = ref(props.data);
                 <div class="row">
                     <div class="col-lg-6">
 
-                        <h2 class="text-3xl mb-6">Contatto</h2>
-
-                        <div class="row">
-                            <div class="col-lg-7">
-
-                                <label class="form-label">Referente</label>
-                                <input type="text"
-                                       class="form-control"
-                                       v-model="form.name" />
-                                <div class="text-red-500 text-center"
-                                     v-if="form.errors.name">{{ __(form.errors.name) }}</div>
-
-                                <br>
-
-                                <div class="row">
-                                    <div class="col-lg">
-
-                                        <label class="form-label">
-                                            Cellulare
-                                        </label>
-                                        <input type="text"
-                                               class="form-control"
-                                               v-model="form.cellphone" />
-
-                                        <br class="md:hidden">
-
-                                    </div>
-                                    <div class="col-lg">
-
-                                        <label class="form-label">
-                                            Telefono
-                                        </label>
-                                        <input type="text"
-                                               class="form-control"
-                                               v-model="form.telephone" />
-
-                                    </div>
-                                </div>
-
-                                <br>
-
-                                <label class="form-label">Email</label>
-                                <input type="text"
-                                       class="form-control"
-                                       v-model="form.email" />
-                                <label class="form-label !text-xs mt-2">( separare con ";" per invio multiplo )</label>
-                                <div class="text-red-500 text-center"
-                                     v-if="form.errors.email">{{ __(form.errors.email) }}</div>
-
-                            </div>
-                            <div class="col-lg">
-
-                                <br class="md:hidden">
-
-                                <label class="form-label">Note</label>
-                                <textarea class="form-control h-[216px]"></textarea>
-
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-lg-6">
-
                         <br class="md:hidden">
                         <br class="md:hidden">
 
@@ -180,6 +117,69 @@ let modalData = ref(props.data);
                                 <input type="text"
                                        class="form-control"
                                        v-model="form.cap" />
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6">
+
+                        <h2 class="text-3xl mb-6">Contatto</h2>
+
+                        <div class="row">
+                            <div class="col-lg-7">
+
+                                <label class="form-label">Referente</label>
+                                <input type="text"
+                                       class="form-control"
+                                       v-model="form.name" />
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.name">{{ __(form.errors.name) }}</div>
+
+                                <br>
+
+                                <div class="row">
+                                    <div class="col-lg">
+
+                                        <label class="form-label">
+                                            Cellulare
+                                        </label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.cellphone" />
+
+                                        <br class="md:hidden">
+
+                                    </div>
+                                    <div class="col-lg">
+
+                                        <label class="form-label">
+                                            Telefono
+                                        </label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.telephone" />
+
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <label class="form-label">Email</label>
+                                <input type="text"
+                                       class="form-control"
+                                       v-model="form.email" />
+                                <label class="form-label !text-xs mt-2">( separare con ";" per invio multiplo )</label>
+                                <div class="text-red-500 text-center"
+                                     v-if="form.errors.email">{{ __(form.errors.email) }}</div>
+
+                            </div>
+                            <div class="col-lg">
+
+                                <br class="md:hidden">
+
+                                <label class="form-label">Note</label>
+                                <textarea class="form-control h-[216px]"></textarea>
 
                             </div>
                         </div>
