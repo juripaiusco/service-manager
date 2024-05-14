@@ -14,17 +14,17 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
 
-            $table->string('company');
-            $table->string('piva');
-            $table->string('cf');
-            $table->string('address');
-            $table->string('city');
-            $table->string('cap');
+            $table->string('company')->nullable();
+            $table->string('piva')->nullable();
+            $table->string('cf')->nullable();
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('cap')->nullable();
             $table->string('name');
-            $table->string('cellphone');
-            $table->string('telephone');
+            $table->string('cellphone')->nullable();
+            $table->string('telephone')->nullable();
             $table->string('email');
-            $table->longText('note');
+            $table->longText('note')->nullable();
 
             $table->timestamps();
         });
