@@ -104,13 +104,25 @@ let modalData = ref(props.data);
                             fnc: function (d) {
 
                                 let html = ''
+                                let profit = parseFloat((d.incoming - d.outcoming) / d.outcoming * 100).toFixed(2)
 
                                 html += d.profit > 0 ? __currency(d.profit, 'EUR') : '-'
                                 html += '<br>'
                                 html += '<span class=\'font-normal text-xs\'>'
                                 html += 'R. '
-                                html += parseFloat((d.incoming - d.outcoming) / d.outcoming * 100).toFixed(2)
-                                html += '%</span>'
+
+                                switch(profit) {
+                                    case 'Infinity':
+                                        html += '∞'
+                                        break;
+                                    case 'NaN':
+                                        html += '0%'
+                                        break;
+                                    default:
+                                        html += profit + '%'
+                                }
+
+                                html += '</span>'
 
                                 return html
 
