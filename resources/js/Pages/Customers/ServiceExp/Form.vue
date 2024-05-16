@@ -377,62 +377,143 @@ function serviceExpActionRoute (route, data, action) {
                          aria-labelledby="nav-customer-tab"
                          tabindex="0">
 
-                        <h2 class="text-3xl mb-2 mt-2">Anagrafica cliente scadenza servizio</h2>
-                        <span class="text-sm">
-                            Qui puoi inserire dati alternativi ai dati cliente,
-                            per esempio una seconda azienda del cliente. In questo modo
-                            il servizio verrà fatturato a questo cliente.
-                        </span>
-
-                        <br><br>
-
-                        <div class="row">
-                            <div class="col-sm mb-6">
-
-                                <label class="form-label">Azienda</label>
-                                <input type="text"
-                                       class="form-control"
-                                       placeholder="es. Pitture Rossi Srl"
-                                       v-model="form.company" />
-                                <div class="text-red-500 text-center"
-                                     v-if="form.errors.company">{{ __(form.errors.company) }}</div>
-
-                            </div>
-                            <div class="col-sm mb-6">
-
-                                <label class="form-label">P.IVA o C.F.</label>
-                                <input type="text"
-                                       class="form-control"
-                                       placeholder="123456789"
-                                       v-model="form.piva" />
-                                <div class="text-red-500 text-center"
-                                     v-if="form.errors.piva">{{ __(form.errors.piva) }}</div>
-
-                            </div>
+                        <div class="alert alert-warning">
+                            <h2 class="text-3xl mb-2 mt-2">Anagrafica cliente scadenza servizio</h2>
+                            <span class="text-sm">
+                                Qui puoi inserire dati alternativi ai dati cliente,
+                                per esempio una seconda azienda del cliente. In questo modo
+                                il servizio verrà fatturato a questo cliente.
+                            </span>
                         </div>
 
                         <div class="row">
                             <div class="col-sm mb-6">
 
-                                <label class="form-label">Referente</label>
+                                <br class="md:hidden">
+                                <br class="md:hidden">
+
+                                <h2 class="text-3xl mb-6">Fatturazione</h2>
+
+                                <label class="form-label">Azienda / Nominativo fatturazione</label>
                                 <input type="text"
                                        class="form-control"
-                                       placeholder="Mario"
-                                       v-model="form.customer_name" />
-                                <div class="text-red-500 text-center"
-                                     v-if="form.errors.customer_name">{{ __(form.errors.customer_name) }}</div>
+                                       v-model="form.customer_company" />
+
+                                <br>
+
+                                <div class="row">
+                                    <div class="col-lg">
+
+                                        <label class="form-label">Partita IVA</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.customer_piva" />
+
+                                    </div>
+                                    <div class="col-lg">
+
+                                        <br class="md:hidden">
+
+                                        <label class="form-label">Codice Fiscale</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.customer_cf" />
+
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+
+                                        <label class="form-label">Indirizzo</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.customer_address" />
+
+                                    </div>
+                                    <div class="col-lg-3">
+
+                                        <br class="md:hidden">
+
+                                        <label class="form-label">Città</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.customer_city" />
+
+                                    </div>
+                                    <div class="col-lg-3">
+
+                                        <br class="md:hidden">
+
+                                        <label class="form-label">CAP</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.customer_cap" />
+
+                                    </div>
+                                </div>
 
                             </div>
                             <div class="col-sm mb-6">
 
-                                <label class="form-label">Email</label>
-                                <input type="text"
-                                       class="form-control"
-                                       placeholder="info@pitturerossi.it"
-                                       v-model="form.email" />
-                                <div class="text-red-500 text-center"
-                                     v-if="form.errors.email">{{ __(form.errors.email) }}</div>
-                                <label class="form-label !text-xs mt-2">separare con ";" per invio multiplo</label>
+                                <h2 class="text-3xl mb-6">Contatto</h2>
+
+                                <div class="row">
+                                    <div class="col-lg-7">
+
+                                        <label class="form-label">Referente</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.customer_name" />
+
+                                        <br>
+
+                                        <div class="row">
+                                            <div class="col-lg">
+
+                                                <label class="form-label">
+                                                    Cellulare
+                                                </label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       v-model="form.customer_cellphone" />
+
+                                                <br class="md:hidden">
+
+                                            </div>
+                                            <div class="col-lg">
+
+                                                <label class="form-label">
+                                                    Telefono
+                                                </label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       v-model="form.customer_telephone" />
+
+                                            </div>
+                                        </div>
+
+                                        <br>
+
+                                        <label class="form-label">Email</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               v-model="form.customer_email" />
+                                        <label class="form-label !text-xs mt-2">( separare con ";" per invio multiplo )</label>
+
+                                    </div>
+                                    <div class="col-lg">
+
+                                        <br class="md:hidden">
+
+                                        <label class="form-label">Note</label>
+                                        <textarea class="form-control h-[216px]"
+                                                  v-model="form.customer_note"></textarea>
+
+                                    </div>
+                                </div>
 
                             </div>
                         </div>

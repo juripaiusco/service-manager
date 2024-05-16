@@ -80,10 +80,10 @@ class Dashboard extends Controller
     public function getServicesExp($search = true)
     {
         $request_validate_array = [
-            'piva',
-            'company',
-            'email',
             'customer_name',
+            'customer_company',
+            'customer_piva',
+            'customer_email',
             'name',
             'reference',
         ];
@@ -98,10 +98,10 @@ class Dashboard extends Controller
                     $q->orWhere('customers_services.' . $field, 'like', '%' . request('s') . '%');
                 }
 
-                $q->orWhere('customers.name', 'like', '%' . request('s') . '%');
-                $q->orWhere('customers.company', 'like', '%' . request('s') . '%');
-                $q->orWhere('customers.piva', 'like', '%' . request('s') . '%');
-                $q->orWhere('customers.email', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.customer_name', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.customer_company', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.customer_piva', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.customer_email', 'like', '%' . request('s') . '%');
 
             });
         }
@@ -126,9 +126,9 @@ class Dashboard extends Controller
         $services_exp = $services_exp->select([
             'customers_services.id AS id',
             'customers_services.customer_id AS customer_id',
-            'customers_services.piva AS piva',
-            'customers_services.company AS company',
-            'customers_services.email AS email',
+            'customers_services.customer_piva AS piva',
+            'customers_services.customer_company AS company',
+            'customers_services.customer_email AS email',
             'customers_services.customer_name AS customer_name',
             'customers_services.name AS name',
             'customers_services.reference AS reference',
