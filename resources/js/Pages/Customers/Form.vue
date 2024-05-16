@@ -179,7 +179,8 @@ let modalData = ref(props.data);
                                 <br class="md:hidden">
 
                                 <label class="form-label">Note</label>
-                                <textarea class="form-control h-[216px]"></textarea>
+                                <textarea class="form-control h-[216px]"
+                                          v-model="form.note"></textarea>
 
                             </div>
                         </div>
