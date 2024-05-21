@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
@@ -8,10 +8,10 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import {__} from "../../ComponentsExt/Translations";
 
-defineProps<{
-    canResetPassword?: boolean;
-    status?: string;
-}>();
+defineProps({
+    canResetPassword: boolean,
+    status: string,
+});
 
 const form = useForm({
     email: '',
