@@ -343,6 +343,12 @@
                                     @php($service_price = $v['price_sell'])
                                 @endif
 
+                                @if($v['price_customer_sell'] && $v['is_share'] == 1)
+                                    @php($service_price = $v['price_customer_sell'])
+                                @else
+                                    @php($service_price = $v['price_sell'])
+                                @endif
+
                                 @php($discount = 0)
                                 @php($discount_alert = 0)
                                 @if($v['price_sell'] > $v['price_customer_sell'] && $v['is_share'] != 1)
