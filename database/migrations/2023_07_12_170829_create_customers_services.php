@@ -22,16 +22,16 @@ return new class extends Migration
             $table->string('autorenew', 1)->nullable();
             $table->string('no_email_alert', 1)->nullable();
 
-            $table->string('customer_company')->nullable();
-            $table->string('customer_piva')->nullable();
+            $table->string('customer_company')->nullable();     //
+            $table->string('customer_piva')->nullable();        //
             $table->string('customer_cf')->nullable();
             $table->string('customer_address')->nullable();
             $table->string('customer_city')->nullable();
             $table->string('customer_cap')->nullable();
-            $table->string('customer_name')->nullable();
+            $table->string('customer_name')->nullable();        //
             $table->string('customer_cellphone')->nullable();
             $table->string('customer_telephone')->nullable();
-            $table->string('customer_email')->nullable();
+            $table->string('customer_email')->nullable();       //
             $table->longText('customer_note')->nullable();
 
             $table->timestamps();
