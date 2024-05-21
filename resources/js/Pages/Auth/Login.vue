@@ -6,11 +6,11 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import {__} from "../../ComponentsExt/Translations";
+import {__} from "@/ComponentsExt/Translations";
 
 defineProps({
-    canResetPassword: boolean,
-    status: string,
+    canResetPassword: Boolean,
+    status: String,
 });
 
 const form = useForm({

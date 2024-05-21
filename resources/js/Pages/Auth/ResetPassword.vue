@@ -7,8 +7,8 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
-    email: string,
-    token: string,
+    email: String,
+    token: String,
 });
 
 const form = useForm({
