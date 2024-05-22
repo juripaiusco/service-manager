@@ -41,7 +41,7 @@ class Sms extends Controller
         try {
 
             $result = $apiInstance->sendTransacSms($sendTransacSms);
-            print_r($result);
+//            print_r($result);
 
         } catch (\Exception $e) {
             echo 'Exception when calling TransactionalSMSApi->sendTransacSms: ', $e->getMessage(), PHP_EOL;
