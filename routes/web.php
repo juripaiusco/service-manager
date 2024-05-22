@@ -106,7 +106,7 @@ Route::get('service/autorenew', [\App\Http\Controllers\Service::class, 'autorene
  * serviceM - expiration alert
  * Invio email di avviso scadenza
  */
-Route::get('mail/service-expiration/all', [\App\Http\Controllers\Email::class, 'sendExpirationList'])->name('email.exp.all');
+Route::get('mail/service-expiration/all', [\App\Http\Controllers\Expiration::class, 'sendExpirationList'])->name('email.exp.all');
 /**
  * ======================================================================
  */
