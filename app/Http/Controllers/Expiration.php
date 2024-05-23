@@ -9,7 +9,11 @@ class Expiration extends Controller
 {
     public function sendExpiration($id)
     {
+        $email = new Email();
+        $email->sendExpiration($id);
 
+        $sms = new Sms();
+        $sms->sendExpiration($id);
     }
 
     public function sendExpirationList()
@@ -44,12 +48,8 @@ class Expiration extends Controller
             $email = new Email();
             $email->sendExpiration($customer_service->id);
 
-            if (env('SMS_API') != '') {
-
-                $sms = new Sms();
-                $sms->sendExpiration($customer_service->id);
-
-            }
+            $sms = new Sms();
+            $sms->sendExpiration($customer_service->id);
 
         }
     }

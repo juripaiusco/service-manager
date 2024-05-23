@@ -12,36 +12,40 @@ class Sms extends Controller
 {
     public function sendExpiration($id)
     {
-        $payment = new Payment();
-        $sid = $payment->sid_create($id);
+        if (env('SMS_API') != '') {
 
-        $data_array = $this->get_data($id, $sid);
+            $payment = new Payment();
+            $sid = $payment->sid_create($id);
 
-        $config = Brevo\Client\Configuration::getDefaultConfiguration()
-            ->setApiKey(
-                'api-key',
-                env('SMS_API')
+            $data_array = $this->get_data($id, $sid);
+
+            $config = Brevo\Client\Configuration::getDefaultConfiguration()
+                ->setApiKey(
+                    'api-key',
+                    env('SMS_API')
+                );
+
+            $apiInstance = new Brevo\Client\Api\TransactionalSMSApi(
+                new GuzzleHttp\Client(),
+                $config
             );
 
-        $apiInstance = new Brevo\Client\Api\TransactionalSMSApi(
-            new GuzzleHttp\Client(),
-            $config
-        );
-
-        $sendTransacSms = new \Brevo\Client\Model\SendTransacSms();
-        $sendTransacSms['sender'] = env('SMS_SENDER');
-        $sendTransacSms['recipient'] = $data_array['cellphone'];
-        $sendTransacSms['content'] = $data_array['sms_txt'];
-        $sendTransacSms['type'] = 'transactional';
+            $sendTransacSms = new \Brevo\Client\Model\SendTransacSms();
+            $sendTransacSms['sender'] = env('SMS_SENDER');
+            $sendTransacSms['recipient'] = $data_array['cellphone'];
+            $sendTransacSms['content'] = $data_array['sms_txt'];
+            $sendTransacSms['type'] = 'transactional';
 //        $sendTransacSms['webUrl'] = 'https://example.com/notifyUrl';
 
-        try {
+            try {
 
-            $result = $apiInstance->sendTransacSms($sendTransacSms);
+                $result = $apiInstance->sendTransacSms($sendTransacSms);
 //            print_r($result);
 
-        } catch (\Exception $e) {
-            echo 'Exception when calling TransactionalSMSApi->sendTransacSms: ', $e->getMessage(), PHP_EOL;
+            } catch (\Exception $e) {
+                echo 'Exception when calling TransactionalSMSApi->sendTransacSms: ', $e->getMessage(), PHP_EOL;
+            }
+
         }
     }
 
