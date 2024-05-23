@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('expiration_monthly', 1)->nullable();
             $table->string('autorenew', 1)->nullable();
             $table->string('no_email_alert', 1)->nullable();
+            $table->string('no_sms_alert', 1)->nullable();
 
             $table->string('customer_company')->nullable();     //
             $table->string('customer_piva')->nullable();        //

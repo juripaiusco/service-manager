@@ -288,6 +288,20 @@ let modalData = ref(props.data);
 
                                 }
                             }, {
+                                class: 'text-center w-[120px] hidden sm:table-cell',
+                                label: 'Avviso SMS',
+                                field: 'no_sms_alert',
+                                order: false,
+                                fnc: function (d) {
+
+                                    let html = ''
+
+                                    html += d.no_sms_alert == 1 ? 'No' : 'Sì'
+
+                                    return html
+
+                                }
+                            }, {
                                 class: 'text-right w-[140px] hidden sm:table-cell',
                                 label: 'Spesa',
                                 field: 'details_sum_price_sell',
