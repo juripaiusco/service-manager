@@ -12,12 +12,12 @@ class Sms extends Controller
 {
     public function sendExpiration($id)
     {
-        if (env('SMS_API') != '') {
+        $payment = new Payment();
+        $sid = $payment->sid_create($id);
 
-            $payment = new Payment();
-            $sid = $payment->sid_create($id);
+        $data_array = $this->get_data($id, $sid);
 
-            $data_array = $this->get_data($id, $sid);
+        if (env('SMS_API') && $data_array['cellphone']) {
 
             $config = Brevo\Client\Configuration::getDefaultConfiguration()
                 ->setApiKey(
