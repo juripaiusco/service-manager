@@ -17,7 +17,12 @@ class Sms extends Controller
 
         $data_array = $this->get_data($id, $sid);
 
-        if (env('SMS_API') && $data_array['cellphone']) {
+        if (env('SMS_API') != '' && $data_array['cellphone'] != '') {
+
+            // Fix cellphone number
+            if (substr($data_array['cellphone'], 0, 3) != '+39') {
+                $data_array['cellphone'] = '+39' . $data_array['cellphone'];
+            }
 
             $config = Brevo\Client\Configuration::getDefaultConfiguration()
                 ->setApiKey(
@@ -61,10 +66,6 @@ class Sms extends Controller
             'subject_confirm_bonifico' => '[' . $customer_service->reference . '] - Richiesta bonifico bancario ' . $customer_service->name,
             'subject_destroy' => '[' . $customer_service->reference . '] - disdetta ' . $customer_service->name,
         );
-
-        if (substr($array['cellphone'], 0, 3) != '+39') {
-            $array['cellphone'] = '+39' . $array['cellphone'];
-        }
 
         // SMS Text
         $customer_service_array = json_decode($customer_service, true);
