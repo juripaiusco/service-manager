@@ -130,6 +130,7 @@ class Dashboard extends Controller
             'customers_services.customer_company AS company',
             'customers_services.customer_email AS email',
             'customers_services.customer_name AS customer_name',
+            'customers_services.customer_cellphone AS customer_cellphone',
             'customers_services.name AS name',
             'customers_services.reference AS reference',
             'customers_services.expiration AS expiration',

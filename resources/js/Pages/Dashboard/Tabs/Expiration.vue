@@ -255,6 +255,13 @@ function invoiceCreate(email_send)
 
                         </span>
 
+                        <span v-if="service.customer_cellphone || service.customer.cellphone">
+
+                            -
+                            {{ service.customer_cellphone ? service.customer_cellphone : service.customer.cellphone }}
+
+                        </span>
+
 <!--                        {{
                             service.email ?
 
