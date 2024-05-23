@@ -89,7 +89,7 @@ class Sms extends Controller
         $sms_txt_expiration = str_replace('[service_name]', $customer_service->name, $sms_txt_expiration);
         $sms_txt_expiration = str_replace('[service_reference]', $customer_service->reference, $sms_txt_expiration);
         $sms_txt_expiration = str_replace('[service_expiration]', date('d/m/Y', strtotime($customer_service->expiration)), $sms_txt_expiration);
-        $sms_txt_expiration = str_replace('[LINK]', route('email.show', ['expiration', $sid]), $sms_txt_expiration);
+        $sms_txt_expiration = str_replace('[link]', route('email.show', ['expiration', $sid]), $sms_txt_expiration);
 
         $array['sms_txt'] = $sms_txt_expiration;
 
