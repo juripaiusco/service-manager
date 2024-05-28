@@ -98,10 +98,10 @@ class Dashboard extends Controller
                     $q->orWhere('customers_services.' . $field, 'like', '%' . request('s') . '%');
                 }
 
-                $q->orWhere('customers.customer_name', 'like', '%' . request('s') . '%');
-                $q->orWhere('customers.customer_company', 'like', '%' . request('s') . '%');
-                $q->orWhere('customers.customer_piva', 'like', '%' . request('s') . '%');
-                $q->orWhere('customers.customer_email', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.name', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.company', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.piva', 'like', '%' . request('s') . '%');
+                $q->orWhere('customers.email', 'like', '%' . request('s') . '%');
 
             });
         }
