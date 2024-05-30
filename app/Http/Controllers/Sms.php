@@ -70,7 +70,7 @@ class Sms extends Controller
         // SMS Text
         $customer_service_array = json_decode($customer_service, true);
 
-        $sms_txt_expiration = Storage::disk('public')->get('sms_template/expiration.txt');
+        $sms_txt_expiration = Storage::disk('public')->get('sms_template/expiration_' . env('TEMPLATE') . '.txt');
 
         foreach ($customer_service_array as $k => $v) {
 

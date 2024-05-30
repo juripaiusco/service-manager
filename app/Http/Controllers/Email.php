@@ -54,7 +54,7 @@ class Email extends Controller
         $payment = new Payment();
         $sid = $payment->sid_create($id);
 
-        $html = Storage::disk('public')->get('mail_template/expiration.html');
+        $html = Storage::disk('public')->get('mail_template/expiration_' . env('TEMPLATE') . '.html');
         $content = $this->get_template($sid, 'expiration', $html);
         $data_array = $this->get_data($id);
 
