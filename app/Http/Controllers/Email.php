@@ -29,7 +29,7 @@ class Email extends Controller
             return view('payment.nofound');
         }
 
-        $html = Storage::disk('public')->get('mail_template/' . $view . '.html');
+        $html = Storage::disk('public')->get('mail_template/' . $view . '_' . env('TEMPLATE') . '.html');
         $content = $this->get_template($sid, $view, $html);
 
         return view('mail.service-msg', [
