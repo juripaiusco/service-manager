@@ -70,20 +70,46 @@ class Payment extends Controller
                 $array_services_rows[$index]['reference'][] = $customer_service_detail->reference;
             }
 
+            // Ricerco i dati del cliente in base alla priorità dell'anagrafica
+            // 1. Se esiste la PIVA del sotto cliente
+            // 2. Se esiste il CF del sotto cliente
+            // 3. Se esiste la PIVA del cliente
+            // 4. Se esiste il CF del cliente
             $fattureincloud = new FattureInCloudAPI();
-            $cliente = $fattureincloud->api(
-                'get.clients',
-                array(
-                    'vat_number' => $customer_service->customer_piva ? $customer_service->customer_piva : $customer_service->customer->piva
-                )
-            );
 
-            if (!$cliente->getData()) {
+            if ($customer_service->customer_piva) {
 
                 $cliente = $fattureincloud->api(
                     'get.clients',
                     array(
-                        'tax_code' => $customer_service->customer_piva ? $customer_service->customer_piva : $customer_service->customer->piva
+                        'vat_number' => $customer_service->customer_piva
+                    )
+                );
+
+            } else if ($customer_service->customer_cf) {
+
+                $cliente = $fattureincloud->api(
+                    'get.clients',
+                    array(
+                        'tax_code' => $customer_service->customer_cf
+                    )
+                );
+
+            } else if ($customer_service->customer->piva) {
+
+                $cliente = $fattureincloud->api(
+                    'get.clients',
+                    array(
+                        'vat_number' => $customer_service->customer->piva
+                    )
+                );
+
+            } else if ($customer_service->customer->cf) {
+
+                $cliente = $fattureincloud->api(
+                    'get.clients',
+                    array(
+                        'tax_code' => $customer_service->customer->cf
                     )
                 );
 
