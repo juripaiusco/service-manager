@@ -374,20 +374,49 @@ class Service extends Controller
 
         // -----------------------------
 
+        // Ricerco i dati del cliente in base alla priorità dell'anagrafica
+        // 1. Se esiste la PIVA del sotto cliente
+        // 2. Se esiste il CF del sotto cliente
+        // 3. Se esiste la PIVA del cliente
+        // 4. Se esiste il CF del cliente
         $fic = new FattureInCloudAPI();
 
-        $fic_clients = $fic->api('get.clients', array(
-            'vat_number' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
-        ));
+        if ($service_exp->customer_piva) {
 
-        if (!$fic_clients->getData()) {
-            $fic_clients = $fic->api('get.clients', array(
-                'tax_code' => $service_exp->piva ? $service_exp->piva : $service_exp->customer->piva
-            ));
-        }
+            $fic_clients = $fic->api(
+                'get.clients',
+                array(
+                    'vat_number' => $service_exp->customer_piva
+                )
+            );
 
-        if (!$fic_clients->getData()) {
-            dd('Cliente non trovato in Fatture in Cloud');
+        } else if ($service_exp->customer_cf) {
+
+            $fic_clients = $fic->api(
+                'get.clients',
+                array(
+                    'tax_code' => $service_exp->customer_cf
+                )
+            );
+
+        } else if ($service_exp->customer->piva) {
+
+            $fic_clients = $fic->api(
+                'get.clients',
+                array(
+                    'vat_number' => $service_exp->customer->piva
+                )
+            );
+
+        } else if ($service_exp->customer->cf) {
+
+            $fic_clients = $fic->api(
+                'get.clients',
+                array(
+                    'tax_code' => $service_exp->customer->cf
+                )
+            );
+
         }
 
         // -----------------------------
