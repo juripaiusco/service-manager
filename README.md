@@ -1,5 +1,5 @@
 # serviceM - v4
-Italiano
+🇮🇹 Italiano
 
 ## ServiceM è un software per la gestione di servizi in scadenza.
 
@@ -86,7 +86,7 @@ Juri Paiusco - Sviluppatore - [GitHub](https://github.com/juripaiusco)
 
 - - - - - - - - - - - - - - - - - - - - - - - -
 
-English
+🇬🇧 English
 
 ## ServiceM is software for managing expiring services.
 
