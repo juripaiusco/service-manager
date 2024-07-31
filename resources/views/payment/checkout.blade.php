@@ -325,7 +325,7 @@
                             <tr>
                                 <td>Servizio</td>
                                 <td class="text-center"></td>
-                                <td class="text-right">Importo</td>
+                                <td align="right" class="text-right">Importo</td>
                             </tr>
                             </thead>
 
