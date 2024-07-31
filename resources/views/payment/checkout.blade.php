@@ -337,14 +337,12 @@
 
                             @foreach($array_services_rows as $k => $v)
 
-                                {{ // Se il prezzo price_customer_sell esiste ed è maggiore viene selezionato }}
                                 @if($v['price_customer_sell'] >= $v['price_sell'])
                                     @php($service_price = $v['price_customer_sell'])
                                 @else
                                     @php($service_price = $v['price_sell'])
                                 @endif
 
-                                {{ // Se il servizio è condiviso viene selezionato questo prezzo }}
                                 @if($v['is_share'] == 1)
                                     @if($v['price_customer_sell'])
                                         @php($service_price = $v['price_customer_sell'])
